@@ -34,9 +34,6 @@
 /*.iml
 /modules
 
-# IntelliJ
-out/
-
 # Other
 /compiler.xml
 /misc.xml
