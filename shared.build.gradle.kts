@@ -17,12 +17,14 @@
  */
 
 buildscript {
+  val kordampVersion: String by project
+
   repositories {
     gradlePluginPortal()
     mavenCentral()
   }
   dependencies {
-    classpath(group = "org.kordamp.gradle", name = "base-gradle-plugin", version = "0.22.0")
+    classpath(group = "org.kordamp.gradle", name = "base-gradle-plugin", version = kordampVersion)
   }
 }
 
