@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 buildscript {
+    val kordampVersion: String by settings
+
     repositories {
         gradlePluginPortal()
     }
     dependencies {
-        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = "0.22.0")
+        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
     }
 }
 apply(plugin = "org.kordamp.gradle.settings")
