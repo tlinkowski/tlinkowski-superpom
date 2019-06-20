@@ -38,7 +38,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = "0.21.0")
+        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = "0.22.0")
     }
 }
 apply(plugin = "org.kordamp.gradle.settings")
