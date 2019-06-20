@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   //region MAIN
-  kotlin("jvm") version "1.3.30"
+  kotlin("jvm") version "1.3.40"
   `java-gradle-plugin`
   `kotlin-dsl`
   //endregion
