@@ -42,7 +42,7 @@ gradlePlugin {
   plugins {
     create("TLinkowskiSuperpom") {
       id = "pl.tlinkowski.tlinkowski-superpom"
-      implementationClass = "pl.tlinkowski.TLinkowskiSuperpomPlugin"
+      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
     }
   }
 }

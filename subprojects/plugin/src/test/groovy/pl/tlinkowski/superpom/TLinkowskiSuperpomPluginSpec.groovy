@@ -16,12 +16,14 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski
+package pl.tlinkowski.superpom
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import spock.lang.Specification
+
+import pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin
 
 /**
  * @author Tomasz Linkowski
