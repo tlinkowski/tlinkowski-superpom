@@ -44,4 +44,20 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
 }
 //endregion
 
+//region PRIVATE CONFIG SCRIPT
+configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
+  info {
+    name = "tlinkowski-superpom"
+    description = """A Gradle SuperPOM for all projects in "pl.tlinkowski" group."""
+    inceptionYear = "2019"
+
+    links {
+      website = "https://github.com/tlinkowski/tlinkowski-superpom"
+      issueTracker = "https://github.com/tlinkowski/tlinkowski-superpom/issues"
+      scm = "https://github.com/tlinkowski/tlinkowski-superpom.git"
+    }
+  }
+}
+//endregion
+
 apply(from = "$rootDir/gradle/ide.gradle.kts")
