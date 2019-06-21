@@ -26,6 +26,10 @@ allprojects {
   }
 }
 
-subprojects {
-  group = "pl.tlinkowski.sample"
+configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
+  info {
+    name = "sample-project"
+    description = "A sample project"
+    inceptionYear = "2019"
+  }
 }
