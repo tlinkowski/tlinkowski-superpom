@@ -16,27 +16,27 @@
  * limitations under the License.
  */
 pluginManagement {
-    //region SOLVES: https://github.com/gradle/gradle/issues/1697
-    val kordampVersion: String by settings
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.namespace == "org.kordamp.gradle") {
-                useVersion(kordampVersion)
-            }
-        }
+  //region SOLVES: https://github.com/gradle/gradle/issues/1697
+  val kordampVersion: String by settings
+  resolutionStrategy {
+    eachPlugin {
+      if (requested.id.namespace == "org.kordamp.gradle") {
+        useVersion(kordampVersion)
+      }
     }
-    //endregion
+  }
+  //endregion
 }
 
 //region SEE: https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_settings
 buildscript {
-    val kordampVersion: String by settings
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
-    }
+  val kordampVersion: String by settings
+  repositories {
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
+  }
 }
 apply(plugin = "org.kordamp.gradle.settings")
 //endregion
@@ -44,5 +44,5 @@ apply(plugin = "org.kordamp.gradle.settings")
 rootProject.name = "tlinkowski-superpom"
 
 configure<org.kordamp.gradle.plugin.settings.ProjectsExtension> {
-    directories = listOf("subprojects")
+  directories = listOf("subprojects")
 }
