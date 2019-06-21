@@ -26,7 +26,7 @@ allprojects {
   }
 }
 
-configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
+config {
   info {
     name = "sample-project"
     description = "A sample project"
