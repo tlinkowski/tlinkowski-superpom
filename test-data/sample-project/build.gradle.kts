@@ -17,7 +17,7 @@
  */
 plugins {
   java
-  id("pl.tlinkowski.tlinkowski-superpom") version "0.1"
+  id("pl.tlinkowski.tlinkowski-superpom") version "*"
 }
 
 allprojects {
