@@ -20,7 +20,6 @@ package pl.tlinkowski.superpom
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
 
 /**
  * Applies the concept of a Gradle SuperPOM for all projects of Tomasz Linkowski.
@@ -29,39 +28,11 @@ import org.gradle.kotlin.dsl.*
  *
  * @author Tomasz Linkowski
  */
-class TLinkowskiSuperpomPlugin : Plugin<Project> {
+abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.sharedBuildScriptFromBuildGradleKts()
   }
 
-  /**
-   * ATTENTION: The contents of this method are copied from `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
-   */
-  private fun Project.sharedBuildScriptFromBuildGradleKts() {
-    apply<org.kordamp.gradle.plugin.base.BasePlugin>()
-
-    configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
-      info {
-        vendor = "Tomasz Linkowski"
-
-        people {
-          person {
-            id = "tlinkowski"
-            name = "Tomasz Linkowski"
-            url = "https://tlinkowski.pl/"
-            roles = listOf("developer")
-          }
-        }
-      }
-
-      licensing {
-        licenses {
-          license {
-            id = "Apache-2.0"
-          }
-        }
-      }
-    }
-  }
+  protected abstract fun Project.sharedBuildScriptFromBuildGradleKts()
 }

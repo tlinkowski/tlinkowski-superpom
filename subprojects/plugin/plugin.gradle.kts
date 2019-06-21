@@ -42,6 +42,8 @@ dependencies {
   //endregion
 }
 
+apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
+
 gradlePlugin {
   plugins {
     create("TLinkowskiSuperpom") {
