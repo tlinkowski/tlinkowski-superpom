@@ -15,9 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+pluginManagement {
+    //region SOLVES: https://github.com/gradle/gradle/issues/1697
+    val kordampVersion: String by settings
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == "org.kordamp.gradle") {
+                useVersion(kordampVersion)
+            }
+        }
+    }
+    //endregion
+}
+
+//region SEE: https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_settings
 buildscript {
     val kordampVersion: String by settings
-
     repositories {
         gradlePluginPortal()
     }
@@ -26,6 +39,7 @@ buildscript {
     }
 }
 apply(plugin = "org.kordamp.gradle.settings")
+//endregion
 
 rootProject.name = "tlinkowski-superpom"
 

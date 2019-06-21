@@ -32,11 +32,13 @@ import org.gradle.kotlin.dsl.*
 class TLinkowskiSuperpomPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    project.sharedBuildGradle()
+    project.sharedBuildScriptFromBuildGradleKts()
   }
 
-  private fun Project.sharedBuildGradle() {
-    //region SHARED CONFIG (carbon copy in: shared.build.gradle.kts)
+  /**
+   * ATTENTION: The contents of this method are copied from `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
+   */
+  private fun Project.sharedBuildScriptFromBuildGradleKts() {
     apply<org.kordamp.gradle.plugin.base.BasePlugin>()
 
     configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
@@ -61,6 +63,5 @@ class TLinkowskiSuperpomPlugin : Plugin<Project> {
         }
       }
     }
-    //endregion
   }
 }
