@@ -36,6 +36,13 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
     }
   }
 
+  buildInfo {
+    // for reproducible builds: https://aalmiray.github.io/kordamp-gradle-plugins/#_reproducible_builds
+    skipBuildBy = true
+    skipBuildDate = true
+    skipBuildTime = true
+  }
+
   licensing {
     licenses {
       license {
