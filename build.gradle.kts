@@ -21,6 +21,8 @@ allprojects {
 apply<org.kordamp.gradle.plugin.base.BasePlugin>()
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
+  release = rootProject.findProperty("release") == "true"
+
   info {
     vendor = "Tomasz Linkowski"
 
