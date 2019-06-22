@@ -18,7 +18,7 @@ allprojects {
  * As a result, all configuration here should be explicit (no imports, no auto-generated Kotlin DSL accessors).
  */
 //region SHARED BUILD SCRIPT
-apply<org.kordamp.gradle.plugin.base.BasePlugin>()
+apply(plugin = "org.kordamp.gradle.base")
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   release = rootProject.findProperty("release") == "true"
