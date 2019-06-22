@@ -42,6 +42,14 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
     }
   }
 }
+
+subprojects {
+  tasks.withType<org.gradle.api.tasks.testing.Test> {
+    testLogging {
+      events("PASSED", "FAILED", "SKIPPED")
+    }
+  }
+}
 //endregion
 
 //region PRIVATE CONFIG SCRIPT
