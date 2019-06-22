@@ -33,7 +33,7 @@ dependencies {
    * ATTENTION: The same plugins must be included in the `plugins` block in `build.gradle.kts`.
    */
   //region SHARED PLUGINS
-  implementation(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
+  compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
   //endregion
 
   //region TEST
