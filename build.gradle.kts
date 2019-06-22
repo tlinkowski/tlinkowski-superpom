@@ -3,7 +3,7 @@ plugins {
    * ATTENTION: The same plugins must be included as dependencies in `plugin.gradle.kts`.
    */
   //region SHARED PLUGINS
-  id("org.kordamp.gradle.base") apply false
+  id("org.kordamp.gradle.project") apply false
   //endregion
 }
 
