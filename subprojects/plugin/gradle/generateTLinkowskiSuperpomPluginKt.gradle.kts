@@ -24,15 +24,21 @@ import java.time.LocalTime
  */
 tasks {
   val generateTLinkowskiSuperpomPluginKt by registering {
+    val rootBuildGradleKts = rootDir.resolve("build.gradle.kts")
+    val superpomPluginKt = file("src/main/kotlin/pl/tlinkowski/superpom/TLinkowskiSuperpomPlugin.kt")
+
+    description = "Generates ${superpomPluginKt.name}"
+    inputs.file(rootBuildGradleKts)
+    outputs.file(superpomPluginKt)
+
     doLast {
-      val sharedBuildScript = rootDir.resolve("build.gradle.kts").readText()
+      val sharedBuildScript = rootBuildGradleKts.readText()
               .substringAfter("//region SHARED BUILD SCRIPT")
               .substringBefore("//endregion")
               .trim()
 
-      val pluginFile = file("src/main/kotlin/pl/tlinkowski/superpom/TLinkowskiSuperpomPlugin.kt")
-      pluginFile.parentFile.mkdirs()
-      pluginFile.writeText(buildPluginFileContent(sharedBuildScript))
+      superpomPluginKt.parentFile.mkdirs()
+      superpomPluginKt.writeText(buildTLinkowskiSuperpomPluginKtContent(sharedBuildScript))
     }
   }
 
@@ -41,7 +47,10 @@ tasks {
   }
 }
 
-fun buildPluginFileContent(sharedBuildScript: String) = """
+/**
+ * Builds the content of `TLinkowskiSuperpomPlugin.kt`.
+ */
+fun buildTLinkowskiSuperpomPluginKtContent(sharedBuildScript: String) = """
 // Auto-generated using `generateTLinkowskiSuperpomPluginKt.gradle.kts` on ${LocalDate.now()} at ${LocalTime.now().withNano(0)}
 package pl.tlinkowski.superpom
 
@@ -58,7 +67,7 @@ import org.gradle.kotlin.dsl.*
 class TLinkowskiSuperpomPlugin : BaseTLinkowskiSuperpomPlugin() {
 
   /**
-   * The contents of this method are copied from `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
+   * The contents of this method are copied from root `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
    */
   override fun Project.sharedBuildScriptFromBuildGradleKts() {
     ${sharedBuildScript.prependIndent("    ").trimStart()}
