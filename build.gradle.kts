@@ -116,16 +116,12 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
       scm = "https://github.com/tlinkowski/tlinkowski-superpom.git"
     }
   }
+
+  plugin {
+    id = "pl.tlinkowski.tlinkowski-superpom"
+    implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
+  }
 }
 //endregion
 
 apply(from = "$rootDir/gradle/ide.gradle.kts")
-
-gradlePlugin {
-  plugins {
-    create("TLinkowskiSuperpom") {
-      id = "pl.tlinkowski.tlinkowski-superpom"
-      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
-    }
-  }
-}
