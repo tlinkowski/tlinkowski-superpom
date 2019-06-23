@@ -37,7 +37,6 @@ tasks {
               .substringBefore("//endregion")
               .trim()
 
-      superpomPluginKt.parentFile.mkdirs()
       superpomPluginKt.writeText(buildTLinkowskiSuperpomPluginKtContent(sharedBuildScript))
     }
   }

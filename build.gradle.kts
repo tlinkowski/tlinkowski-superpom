@@ -1,15 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  //region MAIN
   kotlin("jvm") version "1.3.40"
   `java-gradle-plugin`
   `kotlin-dsl`
-  //endregion
-
-  //region TEST
+  
   groovy
-  //endregion
 
   /**
    * ATTENTION: The same plugins must be included in the `dependencies` block below.
@@ -19,37 +15,20 @@ plugins {
   //endregion
 }
 
-//region gradle.properties
-val kordampVersion: String by project
-val spockVersion: String by project
-val groovyVersion: String by project
-//endregion
-
+/**
+ * ATTENTION: The same plugins must be included in the `plugins` block above.
+ */
+//region SHARED PLUGINS
 dependencies {
-  /**
-   * ATTENTION: The same plugins must be included in the `plugins` block above.
-   */
-  //region SHARED PLUGINS
+  val kordampVersion: String by project
+
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
-  //endregion
-
-  implementation(kotlin("stdlib-jdk8"))
-
-  //region TEST
-  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
-  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
-  //endregion
 }
-
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
-}
-
-apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
 
 repositories {
-  gradlePluginPortal() // for other Gradle plugins
+  gradlePluginPortal() // for shared Gradle plugins
 }
+//endregion
 
 /**
  * ATTENTION: The contents of the `SHARED BUILD SCRIPT` region are copied to `TLinkowskiSuperpomPlugin.kt`.
@@ -57,6 +36,10 @@ repositories {
  */
 //region SHARED BUILD SCRIPT
 apply(plugin = "org.kordamp.gradle.base")
+
+dependencies {
+
+}
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   release = rootProject.findProperty("release") == "true"
@@ -103,7 +86,23 @@ allprojects {
 }
 //endregion
 
-//region PRIVATE CONFIG SCRIPT
+//region PRIVATE BUILD SCRIPT
+apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
+
+dependencies {
+  implementation(kotlin("stdlib-jdk8"))
+
+  val spockVersion: String by project
+  val groovyVersion: String by project
+
+  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
+  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions.jvmTarget = "1.8"
+}
+
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   info {
     name = "tlinkowski-superpom"
