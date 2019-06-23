@@ -24,15 +24,15 @@ import java.time.LocalTime
  */
 tasks {
   val generateTLinkowskiSuperpomPluginKt by registering {
-    val rootBuildGradleKts = rootDir.resolve("build.gradle.kts")
+    val buildGradleKts = file("build.gradle.kts")
     val superpomPluginKt = file("src/main/kotlin/pl/tlinkowski/superpom/TLinkowskiSuperpomPlugin.kt")
 
     description = "Generates ${superpomPluginKt.name}"
-    inputs.file(rootBuildGradleKts)
+    inputs.file(buildGradleKts)
     outputs.file(superpomPluginKt)
 
     doLast {
-      val sharedBuildScript = rootBuildGradleKts.readText()
+      val sharedBuildScript = buildGradleKts.readText()
               .substringAfter("//region SHARED BUILD SCRIPT")
               .substringBefore("//endregion")
               .trim()

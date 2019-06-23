@@ -18,31 +18,37 @@
 
 package pl.tlinkowski.superpom
 
-import org.gradle.testkit.runner.GradleRunner
-import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
+import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import spock.lang.Specification
-
-import java.nio.file.Path
 
 /**
  * @author Tomasz Linkowski
  */
-class TLinkowskiSuperpomPluginSmokeTest extends Specification {
+class TLinkowskiSuperpomPluginSpec extends Specification {
 
-  private static final String GRADLE_VERSION = '5.4.1'
-  private static final Path TEST_DATA_DIR = Path.of('..', '..', 'test-data')
+  private Project project
 
-  def smokeTest() {
+  def 'plugin sets proper license'() {
     given:
-      def runner = GradleRunner.create()
-              .withGradleVersion(GRADLE_VERSION)
-              .withPluginClasspath()
-              .withProjectDir(TEST_DATA_DIR.resolve('sample-project').toFile())
-              .withArguments('clean', 'build')
-              .forwardOutput()
+      project = newEmptyProject()
     when:
-      def result = runner.build()
+      applyTLinkowskiPlugin()
     then:
-      TaskOutcome.SUCCESS == result.task(':build').getOutcome()
+      def config = kordampConfig()
+      config.licensing.licenses.licenses[0].id == 'Apache-2.0'
+  }
+
+  private static Project newEmptyProject() {
+    ProjectBuilder.builder().build()
+  }
+
+  private void applyTLinkowskiPlugin() {
+    project.pluginManager.apply TLinkowskiSuperpomPlugin
+  }
+
+  private ProjectConfigurationExtension kordampConfig() {
+    project.extensions.getByType ProjectConfigurationExtension
   }
 }
