@@ -17,17 +17,13 @@
  */
 
 plugins {
-  groovy
+  java
 }
 
 //region gradle.properties
-val spockVersion: String by project
-val groovyVersion: String by project
+val guavaVersion: String by project
 //endregion
 
 dependencies {
-  compile(group = "com.google.guava", name = "guava", version = "28.0-jre")
-
-  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
-  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
+  compile(group = "com.google.guava", name = "guava", version = guavaVersion)
 }

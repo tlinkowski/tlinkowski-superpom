@@ -4,8 +4,6 @@ plugins {
   kotlin("jvm") version "1.3.40"
   `java-gradle-plugin`
   `kotlin-dsl`
-  
-  groovy
 
   /**
    * ATTENTION: The same plugins must be included in the `dependencies` block below.
@@ -36,9 +34,15 @@ repositories {
  */
 //region SHARED BUILD SCRIPT
 apply(plugin = "org.kordamp.gradle.base")
+apply(plugin = "groovy") // for Spock
 
 dependencies {
+  val testImplementation by configurations
+  val spockVersion: String by project
+  val groovyVersion: String by project
 
+  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
+  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
 }
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
@@ -91,12 +95,6 @@ apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
-
-  val spockVersion: String by project
-  val groovyVersion: String by project
-
-  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
-  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
 }
 
 tasks.withType<KotlinCompile> {

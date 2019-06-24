@@ -32,12 +32,9 @@ tasks {
     outputs.file(superpomPluginKt)
 
     doLast {
-      val sharedBuildScript = buildGradleKts.readText()
-              .substringAfter("//region SHARED BUILD SCRIPT")
-              .substringBefore("//endregion")
-              .trim()
-
-      superpomPluginKt.writeText(buildTLinkowskiSuperpomPluginKtContent(sharedBuildScript))
+      val sharedBuildScript = prepareSharedBuildScript(buildGradleKts.readText())
+      val superpomPluginContent = buildTLinkowskiSuperpomPluginKtContent(sharedBuildScript)
+      superpomPluginKt.writeText(superpomPluginContent)
     }
   }
 
@@ -45,6 +42,19 @@ tasks {
     dependsOn(generateTLinkowskiSuperpomPluginKt)
   }
 }
+
+/**
+ * Prepares the shared content to be pasted into `TLinkowskiSuperpomPlugin.kt`.
+ */
+fun prepareSharedBuildScript(buildGradleKtsContent: String) = buildGradleKtsContent
+        .substringAfter("//region SHARED BUILD SCRIPT")
+        .substringBefore("//endregion")
+        .trim()
+        .replace(Regex("val (\\w+): String by project")) {
+          val propertyName = it.groups[1]!!.value
+          val propertyValue = property(propertyName)
+          "val $propertyName = \"$propertyValue\" // copied from gradle.properties"
+        }
 
 /**
  * Builds the content of `TLinkowskiSuperpomPlugin.kt`.
