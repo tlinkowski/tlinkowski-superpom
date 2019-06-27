@@ -33,7 +33,7 @@ repositories {
  * As a result, all configuration here should be explicit (no imports, no auto-generated Kotlin DSL accessors).
  */
 //region SHARED BUILD SCRIPT
-apply(plugin = "org.kordamp.gradle.base")
+apply(plugin = "org.kordamp.gradle.project")
 apply(plugin = "groovy") // for Spock
 
 dependencies {
@@ -75,6 +75,11 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
       }
     }
   }
+}
+
+configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
+  mapping("kt", "SLASHSTAR_STYLE")
+  mapping("kts", "SLASHSTAR_STYLE")
 }
 
 allprojects {

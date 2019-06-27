@@ -31,5 +31,10 @@ config {
     name = "sample-project"
     description = "A sample project"
     inceptionYear = "2019"
+
+    links {
+      website = "https://github.com/tlinkowski/FAKE-NAME"
+      scm = "https://github.com/tlinkowski/FAKE-NAME.git"
+    }
   }
 }
