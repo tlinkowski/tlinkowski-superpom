@@ -34,16 +34,6 @@ repositories {
  */
 //region SHARED BUILD SCRIPT
 apply(plugin = "org.kordamp.gradle.project")
-apply(plugin = "groovy") // for Spock
-
-dependencies {
-  val testImplementation by configurations
-  val spockVersion: String by project
-  val groovyVersion: String by project
-
-  testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
-  testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
-}
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   release = rootProject.findProperty("release") == "true"
@@ -68,6 +58,10 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
     skipBuildTime = true
   }
 
+  groovydoc {
+    enabled = false // Groovy used only for tests
+  }
+
   licensing {
     licenses {
       license {
@@ -83,13 +77,26 @@ configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
 }
 
 allprojects {
+  apply(plugin = "groovy") // for Spock
+
+  dependencies {
+    val testImplementation by configurations
+    val spockVersion: String by project
+    val groovyVersion: String by project
+
+    testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
+    testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
+  }
+
   repositories {
     mavenCentral()
   }
 
-  tasks.withType<org.gradle.api.tasks.testing.Test> {
-    testLogging {
-      events("PASSED", "FAILED", "SKIPPED")
+  tasks {
+    withType<org.gradle.api.tasks.testing.Test> {
+      testLogging {
+        events("PASSED", "FAILED", "SKIPPED")
+      }
     }
   }
 }
