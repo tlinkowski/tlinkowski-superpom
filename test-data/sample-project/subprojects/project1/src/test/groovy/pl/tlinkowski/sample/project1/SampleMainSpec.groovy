@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package pl.tlinkowski.sample.project1
 
 import groovy.transform.TypeChecked
 import spock.lang.Specification
+
 /**
  * @author Tomasz Linkowski
  */

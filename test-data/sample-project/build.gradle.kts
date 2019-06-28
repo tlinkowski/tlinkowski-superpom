@@ -15,15 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
   java
   id("pl.tlinkowski.tlinkowski-superpom") version "*"
-}
-
-allprojects {
-  repositories {
-    mavenCentral()
-  }
 }
 
 config {
