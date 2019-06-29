@@ -119,13 +119,13 @@ allprojects {
     }
 
     //region https://github.com/hierynomus/license-gradle-plugin#running-on-a-non-java-project
-    val licenseGradle by creating(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
+    val licenseGradle by registering(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
       source = fileTree(rootDir) {
         include("**/*.gradle")
         include("**/*.gradle.kts")
       }
     }
-    val license by getting {
+    "license" {
       dependsOn(licenseGradle)
     }
     //endregion
