@@ -96,6 +96,26 @@ configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
 }
 
 allprojects {
+  repositories {
+    mavenCentral()
+  }
+}
+
+tasks {
+  //region https://github.com/hierynomus/license-gradle-plugin#running-on-a-non-java-project
+  val licenseGradle by registering(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
+    source = fileTree(rootDir) {
+      include("**/*.gradle")
+      include("**/*.gradle.kts")
+    }
+  }
+  "license" {
+    dependsOn(licenseGradle)
+  }
+  //endregion
+}
+
+fun configureSubproject() {
   apply(plugin = "groovy") // for Spock
 
   dependencies {
@@ -105,10 +125,6 @@ allprojects {
 
     testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
     testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
-  }
-
-  repositories {
-    mavenCentral()
   }
 
   tasks {
@@ -137,23 +153,17 @@ allprojects {
       dependsOn(jacocoTestCoverageVerification)
     }
     //endregion
-
-    //region https://github.com/hierynomus/license-gradle-plugin#running-on-a-non-java-project
-    val licenseGradle by registering(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
-      source = fileTree(rootDir) {
-        include("**/*.gradle")
-        include("**/*.gradle.kts")
-      }
-    }
-    "license" {
-      dependsOn(licenseGradle)
-    }
-    //endregion
   }
+}
+
+subprojects {
+  configureSubproject() // without rootProject
 }
 //endregion
 
 //region PRIVATE BUILD SCRIPT
+configureSubproject() // rootProject (this is a single-project build)
+
 apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
 
 dependencies {
