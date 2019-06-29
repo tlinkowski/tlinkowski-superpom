@@ -17,19 +17,19 @@
  */
 
 buildscript {
-    val kordampVersion: String by settings
+  val kordampVersion: String by settings
 
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
-    }
+  repositories {
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
+  }
 }
 apply(plugin = "org.kordamp.gradle.settings")
 
 rootProject.name = "sample-project"
 
 configure<org.kordamp.gradle.plugin.settings.ProjectsExtension> {
-    directories = listOf("subprojects")
+  directories = listOf("subprojects")
 }
