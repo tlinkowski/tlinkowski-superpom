@@ -119,8 +119,22 @@ allprojects {
     }
 
     //region https://docs.gradle.org/current/userguide/jacoco_plugin.html
+    val jacocoTestReport by existing
+    val jacocoTestCoverageVerification by existing(org.gradle.testing.jacoco.tasks.JacocoCoverageVerification::class) {
+      violationRules {
+        rule {
+          limit {
+            counter = "LINE"
+            minimum = "0.99".toBigDecimal()
+          }
+        }
+      }
+      shouldRunAfter(jacocoTestReport)
+    }
+
     "check" {
-      dependsOn("jacocoTestReport")
+      dependsOn(jacocoTestReport)
+      dependsOn(jacocoTestCoverageVerification)
     }
     //endregion
 

@@ -36,16 +36,46 @@ class TLinkowskiSuperpomPluginSpec extends Specification {
     when:
       applyTLinkowskiPlugin()
     then:
-      def config = kordampConfig()
-      config.licensing.licenses.licenses[0].id == 'Apache-2.0'
+      kordampConfig().licensing.licenses.licenses[0].id == 'Apache-2.0'
+  }
+
+  def 'all tasks can be configured'() {
+    given:
+      project = newMultiProject()
+    when:
+      applyTLinkowskiPlugin()
+      configureAllTasks()
+    then:
+      noExceptionThrown()
+  }
+
+  //region PROJECT HELPERS
+  private static Project newMultiProject() {
+    def rootProject = newEmptyProject()
+    newSubprojectOf(rootProject)
+    rootProject
   }
 
   private static Project newEmptyProject() {
     ProjectBuilder.builder().build()
   }
 
+  private static Project newSubprojectOf(Project parent) {
+    ProjectBuilder.builder().withParent(parent).build()
+  }
+  //endregion
+
   private void applyTLinkowskiPlugin() {
     project.pluginManager.apply TLinkowskiSuperpomPlugin
+  }
+
+  /**
+   * Necessary for high code coverage - causes all tasks to be eagerly configured.
+   *
+   * See: https://docs.gradle.org/current/userguide/task_configuration_avoidance.html
+   */
+  private configureAllTasks() {
+    project.tasks.forEach({})
   }
 
   private ProjectConfigurationExtension kordampConfig() {
