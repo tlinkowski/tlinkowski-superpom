@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import org.gradle.kotlin.dsl.support.*
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -47,11 +48,11 @@ tasks {
  * Prepares the shared content to be pasted into `TLinkowskiSuperpomPlugin.kt`.
  */
 fun prepareSharedBuildScript(buildGradleKtsContent: String) = buildGradleKtsContent
-        .substringAfter("//region SHARED BUILD SCRIPT")
-        .substringBefore("//endregion")
-        .trim()
+        .normaliseLineSeparators()
+        .substringAfter("\n//region SHARED BUILD SCRIPT\n")
+        .substringBefore("\n//endregion\n")
         .replace(Regex("val (\\w+): String by project")) {
-          val propertyName = it.groups[1]!!.value
+          val propertyName = checkNotNull(it.groups[1], { "Group 1 not found" }).value
           val propertyValue = property(propertyName)
           "val $propertyName = \"$propertyValue\" // copied from gradle.properties"
         }
