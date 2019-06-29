@@ -118,6 +118,12 @@ allprojects {
       }
     }
 
+    //region https://docs.gradle.org/current/userguide/jacoco_plugin.html
+    "check" {
+      dependsOn("jacocoTestReport")
+    }
+    //endregion
+
     //region https://github.com/hierynomus/license-gradle-plugin#running-on-a-non-java-project
     val licenseGradle by registering(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
       source = fileTree(rootDir) {
