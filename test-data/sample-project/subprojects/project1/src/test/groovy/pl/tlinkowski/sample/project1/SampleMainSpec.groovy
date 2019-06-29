@@ -30,4 +30,13 @@ class SampleMainSpec extends Specification {
     expect:
       'HelloWorld' == SampleMain.greetUpperCamel()
   }
+
+  def main() {
+    given:
+      String[] args = []
+    when:
+      SampleMain.main(args)
+    then:
+      noExceptionThrown()
+  }
 }

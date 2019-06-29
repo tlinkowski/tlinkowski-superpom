@@ -31,4 +31,7 @@ public final class SampleMain {
   public static String greetUpperCamel() {
     return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, "hello-world");
   }
+
+  private SampleMain() {
+  }
 }
