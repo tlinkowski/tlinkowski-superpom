@@ -18,6 +18,7 @@
 
 package pl.tlinkowski.superpom
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
@@ -47,6 +48,15 @@ class TLinkowskiSuperpomPluginSpec extends Specification {
       configureAllTasks()
     then:
       noExceptionThrown()
+  }
+
+  def 'plugin cannot be applied to a subproject'() {
+    given:
+      project = newMultiProject().subprojects.first()
+    when:
+      applyTLinkowskiPlugin()
+    then:
+      thrown(GradleException)
   }
 
   //region PROJECT HELPERS
