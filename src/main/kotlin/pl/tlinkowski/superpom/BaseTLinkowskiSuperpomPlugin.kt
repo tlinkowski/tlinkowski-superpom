@@ -20,14 +20,15 @@ package pl.tlinkowski.superpom
 import org.gradle.api.*
 
 /**
- * Applies the concept of a Gradle SuperPOM for all projects of Tomasz Linkowski.
- *
- * See: [http://andresalmiray.com/the-gradle-superpom/]
+ * Hand-written base class for [TLinkowskiSuperpomPlugin].
  *
  * @author Tomasz Linkowski
  */
 abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
 
+  /**
+   * Applies the plugin (can be called on the root project only).
+   */
   override fun apply(project: Project) {
     project.pluginOnlyBuildScript()
     project.sharedBuildScriptFromBuildGradleKts()
@@ -39,5 +40,8 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
     }
   }
 
+  /**
+   * The contents of this method are copied from root `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
+   */
   protected abstract fun Project.sharedBuildScriptFromBuildGradleKts()
 }
