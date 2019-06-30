@@ -158,8 +158,7 @@ fun configureSubproject() {
     }
 
     "check" {
-      dependsOn(jacocoTestReport)
-      dependsOn(jacocoTestCoverageVerification)
+      dependsOn(jacocoTestReport, jacocoTestCoverageVerification)
     }
     //endregion
   }
