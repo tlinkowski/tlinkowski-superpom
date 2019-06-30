@@ -97,6 +97,8 @@ configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
 }
 
 allprojects {
+  apply(plugin = "idea")
+
   repositories {
     mavenCentral()
   }
@@ -211,5 +213,3 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   }
 }
 //endregion
-
-apply(from = "$rootDir/gradle/ide.gradle.kts")
