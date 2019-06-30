@@ -22,6 +22,7 @@ plugins {
   kotlin("jvm") version "1.3.40"
   `java-gradle-plugin`
   `kotlin-dsl`
+  id("org.kordamp.gradle.kotlindoc")
 
   /**
    * ATTENTION: The same plugins must be included in the `dependencies` block below.
@@ -191,6 +192,11 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
       issueTracker = "https://github.com/tlinkowski/tlinkowski-superpom/issues"
       scm = "https://github.com/tlinkowski/tlinkowski-superpom.git"
     }
+  }
+
+  kotlindoc {
+    replaceJavadoc = true
+    jdkVersion = 8
   }
 
   plugin {
