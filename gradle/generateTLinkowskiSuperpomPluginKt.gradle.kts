@@ -85,7 +85,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
 /**
- * Applies the concept of a Gradle SuperPOM for all projects of Tomasz Linkowski.
+ * Automatically generated class that applies the concept of a Gradle SuperPOM for all projects of Tomasz Linkowski.
  *
  * See: [http://andresalmiray.com/the-gradle-superpom/]
  *
