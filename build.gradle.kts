@@ -181,6 +181,12 @@ tasks.withType<KotlinCompile> {
   kotlinOptions.jvmTarget = "1.8"
 }
 
+//region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+configurations {
+  create("dokkaRuntime")
+}
+//endregion
+
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   info {
     name = "tlinkowski-superpom"
