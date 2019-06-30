@@ -38,6 +38,14 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
     if (project != rootProject) {
       throw GradleException("This plugin can be applied to a root project only")
     }
+    configureSharedFileImport()
+  }
+
+  /**
+   * Counterpart of `configureSharedFileExport.gradle.kts`.
+   */
+  private fun Project.configureSharedFileImport() {
+
   }
 
   /**

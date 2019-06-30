@@ -173,6 +173,7 @@ subprojects {
 configureSubproject() // rootProject (this is a single-project build)
 
 apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
+apply(from = "gradle/configureSharedFileExport.gradle.kts")
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
