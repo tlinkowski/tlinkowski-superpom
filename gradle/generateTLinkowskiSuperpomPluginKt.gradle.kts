@@ -28,6 +28,7 @@ tasks {
     val buildGradleKts = file("build.gradle.kts")
     val superpomPluginKt = file("src/main/kotlin/pl/tlinkowski/superpom/TLinkowskiSuperpomPlugin.kt")
 
+    group = "superpom"
     description = "Generates ${superpomPluginKt.name}"
     inputs.file(buildGradleKts)
     outputs.file(superpomPluginKt)
@@ -41,6 +42,10 @@ tasks {
 
   "compileKotlin" {
     dependsOn(generateTLinkowskiSuperpomPluginKt)
+  }
+
+  "clean" {
+    dependsOn("cleanGenerateTLinkowskiSuperpomPluginKt")
   }
 }
 
