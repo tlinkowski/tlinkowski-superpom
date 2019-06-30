@@ -90,9 +90,9 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
 }
 
 configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
-  mapping("gradle", "SLASHSTAR_STYLE")
-  mapping("kt", "SLASHSTAR_STYLE")
-  mapping("kts", "SLASHSTAR_STYLE")
+  listOf("gradle", "kt", "kts").forEach {
+    mapping(it, "SLASHSTAR_STYLE")
+  }
 }
 
 allprojects {
@@ -115,6 +115,12 @@ tasks {
   //endregion
 }
 
+/**
+ * Configures every subproject.
+ *
+ * This method is called in a `subprojects` block below, but - in case of single-project builds like this one - it may
+ * also be called for the root project.
+ */
 fun configureSubproject() {
   apply(plugin = "groovy") // for Spock
 
