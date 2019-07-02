@@ -20,5 +20,62 @@
  * Counterpart of `configureSharedFileImport()` in `BaseTLinkowskiSuperpomPlugin.kt`.
  */
 tasks {
+  //region DUPLICATED IN `BaseTLinkowskiSuperpomPlugin.configureSharedFileImport()`
+  val superpomGroup = "superpom"
+  val sharedIdeaFileTree = fileTree(".idea") {
+    include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
+  }
+  //endregion
 
+  val exportedDir = file("src/main/resources/pl/tlinkowski/superpom/exported")
+
+  val exportPluginVersion by registering {
+    group = superpomGroup
+    description = "Exports the plugin version to a text file"
+
+    val pluginVersionFile = exportedDir.resolve("plugin-version.txt")
+
+    inputs.property("version", project.version)
+    outputs.file(pluginVersionFile)
+
+    doLast {
+      pluginVersionFile.writeText(project.version as String)
+    }
+  }
+
+  fun Zip.intoSharedFilesZip(subname: String) {
+    val filename = "shared-$subname-files.zip"
+
+    description = "Packages $filename as an exported resource"
+
+    destinationDirectory.set(exportedDir)
+    archiveFileName.set(filename)
+    entryCompression = ZipEntryCompression.STORED
+  }
+
+  val exportSharedIdeaFiles by registering(Zip::class) {
+    group = superpomGroup
+    from(sharedIdeaFileTree)
+    intoSharedFilesZip("idea")
+  }
+
+  //region MAIN TASKS
+  val exportSharedFiles by registering {
+    group = superpomGroup
+    dependsOn(exportPluginVersion, exportSharedIdeaFiles)
+  }
+  val cleanExportSharedFiles by existing(Delete::class) {
+    group = superpomGroup
+    delete(exportedDir)
+  }
+  //endregion
+
+  //region LIFECYCLE HOOKS
+  "processResources" {
+    dependsOn(exportSharedFiles)
+  }
+  "clean" {
+    dependsOn(cleanExportSharedFiles)
+  }
+  //endregion
 }

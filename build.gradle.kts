@@ -179,8 +179,13 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
+tasks {
+  withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+  }
+  named<SourceTask>("licenseMain") {
+    exclude("/pl/tlinkowski/superpom/exported/*")
+  }
 }
 
 //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
