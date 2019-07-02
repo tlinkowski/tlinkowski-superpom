@@ -18,6 +18,11 @@
 package pl.tlinkowski.superpom
 
 import org.gradle.api.*
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Delete
+import org.gradle.kotlin.dsl.*
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 /**
  * Hand-written base class for [TLinkowskiSuperpomPlugin].
@@ -41,12 +46,59 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
     configureSharedFileImport()
   }
 
+  //region SHARED FILE IMPORT
   /**
    * Counterpart of `configureSharedFileExport.gradle.kts`.
    */
   private fun Project.configureSharedFileImport() {
+    tasks {
+      //region DUPLICATED IN `configureSharedFileExport.gradle.kts`
+      val superpomGroup = "superpom"
+      val sharedIdeaFileTree = fileTree(".idea") {
+        include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
+      }
+      //endregion
 
+      val importSharedIdeaFiles by registering(Copy::class) {
+        group = superpomGroup
+        fromSharedFilesZip("idea")
+        into(".idea")
+      }
+      val cleanImportSharedIdeaFiles by registering(Delete::class) {
+        group = superpomGroup
+        delete(sharedIdeaFileTree)
+      }
+
+      //region MAIN TASKS (no dependency on them - should be run manually whenever needed)
+      register("importSharedFiles") {
+        group = superpomGroup
+        dependsOn(importSharedIdeaFiles)
+      }
+      register("cleanImportSharedFiles") {
+        group = superpomGroup
+        dependsOn(cleanImportSharedIdeaFiles)
+      }
+      //endregion
+    }
   }
+
+  private fun Copy.fromSharedFilesZip(subname: String) {
+    val sharedZipTempDir = project.file(System.getProperty("java.io.tmpdir"))
+            .resolve("tlinkowski-superpom")
+            .resolve(TLinkowskiSuperpomExportedFiles.readPluginVersion())
+    sharedZipTempDir.mkdirs()
+
+    val filename = "shared-$subname-files.zip"
+    val sharedZipTempFile = sharedZipTempDir.resolve(filename)
+
+    TLinkowskiSuperpomExportedFiles.exportedResourceAsStream(filename).use { zipInputStream ->
+      Files.copy(zipInputStream, sharedZipTempFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    description = "Imports shared files from $filename exported by the plugin"
+    from(project.zipTree(sharedZipTempFile))
+  }
+  //endregion
 
   /**
    * The contents of this method are copied from root `build.gradle.kts` (`SHARED BUILD SCRIPT` region).
