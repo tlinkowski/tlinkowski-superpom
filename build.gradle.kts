@@ -90,32 +90,12 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   }
 }
 
-configure<nl.javadude.gradle.plugins.license.LicenseExtension> {
-  listOf("gradle", "kt", "kts").forEach {
-    mapping(it, "SLASHSTAR_STYLE")
-  }
-}
-
 allprojects {
   apply(plugin = "idea")
 
   repositories {
     mavenCentral()
   }
-}
-
-tasks {
-  //region https://github.com/hierynomus/license-gradle-plugin#running-on-a-non-java-project
-  val licenseGradle by registering(com.hierynomus.gradle.license.tasks.LicenseCheck::class) {
-    source = fileTree(rootDir) {
-      include("**/*.gradle")
-      include("**/*.gradle.kts")
-    }
-  }
-  "license" {
-    dependsOn(licenseGradle)
-  }
-  //endregion
 }
 
 /**
