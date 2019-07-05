@@ -137,7 +137,7 @@ fun configureSubproject() {
   }
 
   tasks {
-    withType<org.gradle.api.tasks.testing.Test> {
+    withType<org.gradle.api.tasks.testing.Test>().configureEach {
       testLogging {
         events("PASSED", "FAILED", "SKIPPED")
       }
@@ -180,7 +180,7 @@ dependencies {
 }
 
 tasks {
-  withType<KotlinCompile> {
+  withType<KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "1.8"
   }
   named<SourceTask>("licenseMain") {
