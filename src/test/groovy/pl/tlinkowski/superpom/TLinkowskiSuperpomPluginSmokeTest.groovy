@@ -62,6 +62,15 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
       result.task(':build').getOutcome() == TaskOutcome.SUCCESS
   }
 
+  def 'gradle dependencyUpdates'() {
+    given:
+      runner = sampleProjectRunner('dependencyUpdates')
+    when:
+      def result = runner.build()
+    then:
+      result.task(':dependencyUpdates').getOutcome() == TaskOutcome.SUCCESS
+  }
+
   //region HELPERS
   private static SmokeTestRunner sampleProjectRunner(String... tasks) {
     new SmokeTestRunner(SAMPLE_PROJECT_DIR, tasks)

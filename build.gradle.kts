@@ -144,6 +144,23 @@ fun configureSubproject() {
       dependsOn(jacocoTestReport, jacocoTestCoverageVerification)
     }
     //endregion
+
+    //region DEPENDENCY UPDATES: https://github.com/ben-manes/gradle-versions-plugin#revisions
+    named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
+      resolutionStrategy {
+        componentSelection {
+          all {
+            val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview", "b", "ea").any { qualifier ->
+              candidate.version.matches(Regex("(?i).*[.-]$qualifier[.\\d-+]*"))
+            }
+            if (rejected) {
+              reject("Release candidate")
+            }
+          }
+        }
+      }
+    }
+    //endregion
   }
 }
 
