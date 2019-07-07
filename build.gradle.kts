@@ -190,6 +190,10 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   kotlindoc {
     replaceJavadoc = true
     jdkVersion = 8
+
+    //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/150
+    outputDirectory = buildDir.resolve("docs/kotlindoc")
+    //endregion
   }
 
   plugin {
