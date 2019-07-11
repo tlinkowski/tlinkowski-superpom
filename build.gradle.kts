@@ -19,7 +19,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  kotlin("jvm") version "1.3.40"
+  kotlin("jvm") version "1.3.41"
   `java-gradle-plugin`
   `kotlin-dsl`
   id("org.kordamp.gradle.kotlindoc")
