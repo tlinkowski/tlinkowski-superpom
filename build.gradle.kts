@@ -24,6 +24,9 @@ plugins {
   `kotlin-dsl`
   id("org.kordamp.gradle.kotlindoc")
 
+  // https://github.com/koral--/jacoco-gradle-testkit-plugin
+  id("pl.droidsonroids.jacoco.testkit") version "1.0.4"
+
   /**
    * ATTENTION: The same plugins must be included in the `dependencies` block below.
    */

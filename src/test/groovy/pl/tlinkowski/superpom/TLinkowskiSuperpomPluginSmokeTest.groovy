@@ -18,13 +18,10 @@
 
 package pl.tlinkowski.superpom
 
-import org.gradle.testkit.runner.GradleRunner
-import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Specification
-import spock.lang.Stepwise
+import org.gradle.testkit.runner.*
+import spock.lang.*
 
-import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.*
 
 /**
  * @author Tomasz Linkowski
@@ -32,16 +29,18 @@ import java.nio.file.Path
 @Stepwise
 class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
-  private static final String GRADLE_VERSION = '5.4.1'
   private static final Path TEST_DATA_DIR = Path.of('test-data')
   private static final Path SAMPLE_PROJECT_DIR = TEST_DATA_DIR.resolve('sample-project')
 
   private static final String IDEA_CODE_STYLES_XML = '.idea/codeStyles/Project.xml'
   private static final String IDEA_INSPECTION_PROFILES_XML = '.idea/inspectionProfiles/Project_Default.xml'
 
+  @AutoCleanup
+  private SmokeTestRunner runner
+
   def 'gradle cleanImportSharedFiles clean'() {
     given:
-      def runner = sampleProjectRunner('cleanImportSharedFiles', 'clean')
+      runner = sampleProjectRunner('cleanImportSharedFiles', 'clean')
     when:
       def result = runner.build()
     then:
@@ -53,7 +52,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
   def 'gradle importSharedFiles build'() {
     given:
-      def runner = sampleProjectRunner('importSharedFiles', 'build')
+      runner = sampleProjectRunner('importSharedFiles', 'build')
     when:
       def result = runner.build()
     then:
@@ -64,21 +63,60 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
   }
 
   //region HELPERS
-  private static GradleRunner gradleRunner(Path projectDir, String... tasks) {
-    GradleRunner.create()
-            .withGradleVersion(GRADLE_VERSION)
-            .withPluginClasspath()
-            .withProjectDir(projectDir.toFile())
-            .withArguments(tasks)
-            .forwardOutput()
-  }
-
-  private static GradleRunner sampleProjectRunner(String... tasks) {
-    gradleRunner(SAMPLE_PROJECT_DIR, tasks)
+  private static SmokeTestRunner sampleProjectRunner(String... tasks) {
+    new SmokeTestRunner(SAMPLE_PROJECT_DIR, tasks)
   }
 
   private static boolean sampleProjectFileExists(String subpath) {
     Files.exists(SAMPLE_PROJECT_DIR.resolve(subpath))
   }
   //endregion
+
+  /**
+   * Special class that handles setting up and cleaning up an appropriately modified `gradle.properties` file.
+   */
+  private static class SmokeTestRunner implements AutoCloseable {
+
+    private final GradleRunner gradleRunner
+    private final Path gradlePropertiesPath
+    private final Path gradlePropertiesBakPath
+
+    SmokeTestRunner(Path projectDir, String... tasks) {
+      gradleRunner = createGradleRunner(projectDir, tasks)
+      gradlePropertiesPath = projectDir.resolve('gradle.properties')
+      gradlePropertiesBakPath = projectDir.resolve('gradle.properties.bak')
+
+      setUpModifiedGradleProperties()
+    }
+
+    @Override
+    void close() {
+      cleanUpModifiedGradleProperties()
+    }
+
+    BuildResult build() {
+      gradleRunner.build()
+    }
+
+    private static GradleRunner createGradleRunner(Path projectDir, String... tasks) {
+      GradleRunner.create()
+              .withPluginClasspath()
+              .withProjectDir(projectDir.toFile())
+              .withArguments(tasks)
+              .forwardOutput()
+    }
+
+    //region MODIFIED GRADLE PROPERTIES
+    private void setUpModifiedGradleProperties() {
+      Files.copy(gradlePropertiesPath, gradlePropertiesBakPath)
+
+      def testkitContent = GradleRunner.class.classLoader.getResourceAsStream('testkit-gradle.properties').text
+      Files.writeString(gradlePropertiesPath, testkitContent, StandardOpenOption.APPEND)
+    }
+
+    private void cleanUpModifiedGradleProperties() {
+      Files.move(gradlePropertiesBakPath, gradlePropertiesPath, StandardCopyOption.REPLACE_EXISTING)
+    }
+    //endregion
+  }
 }
