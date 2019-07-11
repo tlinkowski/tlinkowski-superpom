@@ -18,12 +18,13 @@
 
 package pl.tlinkowski.superpom
 
-
+import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.*
 
 import java.nio.file.Files
 import java.nio.file.Path
+
 /**
  * @author Tomasz Linkowski
  */
@@ -48,7 +49,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
       !sampleProjectFileExists(IDEA_CODE_STYLES_XML)
       !sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
-      result.task(':clean').getOutcome() != TaskOutcome.FAILED
+      taskDidNotFail(result, ':clean')
   }
 
   def 'gradle importSharedFiles build'() {
@@ -60,7 +61,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
       sampleProjectFileExists(IDEA_CODE_STYLES_XML)
       sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
-      result.task(':build').getOutcome() == TaskOutcome.SUCCESS
+      taskWasSuccessful(result, ':build')
   }
 
   def 'gradle dependencyUpdates'() {
@@ -69,7 +70,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
     when:
       def result = runner.build()
     then:
-      result.task(':dependencyUpdates').getOutcome() == TaskOutcome.SUCCESS
+      taskWasSuccessful(result, ':dependencyUpdates')
   }
 
   //region HELPERS
@@ -79,6 +80,14 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
   private static boolean sampleProjectFileExists(String subpath) {
     Files.exists(SAMPLE_PROJECT_DIR.resolve(subpath))
+  }
+
+  private static boolean taskWasSuccessful(BuildResult result, String taskName) {
+    result.task(taskName).getOutcome() == TaskOutcome.SUCCESS
+  }
+
+  private static boolean taskDidNotFail(BuildResult result, String taskName) {
+    result.task(taskName).getOutcome() != TaskOutcome.FAILED
   }
   //endregion
 }
