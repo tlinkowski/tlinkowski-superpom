@@ -88,12 +88,10 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
     private final GradleRunner gradleRunner
     private final Path gradlePropertiesPath
-    private final Path gradlePropertiesBakPath
 
     SmokeTestRunner(Path projectDir, String... tasks) {
       gradleRunner = createGradleRunner(projectDir, tasks)
       gradlePropertiesPath = projectDir.resolve('gradle.properties')
-      gradlePropertiesBakPath = projectDir.resolve('gradle.properties.bak')
 
       setUpModifiedGradleProperties()
     }
@@ -117,15 +115,27 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
     //region MODIFIED GRADLE PROPERTIES
     private void setUpModifiedGradleProperties() {
-      Files.copy(gradlePropertiesPath, gradlePropertiesBakPath)
+      backupFile(gradlePropertiesPath)
 
       def testkitContent = GradleRunner.class.classLoader.getResourceAsStream('testkit-gradle.properties').text
       Files.writeString(gradlePropertiesPath, testkitContent, StandardOpenOption.APPEND)
     }
 
     private void cleanUpModifiedGradleProperties() {
-      Files.move(gradlePropertiesBakPath, gradlePropertiesPath, StandardCopyOption.REPLACE_EXISTING)
+      restoreFile(gradlePropertiesPath)
     }
     //endregion
+
+    private static void backupFile(Path path) {
+      Files.copy(path, toBackupPath(path))
+    }
+
+    private static void restoreFile(Path path) {
+      Files.move(toBackupPath(path), path, StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    private static Path toBackupPath(Path path) {
+      Path.of(path.toString() + '.bak')
+    }
   }
 }
