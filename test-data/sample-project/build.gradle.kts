@@ -18,7 +18,7 @@
 
 plugins {
   java
-  id("pl.tlinkowski.tlinkowski-superpom") version "*"
+  id("pl.tlinkowski.tlinkowski-superpom") version null
 }
 
 config {

@@ -32,6 +32,7 @@ plugins {
    */
   //region SHARED PLUGINS
   id("org.kordamp.gradle.project") apply false
+  // "org.kordamp.gradle.settings" doesn't need to be included here
   //endregion
 }
 
@@ -43,6 +44,7 @@ dependencies {
   val kordampVersion: String by project
 
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
+  compile(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
 }
 
 repositories {
@@ -221,6 +223,10 @@ gradlePlugin {
     create("tlinkowski-superpom") {
       id = "pl.tlinkowski.tlinkowski-superpom"
       implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
+    }
+    create("standard-settings") {
+      id = "pl.tlinkowski.standard-settings"
+      implementationClass = "pl.tlinkowski.superpom.StandardSettingsPlugin"
     }
   }
 }

@@ -88,17 +88,21 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
     private final GradleRunner gradleRunner
     private final Path gradlePropertiesPath
+    private final Path settingsGradleKtsPath
 
     SmokeTestRunner(Path projectDir, String... tasks) {
       gradleRunner = createGradleRunner(projectDir, tasks)
       gradlePropertiesPath = projectDir.resolve('gradle.properties')
+      settingsGradleKtsPath = projectDir.resolve('settings.gradle.kts')
 
       setUpModifiedGradleProperties()
+      setUpModifiedSettingsGradleKts()
     }
 
     @Override
     void close() {
       cleanUpModifiedGradleProperties()
+      cleanUpModifiedSettingsGradleKts()
     }
 
     BuildResult build() {
@@ -113,16 +117,42 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
               .forwardOutput()
     }
 
-    //region MODIFIED GRADLE PROPERTIES
+    //region MODIFIED GRADLE.PROPERTIES
     private void setUpModifiedGradleProperties() {
       backupFile(gradlePropertiesPath)
-
-      def testkitContent = GradleRunner.class.classLoader.getResourceAsStream('testkit-gradle.properties').text
-      Files.writeString(gradlePropertiesPath, testkitContent, StandardOpenOption.APPEND)
+      Files.writeString(gradlePropertiesPath, readTestkitPropertiesContent(), StandardOpenOption.APPEND)
     }
 
     private void cleanUpModifiedGradleProperties() {
       restoreFile(gradlePropertiesPath)
+    }
+
+    private static String readTestkitPropertiesContent() {
+      GradleRunner.class.classLoader.getResourceAsStream('testkit-gradle.properties').text
+    }
+    //endregion
+
+    //region MODIFIED SETTINGS.GRADLE.KTS
+    private void setUpModifiedSettingsGradleKts() {
+      backupFile(settingsGradleKtsPath)
+      Files.writeString(settingsGradleKtsPath, replaceWithPluginClasspath(Files.readString(settingsGradleKtsPath)))
+    }
+
+    private void cleanUpModifiedSettingsGradleKts() {
+      restoreFile(settingsGradleKtsPath)
+    }
+
+    // https://github.com/gradle/gradle/blob/6b1ced257444b04ca4f93a4e0d624d0f1903e42c/subprojects/test-kit/src/integTest/groovy/org/gradle/testkit/TestKitEndUserIntegrationTest.groovy#L354-L365
+    private String replaceWithPluginClasspath(String content) {
+      def dependencyNotation = 'group = "pl.tlinkowski.superpom", name = "tlinkowski-superpom", version = null'
+      def pluginClasspath = gradleRunner.pluginClasspath
+              .collect { file -> '"' + toNormalizedString(file) + '"' }
+              .join(', ')
+      content.replace(dependencyNotation, "files($pluginClasspath)")
+    }
+
+    private static String toNormalizedString(File file) {
+      file.path.replace('\\', '/')
     }
     //endregion
 
