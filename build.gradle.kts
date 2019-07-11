@@ -188,6 +188,12 @@ tasks {
   named<SourceTask>("licenseMain") {
     exclude("/pl/tlinkowski/superpom/exported/*")
   }
+  //region FOR SmokeTestRunner.kt, ShadedFile.kt (https://stackoverflow.com/a/37851957/2032415)
+  named<GroovyCompile>("compileTestGroovy") {
+    classpath += files(compileTestKotlin.get().destinationDir)
+    dependsOn(compileTestKotlin)
+  }
+  //endregion
 }
 
 // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
