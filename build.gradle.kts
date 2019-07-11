@@ -171,6 +171,9 @@ tasks {
   }
 }
 
+// WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
+apply(from = "gradle/workAroundJacocoGradleTestKitIssueOnWindows.gradle.kts")
+
 //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
 configurations {
   create("dokkaRuntime")
