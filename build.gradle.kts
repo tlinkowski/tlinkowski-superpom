@@ -213,15 +213,15 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   kotlindoc {
     replaceJavadoc = true
     jdkVersion = 8
-
-    //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/150
-    outputDirectory = buildDir.resolve("docs/kotlindoc")
-    //endregion
   }
+}
 
-  plugin {
-    id = "pl.tlinkowski.tlinkowski-superpom"
-    implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
+gradlePlugin {
+  plugins {
+    create("tlinkowski-superpom") {
+      id = "pl.tlinkowski.tlinkowski-superpom"
+      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
+    }
   }
 }
 //endregion
