@@ -20,7 +20,7 @@ import org.gradle.kotlin.dsl.support.*
 import java.time.LocalDate
 import java.time.LocalTime
 
-/**
+/*
  * See: https://github.com/tlinkowski/tlinkowski-superpom/issues/6
  */
 tasks {
@@ -90,9 +90,8 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
 /**
- * Automatically generated class that applies the concept of a Gradle SuperPOM for all projects of Tomasz Linkowski.
- *
- * See: [http://andresalmiray.com/the-gradle-superpom/]
+ * Automatically generated class that applies [The Gradle SuperPOM](http://andresalmiray.com/the-gradle-superpom/)
+ * concept of Andres Almiray to all projects of Tomasz Linkowski.
  *
  * @author Tomasz Linkowski
  */

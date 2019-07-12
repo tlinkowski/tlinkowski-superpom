@@ -24,14 +24,18 @@ import org.gradle.kotlin.dsl.*
 import java.io.File
 
 /**
- * A plugin that applies the convention described in
- * [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure).
- * Moreover, it configures plugin management for the [TLinkowskiSuperpomPlugin].
+ * A `Settings` plugin that:
+ * - configures plugin management for [TLinkowskiSuperpomPlugin]
+ * - configures the project structure as described in
+ * [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure)
  *
  * @author Tomasz Linkowski
  */
 class TLinkowskiSettingsPlugin : Plugin<Settings> {
 
+  /**
+   * Applies the plugin (can be used in `settings.gradle.kts` only).
+   */
   override fun apply(settings: Settings) {
     settings.configurePluginManagement()
     settings.configureProjectStructure()
