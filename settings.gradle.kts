@@ -28,4 +28,21 @@ pluginManagement {
   //endregion
 }
 
+//region SEE: https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_settings
+buildscript {
+  val kordampVersion: String by settings
+  repositories {
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
+  }
+}
+apply(plugin = "org.kordamp.gradle.settings")
+//endregion
+
 rootProject.name = "tlinkowski-superpom"
+
+configure<org.kordamp.gradle.plugin.settings.ProjectsExtension> {
+  directories = listOf("subprojects")
+}

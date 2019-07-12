@@ -25,7 +25,7 @@ import java.time.LocalTime
  */
 tasks {
   val generateTLinkowskiSuperpomPluginKt by registering {
-    val buildGradleKts = file("build.gradle.kts")
+    val buildGradleKts = rootDir.resolve("build.gradle.kts")
     val superpomPluginKt = file("src/main/kotlin/pl/tlinkowski/superpom/TLinkowskiSuperpomPlugin.kt")
 
     group = "superpom"

@@ -17,17 +17,12 @@
  */
 
 buildscript {
-  val superpomVersion: String by settings
   repositories {
-    mavenCentral {
-      content {
-        includeGroup("pl.tlinkowski.superpom")
-      }
-    }
-    gradlePluginPortal()
+    mavenCentral()
   }
   dependencies {
-    classpath(group = "pl.tlinkowski.superpom", name = "tlinkowski-superpom", version = superpomVersion)
+    val superpomVersion: String by settings
+    classpath(group = "pl.tlinkowski.superpom", name = "tlinkowski-settings-plugin", version = superpomVersion)
   }
 }
 apply(plugin = "pl.tlinkowski.tlinkowski-settings")

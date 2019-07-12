@@ -15,20 +15,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-plugins {
-  id("pl.tlinkowski.tlinkowski-superpom")
-}
-
-config {
-  info {
-    name = "sample-project"
-    description = "A sample project"
-    inceptionYear = "2019"
-
-    links {
-      website = "https://github.com/tlinkowski/FAKE-NAME"
-      scm = "https://github.com/tlinkowski/FAKE-NAME.git"
-    }
-  }
-}

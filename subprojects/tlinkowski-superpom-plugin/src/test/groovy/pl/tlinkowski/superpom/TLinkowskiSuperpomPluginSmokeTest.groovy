@@ -31,7 +31,7 @@ import java.nio.file.Path
 @Stepwise
 class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
-  private static final Path TEST_DATA_DIR = Path.of('test-data')
+  private static final Path TEST_DATA_DIR = Path.of('../../test-data')
   private static final Path SAMPLE_PROJECT_DIR = TEST_DATA_DIR.resolve('sample-project')
 
   private static final String IDEA_CODE_STYLES_XML = '.idea/codeStyles/Project.xml'

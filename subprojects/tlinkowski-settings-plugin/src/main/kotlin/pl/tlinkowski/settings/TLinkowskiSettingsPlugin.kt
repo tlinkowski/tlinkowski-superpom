@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.superpom
+package pl.tlinkowski.settings
 
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings

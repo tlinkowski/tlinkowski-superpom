@@ -17,38 +17,21 @@
  */
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 
 plugins {
   kotlin("jvm") version "1.3.41"
   `java-gradle-plugin`
-  `kotlin-dsl`
+  `kotlin-dsl` apply false
   id("org.kordamp.gradle.kotlindoc")
 
-  // https://github.com/koral--/jacoco-gradle-testkit-plugin
-  id("pl.droidsonroids.jacoco.testkit") version "1.0.4"
-
   /**
-   * ATTENTION: The same plugins must be included in the `dependencies` block below.
+   * ATTENTION: The same plugins must be included in the `dependencies` block in `tlinkowski-superpom.gradle.kts`.
    */
   //region SHARED PLUGINS
   id("org.kordamp.gradle.project") apply false
   //endregion
 }
-
-/**
- * ATTENTION: The same plugins must be included in the `plugins` block above.
- */
-//region SHARED PLUGINS
-dependencies {
-  val kordampVersion: String by project
-
-  compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
-}
-
-repositories {
-  gradlePluginPortal() // for shared Gradle plugins
-}
-//endregion
 
 /**
  * ATTENTION: The contents of the `SHARED BUILD SCRIPT` region are copied to `TLinkowskiSuperpomPlugin.kt`.
@@ -101,13 +84,7 @@ allprojects {
   }
 }
 
-/**
- * Configures every subproject.
- *
- * This method is called in a `subprojects` block below, but - in case of single-project builds like this one - it may
- * also be called for the root project.
- */
-fun Project.configureSubproject() {
+subprojects {
   apply(plugin = "groovy") // for Spock
 
   dependencies {
@@ -163,47 +140,55 @@ fun Project.configureSubproject() {
     //endregion
   }
 }
-
-subprojects {
-  configureSubproject() // without rootProject
-}
 //endregion
 
 //region PRIVATE BUILD SCRIPT
-configureSubproject() // rootProject (this is a single-project build)
+subprojects {
+  apply {
+    plugin("java-gradle-plugin")
+    plugin("org.gradle.kotlin.kotlin-dsl")
+    plugin("org.jetbrains.kotlin.jvm")
+  }
 
-apply(from = "gradle/generateTLinkowskiSuperpomPluginKt.gradle.kts")
-apply(from = "gradle/configureSharedFileExport.gradle.kts")
+  dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+  }
 
-dependencies {
-  implementation(kotlin("stdlib-jdk8"))
+  tasks {
+    withType<KotlinCompile>().configureEach {
+      kotlinOptions.jvmTarget = "1.8"
+    }
+  }
+
+  gradlePlugin {
+    plugins {
+      create(project.name) {
+        val pluginId: String by project
+        id = pluginId
+
+        val pluginImplementationClass: String by project
+        implementationClass = pluginImplementationClass
+      }
+    }
+  }
 }
-
-tasks {
-  withType<KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-  named<SourceTask>("licenseMain") {
-    exclude("/pl/tlinkowski/superpom/exported/*")
-  }
-  //region FOR SmokeTestRunner.kt, ShadedFile.kt (https://stackoverflow.com/a/37851957/2032415)
-  named<GroovyCompile>("compileTestGroovy") {
-    classpath += files(compileTestKotlin.get().destinationDir)
-    dependsOn(compileTestKotlin)
-  }
-  //endregion
-}
-
-// WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
-apply(from = "gradle/workAroundJacocoGradleTestKitIssueOnWindows.gradle.kts")
 
 //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
-configurations {
-  create("dokkaRuntime")
+allprojects {
+  configurations {
+    create("dokkaRuntime")
+  }
+  repositories {
+    gradlePluginPortal {
+      content {
+        includeGroup("org.jetbrains.dokka")
+      }
+    }
+  }
 }
 //endregion
 
-configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
+configure<ProjectConfigurationExtension> {
   info {
     name = "tlinkowski-superpom"
     description = """A Gradle SuperPOM for all projects in "pl.tlinkowski" group."""
@@ -219,19 +204,6 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   kotlindoc {
     replaceJavadoc = true
     jdkVersion = 8
-  }
-}
-
-gradlePlugin {
-  plugins {
-    create("tlinkowski-superpom") {
-      id = "pl.tlinkowski.tlinkowski-superpom"
-      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
-    }
-    create("tlinkowski-settings") {
-      id = "pl.tlinkowski.tlinkowski-settings"
-      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSettingsPlugin"
-    }
   }
 }
 //endregion

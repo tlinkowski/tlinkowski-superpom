@@ -54,7 +54,7 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
     tasks {
       //region DUPLICATED IN `configureSharedFileExport.gradle.kts`
       val superpomGroup = "superpom"
-      val sharedIdeaFileTree = fileTree(".idea") {
+      val sharedIdeaFileTree = fileTree("$rootDir/.idea") {
         include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
       }
       //endregion

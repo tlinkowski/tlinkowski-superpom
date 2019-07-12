@@ -22,7 +22,7 @@
 tasks {
   //region DUPLICATED IN `BaseTLinkowskiSuperpomPlugin.configureSharedFileImport()`
   val superpomGroup = "superpom"
-  val sharedIdeaFileTree = fileTree(".idea") {
+  val sharedIdeaFileTree = fileTree("$rootDir/.idea") {
     include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
   }
   //endregion
