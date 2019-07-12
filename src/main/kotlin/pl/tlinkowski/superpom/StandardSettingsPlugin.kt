@@ -20,13 +20,11 @@ package pl.tlinkowski.superpom
 
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
-import org.gradle.kotlin.dsl.*
-import org.kordamp.gradle.plugin.settings.ProjectsExtension
+import java.io.File
 
 /**
- * A wrapper over Kordamp Settings Plugin.
- *
- * @see [https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_settings]
+ * A plugin that applies the convention described in
+ * [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure).
  *
  * @author Tomasz Linkowski
  */
@@ -36,11 +34,26 @@ class StandardSettingsPlugin : Plugin<Settings> {
     settings.configure()
   }
 
+  //region ADAPTED FROM: https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure
   private fun Settings.configure() {
-    apply(plugin = "org.kordamp.gradle.settings")
+    listOf("subprojects").forEach { includeSubprojects(rootDir.resolve(it)) }
+  }
 
-    configure<ProjectsExtension> {
-      directories = listOf("subprojects")
+  private fun Settings.includeSubprojects(groupDir: File) {
+    requireNotNull(groupDir.listFiles(), { groupDir }).forEach { tryIncludeSubproject(it) }
+  }
+
+  private fun Settings.tryIncludeSubproject(subprojectDir: File) {
+    val subprojectName = subprojectDir.name
+    val buildFile = subprojectDir.resolve("$subprojectName.gradle.kts")
+
+    if (buildFile.isFile) {
+      include(subprojectName)
+
+      val subproject = project(":$subprojectName")
+      subproject.projectDir = subprojectDir
+      subproject.buildFileName = buildFile.name
     }
   }
+  //endregion
 }

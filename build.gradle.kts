@@ -32,7 +32,6 @@ plugins {
    */
   //region SHARED PLUGINS
   id("org.kordamp.gradle.project") apply false
-  // "org.kordamp.gradle.settings" doesn't need to be included here
   //endregion
 }
 
@@ -44,7 +43,6 @@ dependencies {
   val kordampVersion: String by project
 
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
-  compile(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
 }
 
 repositories {
