@@ -107,7 +107,7 @@ allprojects {
  * This method is called in a `subprojects` block below, but - in case of single-project builds like this one - it may
  * also be called for the root project.
  */
-fun configureSubproject() {
+fun Project.configureSubproject() {
   apply(plugin = "groovy") // for Spock
 
   dependencies {
