@@ -26,10 +26,11 @@ import java.io.File
 /**
  * A plugin that applies the convention described in
  * [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure).
+ * Moreover, it configures plugin management for the [TLinkowskiSuperpomPlugin].
  *
  * @author Tomasz Linkowski
  */
-class StandardSettingsPlugin : Plugin<Settings> {
+class TLinkowskiSettingsPlugin : Plugin<Settings> {
 
   override fun apply(settings: Settings) {
     settings.configurePluginManagement()

@@ -30,6 +30,6 @@ buildscript {
     classpath(group = "pl.tlinkowski.superpom", name = "tlinkowski-superpom", version = superpomVersion)
   }
 }
-apply(plugin = "pl.tlinkowski.standard-settings")
+apply(plugin = "pl.tlinkowski.tlinkowski-settings")
 
 rootProject.name = "sample-project"

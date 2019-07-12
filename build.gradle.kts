@@ -228,9 +228,9 @@ gradlePlugin {
       id = "pl.tlinkowski.tlinkowski-superpom"
       implementationClass = "pl.tlinkowski.superpom.TLinkowskiSuperpomPlugin"
     }
-    create("standard-settings") {
-      id = "pl.tlinkowski.standard-settings"
-      implementationClass = "pl.tlinkowski.superpom.StandardSettingsPlugin"
+    create("tlinkowski-settings") {
+      id = "pl.tlinkowski.tlinkowski-settings"
+      implementationClass = "pl.tlinkowski.superpom.TLinkowskiSettingsPlugin"
     }
   }
 }
