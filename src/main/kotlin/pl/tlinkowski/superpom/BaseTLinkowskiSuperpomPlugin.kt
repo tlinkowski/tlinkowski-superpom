@@ -47,7 +47,7 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
   }
 
   //region SHARED FILE IMPORT
-  /**
+  /*
    * Counterpart of `configureSharedFileExport.gradle.kts`.
    */
   private fun Project.configureSharedFileImport() {

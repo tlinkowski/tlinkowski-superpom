@@ -28,8 +28,9 @@ import java.nio.file.*
 class ShadedFile(private val path: Path, contentMapper: (String) -> String) : AutoCloseable {
 
   init {
-    Files.copy(path, bakPath()) // backup file
-    Files.writeString(path, contentMapper(Files.readString(path))) // modify file content
+    val modifiedContent = contentMapper(Files.readString(path))
+    Files.move(path, bakPath()) // backup original file
+    Files.writeString(path, modifiedContent)
   }
 
   override fun close() {

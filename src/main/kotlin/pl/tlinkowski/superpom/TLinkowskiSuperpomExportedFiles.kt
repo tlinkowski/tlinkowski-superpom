@@ -27,8 +27,14 @@ import java.io.InputStream
  */
 internal object TLinkowskiSuperpomExportedFiles {
 
+  /**
+   * Returns an [InputStream] for a resource with given [name].
+   */
   fun exportedResourceAsStream(name: String): InputStream = javaClass.getResourceAsStream("exported/$name")
           ?: throw IllegalArgumentException("Resource /pl/tlinkowski/superpom/exported/$name not found")
 
+  /**
+   * Returns the SuperPOM plugin version stored as a resource.
+   */
   fun readPluginVersion(): String = exportedResourceAsStream("plugin-version.txt").reader().use { it.readText() }
 }

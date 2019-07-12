@@ -75,7 +75,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
 
   //region HELPERS
   private static SmokeTestRunner sampleProjectRunner(String... tasks) {
-    new SmokeTestRunner(SAMPLE_PROJECT_DIR, tasks)
+    new SmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(tasks))
   }
 
   private static boolean sampleProjectFileExists(String subpath) {

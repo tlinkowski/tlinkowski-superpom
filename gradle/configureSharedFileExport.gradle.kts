@@ -43,6 +43,9 @@ tasks {
     }
   }
 
+  /**
+   * Configures the destination of the [Zip] task.
+   */
   fun Zip.intoSharedFilesZip(subname: String) {
     val filename = "shared-$subname-files.zip"
 

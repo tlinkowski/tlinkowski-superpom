@@ -22,7 +22,10 @@ import org.apache.tools.ant.taskdefs.condition.Os
 if (Os.isFamily(Os.FAMILY_WINDOWS)) {
   tasks {
     "test" {
-      fun File.isLocked() = !renameTo(this) // https://stackoverflow.com/a/13706972/2032415
+      /**
+       * Checks if a file is locked. Source: [https://stackoverflow.com/a/13706972/2032415]
+       */
+      fun File.isLocked() = !renameTo(this)
 
       val waitUntilJacocoTestExecIsUnlocked = Action<Task> {
         val jacocoTestExec = checkNotNull(extensions.getByType(JacocoTaskExtension::class).destinationFile)

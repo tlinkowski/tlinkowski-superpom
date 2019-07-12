@@ -28,14 +28,14 @@ import java.nio.file.Path
  *
  * @author Tomasz Linkowski
  */
-internal class SmokeTestRunner(projectDir: Path, vararg tasks: String) : AutoCloseable {
+internal class SmokeTestRunner(projectDir: Path, tasks: List<String>) : AutoCloseable {
 
   private val gradleRunner: GradleRunner
   private val shadedGradleProperties: ShadedFile
   private val shadedSettingsGradleKts: ShadedFile
 
   init {
-    gradleRunner = createGradleRunner(projectDir, *tasks)
+    gradleRunner = createGradleRunner(projectDir, tasks)
     shadedGradleProperties = ShadedFile(projectDir.resolve("gradle.properties")) {
       it + readTestkitPropertiesContent()
     }
@@ -45,16 +45,19 @@ internal class SmokeTestRunner(projectDir: Path, vararg tasks: String) : AutoClo
   }
 
   override fun close() {
-    shadedGradleProperties.close()
-    shadedSettingsGradleKts.close()
+    try {
+      shadedGradleProperties.close()
+    } finally {
+      shadedSettingsGradleKts.close()
+    }
   }
 
   fun build(): BuildResult = gradleRunner.build()
 
-  private fun createGradleRunner(projectDir: Path, vararg tasks: String) = GradleRunner.create()
+  private fun createGradleRunner(projectDir: Path, tasks: List<String>) = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(projectDir.toFile())
-          .withArguments(*tasks)
+          .withArguments(tasks)
           .forwardOutput()
 
   //region GRADLE.PROPERTIES
