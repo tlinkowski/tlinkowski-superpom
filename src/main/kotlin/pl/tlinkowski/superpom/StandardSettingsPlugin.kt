@@ -63,13 +63,11 @@ class StandardSettingsPlugin : Plugin<Settings> {
     val subprojectName = subprojectDir.name
     val buildFile = subprojectDir.resolve("$subprojectName.gradle.kts")
 
-    if (buildFile.isFile) {
-      include(subprojectName)
+    include(subprojectName)
 
-      val subproject = project(":$subprojectName")
-      subproject.projectDir = subprojectDir
-      subproject.buildFileName = buildFile.name
-    }
+    val subproject = project(":$subprojectName")
+    subproject.projectDir = subprojectDir
+    subproject.buildFileName = buildFile.name
   }
   //endregion
 }
