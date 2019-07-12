@@ -37,16 +37,28 @@ class StandardSettingsPlugin : Plugin<Settings> {
   }
 
   private fun Settings.configurePluginManagement() {
-    val superpomVersion: String by this
-
     pluginManagement {
+      //region WHY: this superpom plugin won't be deployed to Gradle Plugin Portal (it's not a generic-use plugin)
+      repositories {
+        mavenCentral {
+          content {
+            includeGroup("pl.tlinkowski.tlinkowski-superpom")
+          }
+        }
+        gradlePluginPortal()
+      }
+      //endregion
+
+      //region WHY: so that the superpom plugin can be applied in `build.gradle.kts` without specifying its version
       resolutionStrategy {
         eachPlugin {
           if (requested.id.namespace == "pl.tlinkowski") {
+            val superpomVersion: String by settings
             useVersion(superpomVersion)
           }
         }
       }
+      //endregion
     }
   }
 
