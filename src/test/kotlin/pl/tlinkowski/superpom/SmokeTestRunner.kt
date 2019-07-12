@@ -68,7 +68,7 @@ internal class SmokeTestRunner(projectDir: Path, tasks: List<String>) : AutoClos
 
   //region SETTINGS.GRADLE.KTS
   private fun replaceClasspathWithPluginClasspath(content: String): String {
-    val dependencyNotation = """group = "pl.tlinkowski.superpom", name = "tlinkowski-superpom", version = null"""
+    val dependencyNotation = """group = "pl.tlinkowski.superpom", name = "tlinkowski-superpom", version = superpomVersion"""
     val pluginClasspathString = buildPluginClasspathString()
     val modifiedContent = content.replace(dependencyNotation, "files($pluginClasspathString)")
     assert(content != modifiedContent) { content }

@@ -20,6 +20,7 @@ package pl.tlinkowski.superpom
 
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
+import org.gradle.kotlin.dsl.*
 import java.io.File
 
 /**
@@ -31,11 +32,26 @@ import java.io.File
 class StandardSettingsPlugin : Plugin<Settings> {
 
   override fun apply(settings: Settings) {
-    settings.configure()
+    settings.configurePluginManagement()
+    settings.configureProjectStructure()
+  }
+
+  private fun Settings.configurePluginManagement() {
+    val superpomVersion: String by this
+
+    pluginManagement {
+      resolutionStrategy {
+        eachPlugin {
+          if (requested.id.namespace == "pl.tlinkowski") {
+            useVersion(superpomVersion)
+          }
+        }
+      }
+    }
   }
 
   //region ADAPTED FROM: https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure
-  private fun Settings.configure() {
+  private fun Settings.configureProjectStructure() {
     listOf("subprojects").forEach { includeSubprojects(rootDir.resolve(it)) }
   }
 
