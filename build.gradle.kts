@@ -28,8 +28,7 @@ plugins {
    * ATTENTION: The same plugins must be included in the `dependencies` block in `my-superpom-gradle-plugin.gradle.kts`.
    */
   //region SHARED PLUGINS
-  kotlin("jvm") // for test code
-  groovy // for Spock
+  kotlin("jvm") apply false // for test code
   id("org.kordamp.gradle.project")
   //endregion
 }
