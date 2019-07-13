@@ -39,7 +39,8 @@ tasks {
     outputs.file(pluginVersionFile)
 
     doLast {
-      pluginVersionFile.writeText(project.version as String)
+      val version: String by project
+      pluginVersionFile.writeText(version)
     }
   }
 
