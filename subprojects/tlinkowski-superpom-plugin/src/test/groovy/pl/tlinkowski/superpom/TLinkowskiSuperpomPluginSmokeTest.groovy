@@ -61,8 +61,9 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
       sampleProjectFileExists(IDEA_CODE_STYLES_XML)
       sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
-      taskWasSuccessful(result, ':build')
+      taskDidNotFail(result, ':build')
       taskWasSuccessful(result, ':project1:test')
+      taskWasSuccessful(result, ':project1:build')
   }
 
   def 'gradle dependencyUpdates'() {
