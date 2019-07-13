@@ -131,7 +131,7 @@ subprojects {
         rule {
           limit {
             counter = "LINE"
-            minimum = "0.99".toBigDecimal()
+            minimum = "0.95".toBigDecimal()
           }
         }
       }
