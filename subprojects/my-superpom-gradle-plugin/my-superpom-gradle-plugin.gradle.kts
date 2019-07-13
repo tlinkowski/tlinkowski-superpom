@@ -26,6 +26,9 @@ dependencies {
 
   val kordampVersion: String by project
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
+
+  val modularityVersion: String by project
+  compile(group = "org.javamodularity", name = "moduleplugin", version = modularityVersion)
 }
 
 repositories {

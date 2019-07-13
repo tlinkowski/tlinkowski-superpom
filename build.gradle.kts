@@ -30,6 +30,7 @@ plugins {
   //region SHARED PLUGINS
   kotlin("jvm") apply false // for test code
   id("org.kordamp.gradle.project")
+  id("org.javamodularity.moduleplugin") apply false
   //endregion
 }
 

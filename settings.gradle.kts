@@ -15,17 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 pluginManagement {
   //region SOLVES: https://github.com/gradle/gradle/issues/1697
   resolutionStrategy {
+    val namespacesToPropertyNames = mapOf(
+            "org.jetbrains.kotlin" to "kotlinVersion",
+            "org.kordamp.gradle" to "kordampVersion",
+            "org.javamodularity" to "modularityVersion"
+    )
     eachPlugin {
-      if (requested.id.namespace == "org.jetbrains.kotlin") {
-        val kotlinVersion: String by settings
-        useVersion(kotlinVersion)
-      }
-      if (requested.id.namespace == "org.kordamp.gradle") {
-        val kordampVersion: String by settings
-        useVersion(kordampVersion)
+      namespacesToPropertyNames[requested.id.namespace]?.let { propertyName ->
+        useVersion(extra[propertyName] as String)
       }
     }
   }
