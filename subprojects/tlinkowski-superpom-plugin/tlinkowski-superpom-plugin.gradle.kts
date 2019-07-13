@@ -26,8 +26,10 @@ plugins {
  */
 //region SHARED PLUGINS
 dependencies {
-  val kordampVersion: String by project
+  val kotlinVersion: String by project
+  compile(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = kotlinVersion)
 
+  val kordampVersion: String by project
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
 }
 
@@ -51,11 +53,6 @@ tasks {
   pluginUnderTestMetadata {
     // https://discuss.gradle.org/t/how-to-make-gradle-testkit-depend-on-output-jar-rather-than-just-classes/18940/2
     pluginClasspath.from(project(":tlinkowski-settings-plugin").tasks.jar)
-  }
-  compileTestGroovy {
-    // https://stackoverflow.com/a/37851957/2032415
-    classpath += files(compileTestKotlin.get().destinationDir)
-    dependsOn(compileTestKotlin)
   }
   //endregion
 }

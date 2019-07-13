@@ -16,10 +16,7 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-  kotlin("jvm") version "1.3.41"
   `java-gradle-plugin`
   `kotlin-dsl` apply false
   id("org.kordamp.gradle.kotlindoc")
@@ -28,7 +25,8 @@ plugins {
    * ATTENTION: The same plugins must be included in the `dependencies` block in `tlinkowski-superpom.gradle.kts`.
    */
   //region SHARED PLUGINS
-  groovy
+  kotlin("jvm") // for test code
+  groovy // for Spock
   id("org.kordamp.gradle.project")
   //endregion
 }
@@ -88,14 +86,18 @@ allprojects {
 
 subprojects {
   apply {
+    plugin("org.jetbrains.kotlin.jvm") // for test code
     plugin("groovy") // for Spock
   }
 
   dependencies {
     val testImplementation by configurations
+
+    val kotlinVersion: String by project
     val spockVersion: String by project
     val groovyVersion: String by project
 
+    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = kotlinVersion)
     testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
     testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
   }
@@ -106,10 +108,25 @@ subprojects {
         events("PASSED", "FAILED", "SKIPPED")
       }
     }
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+      kotlinOptions.jvmTarget = "1.8"
+    }
+
+    //region TEST-GROOVY CAN ACCESS TEST-KOTLIN: https://stackoverflow.com/a/37851957/2032415
+    val compileTestGroovy by existing(org.gradle.api.tasks.compile.GroovyCompile::class)
+    val compileTestKotlin by existing(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class)
+
+    compileTestGroovy {
+      classpath += files(compileTestKotlin.get().destinationDir)
+      dependsOn(compileTestKotlin)
+    }
+    //endregion
 
     //region https://docs.gradle.org/current/userguide/jacoco_plugin.html
     val jacocoTestReport by existing
-    val jacocoTestCoverageVerification by existing(org.gradle.testing.jacoco.tasks.JacocoCoverageVerification::class) {
+    val jacocoTestCoverageVerification by existing(org.gradle.testing.jacoco.tasks.JacocoCoverageVerification::class)
+
+    jacocoTestCoverageVerification {
       violationRules {
         rule {
           limit {
@@ -127,7 +144,9 @@ subprojects {
     //endregion
 
     //region DEPENDENCY UPDATES: https://github.com/ben-manes/gradle-versions-plugin#revisions
-    named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
+    val dependencyUpdates by existing(com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask::class)
+
+    dependencyUpdates {
       resolutionStrategy {
         componentSelection {
           all {
@@ -151,17 +170,10 @@ subprojects {
   apply {
     plugin("java-gradle-plugin")
     plugin("org.gradle.kotlin.kotlin-dsl")
-    plugin("org.jetbrains.kotlin.jvm")
   }
 
   dependencies {
     implementation(kotlin("stdlib-jdk8"))
-  }
-
-  tasks {
-    withType<KotlinCompile>().configureEach {
-      kotlinOptions.jvmTarget = "1.8"
-    }
   }
 
   gradlePlugin {
@@ -177,8 +189,8 @@ subprojects {
   }
 }
 
-//region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
 allprojects {
+  //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
   configurations {
     create("dokkaRuntime")
   }
@@ -189,8 +201,8 @@ allprojects {
       }
     }
   }
+  //endregion
 }
-//endregion
 
 config {
   info {

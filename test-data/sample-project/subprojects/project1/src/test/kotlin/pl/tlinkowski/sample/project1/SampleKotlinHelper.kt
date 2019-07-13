@@ -15,28 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.tlinkowski.sample.project1
 
-import groovy.transform.TypeChecked
-import spock.lang.Specification
+package pl.tlinkowski.sample.project1
 
 /**
  * @author Tomasz Linkowski
  */
-@TypeChecked
-class SampleMainSpec extends Specification {
+object SampleKotlinHelper {
 
-  def greetUpperCamel() {
-    expect:
-      'HelloWorld' == SampleMain.greetUpperCamel()
-  }
-
-  def main() {
-    given:
-      def args = SampleKotlinHelper.INSTANCE.noArgs()
-    when:
-      SampleMain.main(args)
-    then:
-      noExceptionThrown()
-  }
+  fun noArgs() = arrayOf<String>()
 }
