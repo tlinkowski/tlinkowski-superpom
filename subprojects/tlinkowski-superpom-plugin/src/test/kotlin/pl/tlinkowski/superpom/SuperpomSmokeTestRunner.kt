@@ -28,7 +28,7 @@ import java.nio.file.Path
  *
  * @author Tomasz Linkowski
  */
-internal class SmokeTestRunner(projectDir: Path, tasks: List<String>) : AutoCloseable {
+internal class SuperpomSmokeTestRunner(projectDir: Path, tasks: List<String>) : AutoCloseable {
 
   private val gradleRunner: GradleRunner
   private val shadedGradleProperties: ShadedFile

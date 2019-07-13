@@ -38,7 +38,7 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
   private static final String IDEA_INSPECTION_PROFILES_XML = '.idea/inspectionProfiles/Project_Default.xml'
 
   @AutoCleanup
-  private SmokeTestRunner runner
+  private SuperpomSmokeTestRunner runner
 
   def 'gradle cleanImportSharedFiles clean'() {
     given:
@@ -76,8 +76,8 @@ class TLinkowskiSuperpomPluginSmokeTest extends Specification {
   }
 
   //region HELPERS
-  private static SmokeTestRunner sampleProjectRunner(String... tasks) {
-    new SmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(tasks))
+  private static SuperpomSmokeTestRunner sampleProjectRunner(String... tasks) {
+    new SuperpomSmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(tasks))
   }
 
   private static boolean sampleProjectFileExists(String subpath) {
