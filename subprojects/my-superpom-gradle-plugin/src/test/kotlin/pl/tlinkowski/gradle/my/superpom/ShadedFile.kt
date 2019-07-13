@@ -16,19 +16,26 @@
  * limitations under the License.
  */
 
-plugins {
-  id("pl.tlinkowski.gradle.my.superpom")
-}
+package pl.tlinkowski.gradle.my.superpom
 
-config {
-  info {
-    name = "sample-project"
-    description = "A sample project"
-    inceptionYear = "2019"
+import java.nio.file.*
 
-    links {
-      website = "https://github.com/tlinkowski/FAKE-NAME"
-      scm = "https://github.com/tlinkowski/FAKE-NAME.git"
-    }
+/**
+ * Special class that replaces the content of a file for the duration of a test.
+ *
+ * @author Tomasz Linkowski
+ */
+class ShadedFile(private val path: Path, contentMapper: (String) -> String) : AutoCloseable {
+
+  init {
+    val modifiedContent = contentMapper(Files.readString(path))
+    Files.move(path, bakPath()) // backup original file
+    Files.writeString(path, modifiedContent)
   }
+
+  override fun close() {
+    Files.move(bakPath(), path, StandardCopyOption.REPLACE_EXISTING) // restore original file
+  }
+
+  private fun bakPath() = Path.of("$path.bak")
 }

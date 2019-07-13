@@ -22,7 +22,7 @@ plugins {
   id("org.kordamp.gradle.kotlindoc")
 
   /**
-   * ATTENTION: The same plugins must be included in the `dependencies` block in `tlinkowski-superpom.gradle.kts`.
+   * ATTENTION: The same plugins must be included in the `dependencies` block in `my-superpom-gradle-plugin.gradle.kts`.
    */
   //region SHARED PLUGINS
   kotlin("jvm") // for test code
@@ -32,7 +32,7 @@ plugins {
 }
 
 /**
- * ATTENTION: The contents of the `SHARED BUILD SCRIPT` region are copied to `TLinkowskiSuperpomPlugin.kt`.
+ * ATTENTION: The contents of the `SHARED BUILD SCRIPT` region are copied to `MySuperpomGradlePlugin.kt`.
  * As a result, all configuration here should be explicit (no imports, no auto-generated Kotlin DSL accessors).
  */
 //region SHARED BUILD SCRIPT
@@ -207,7 +207,7 @@ allprojects {
 config {
   info {
     name = "tlinkowski-superpom"
-    description = """A Gradle SuperPOM for all projects in "pl.tlinkowski" group."""
+    description = """Gradle SuperPOM plugin & Gradle Settings plugin for all projects in "pl.tlinkowski" group."""
     inceptionYear = "2019"
 
     links {

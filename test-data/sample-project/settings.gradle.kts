@@ -21,10 +21,10 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    val superpomVersion: String by settings
-    classpath(group = "pl.tlinkowski.superpom", name = "tlinkowski-settings-plugin", version = superpomVersion)
+    val mySuperpomVersion: String by settings
+    classpath(group = "pl.tlinkowski.gradle.my", name = "my-settings-gradle-plugin", version = mySuperpomVersion)
   }
 }
-apply(plugin = "pl.tlinkowski.tlinkowski-settings")
+apply(plugin = "pl.tlinkowski.gradle.my.settings")
 
 rootProject.name = "sample-project"
