@@ -17,7 +17,6 @@
  */
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 
 plugins {
   kotlin("jvm") version "1.3.41"
@@ -29,7 +28,8 @@ plugins {
    * ATTENTION: The same plugins must be included in the `dependencies` block in `tlinkowski-superpom.gradle.kts`.
    */
   //region SHARED PLUGINS
-  id("org.kordamp.gradle.project") apply false
+  groovy
+  id("org.kordamp.gradle.project")
   //endregion
 }
 
@@ -38,7 +38,9 @@ plugins {
  * As a result, all configuration here should be explicit (no imports, no auto-generated Kotlin DSL accessors).
  */
 //region SHARED BUILD SCRIPT
-apply(plugin = "org.kordamp.gradle.project")
+apply {
+  plugin("org.kordamp.gradle.project")
+}
 
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   release = rootProject.findProperty("release") == "true"
@@ -85,7 +87,9 @@ allprojects {
 }
 
 subprojects {
-  apply(plugin = "groovy") // for Spock
+  apply {
+    plugin("groovy") // for Spock
+  }
 
   dependencies {
     val testImplementation by configurations
@@ -188,7 +192,7 @@ allprojects {
 }
 //endregion
 
-configure<ProjectConfigurationExtension> {
+config {
   info {
     name = "tlinkowski-superpom"
     description = """A Gradle SuperPOM for all projects in "pl.tlinkowski" group."""
