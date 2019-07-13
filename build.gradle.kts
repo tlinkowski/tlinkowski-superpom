@@ -21,6 +21,9 @@ plugins {
   `kotlin-dsl` apply false
   id("org.kordamp.gradle.kotlindoc")
 
+  // https://github.com/koral--/jacoco-gradle-testkit-plugin
+  id("pl.droidsonroids.jacoco.testkit") version "1.0.4" apply false
+
   /**
    * ATTENTION: The same plugins must be included in the `dependencies` block in `my-superpom-gradle-plugin.gradle.kts`.
    */
@@ -170,6 +173,10 @@ subprojects {
   apply {
     plugin("java-gradle-plugin")
     plugin("org.gradle.kotlin.kotlin-dsl")
+    plugin("pl.droidsonroids.jacoco.testkit")
+
+    // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
+    from("$rootDir/gradle/workAroundJacocoGradleTestKitIssueOnWindows.gradle.kts")
   }
 
   dependencies {

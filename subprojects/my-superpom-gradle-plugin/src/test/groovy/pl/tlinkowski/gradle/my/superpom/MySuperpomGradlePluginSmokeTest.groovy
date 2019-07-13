@@ -85,11 +85,11 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   }
 
   private static boolean taskWasSuccessful(BuildResult result, String taskName) {
-    result.task(taskName).getOutcome() == TaskOutcome.SUCCESS
+    result.task(taskName).outcome == TaskOutcome.SUCCESS
   }
 
   private static boolean taskDidNotFail(BuildResult result, String taskName) {
-    result.task(taskName).getOutcome() != TaskOutcome.FAILED
+    result.task(taskName).outcome != TaskOutcome.FAILED
   }
   //endregion
 }

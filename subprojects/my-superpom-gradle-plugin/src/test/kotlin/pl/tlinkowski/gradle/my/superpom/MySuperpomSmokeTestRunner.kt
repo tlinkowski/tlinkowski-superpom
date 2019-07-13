@@ -60,7 +60,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, tasks: List<String>) 
           .withArguments(tasks)
           .forwardOutput()
 
-  //region GRADLE.PROPERTIES
+  //region GRADLE.PROPERTIES (duplicated in `MySettingsSmokeTestRunner.kt`)
   private fun readTestkitPropertiesContent() = checkNotNull(gradleClassLoader().getResource("testkit-gradle.properties")).readText()
 
   private fun gradleClassLoader() = GradleRunner::class.java.classLoader
@@ -75,7 +75,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, tasks: List<String>) 
     return modifiedContent
   }
 
-  // https://discuss.gradle.org/t/testing-a-settings-plugin/12716/4
+  // https://discuss.gradle.org/t/testing-a-settings-plugin/12716/4 (duplicated in `MySettingsSmokeTestRunner.kt`)
   private fun buildPluginClasspathString() = gradleRunner.pluginClasspath.joinToString(", ") { file ->
     '"' + file.toNormalizedString() + '"'
   }

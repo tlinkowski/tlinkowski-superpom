@@ -16,11 +16,6 @@
  * limitations under the License.
  */
 
-plugins {
-  // https://github.com/koral--/jacoco-gradle-testkit-plugin
-  id("pl.droidsonroids.jacoco.testkit") version "1.0.4"
-}
-
 /**
  * ATTENTION: The same plugins must be included in the `plugins` block in `build.gradle.kts`.
  */
@@ -40,9 +35,6 @@ repositories {
 
 apply(from = "gradle/generateMySuperpomGradlePluginKt.gradle.kts")
 apply(from = "gradle/configureSharedFileExport.gradle.kts")
-
-// WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
-apply(from = "gradle/workAroundJacocoGradleTestKitIssueOnWindows.gradle.kts")
 
 tasks {
   licenseMain {
