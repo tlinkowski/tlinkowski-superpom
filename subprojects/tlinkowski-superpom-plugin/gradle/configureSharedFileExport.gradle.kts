@@ -66,10 +66,12 @@ tasks {
   //region MAIN TASKS
   val exportSharedFiles by registering {
     group = superpomGroup
+    description = "Exports all files shared by the SuperPOM plugin"
     dependsOn(exportPluginVersion, exportSharedIdeaFiles)
   }
   val cleanExportSharedFiles by existing(Delete::class) {
     group = superpomGroup
+    description = "Cleans all files to be exported by the plugin"
     delete(exportedDir)
   }
   //endregion

@@ -66,16 +66,19 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
       }
       val cleanImportSharedIdeaFiles by registering(Delete::class) {
         group = superpomGroup
+        description = "Cleans shared .idea files imported from the SuperPOM plugin"
         delete(sharedIdeaFileTree)
       }
 
       //region MAIN TASKS (no dependency on them - should be run manually whenever needed)
       register("importSharedFiles") {
         group = superpomGroup
+        description = "Imports all files shared by the SuperPOM plugin"
         dependsOn(importSharedIdeaFiles)
       }
       register("cleanImportSharedFiles") {
         group = superpomGroup
+        description = "Cleans all files imported from the SuperPOM plugin"
         dependsOn(cleanImportSharedIdeaFiles)
       }
       //endregion
@@ -95,7 +98,7 @@ abstract class BaseTLinkowskiSuperpomPlugin : Plugin<Project> {
       Files.copy(zipInputStream, sharedZipTempFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
-    description = "Imports shared files from $filename exported by the plugin"
+    description = "Imports shared files from $filename exported by the SuperPOM plugin"
     from(project.zipTree(sharedZipTempFile))
   }
   //endregion
