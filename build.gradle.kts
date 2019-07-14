@@ -15,13 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 
 plugins {
-  // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
-  `java-gradle-plugin`
-
   // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
   `kotlin-dsl` apply false
+
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
+  id("org.kordamp.gradle.base") // so that we can access `config`
 
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
   id("org.kordamp.gradle.kotlindoc")
@@ -37,7 +38,7 @@ plugins {
   kotlin("jvm") apply false // for test code
 
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
-  id("org.kordamp.gradle.project")
+  id("org.kordamp.gradle.project") apply false
 
   // https://github.com/java9-modularity/gradle-modules-plugin
   id("org.javamodularity.moduleplugin") apply false
@@ -51,7 +52,7 @@ plugins {
 //region SHARED BUILD SCRIPT
 apply {
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
-  plugin("org.kordamp.gradle.project")
+  plugin(org.kordamp.gradle.plugin.project.ProjectPlugin::class)
 }
 
 // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
@@ -106,7 +107,7 @@ subprojects {
     plugin("org.jetbrains.kotlin.jvm") // for test code
 
     // https://docs.gradle.org/current/userguide/groovy_plugin.html
-    plugin("groovy") // for Spock
+    plugin(org.gradle.api.plugins.GroovyPlugin::class) // for Spock
   }
 
   dependencies {
@@ -116,7 +117,7 @@ subprojects {
     val spockVersion: String by project
     val groovyVersion: String by project
 
-    testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = kotlinVersion)
+    testImplementation(kotlin(module = "stdlib-jdk8", version = kotlinVersion))
     testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
     testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
   }
@@ -193,33 +194,25 @@ subprojects {
 //region PRIVATE BUILD SCRIPT
 subprojects {
   apply {
-    // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
-    plugin("java-gradle-plugin")
-
     // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
-    plugin("org.gradle.kotlin.kotlin-dsl")
+    // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
+    plugin(KotlinDslPlugin::class)
 
     // https://github.com/koral--/jacoco-gradle-testkit-plugin
-    plugin("pl.droidsonroids.jacoco.testkit")
+    plugin(JaCoCoTestKitPlugin::class)
 
     // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
     from("$rootDir/gradle/workAroundJacocoGradleTestKitIssueOnWindows.gradle.kts")
   }
 
-  dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-  }
-
   // https://docs.gradle.org/current/userguide/java_gradle_plugin.html#sec:gradle_plugin_dev_usage
-  gradlePlugin {
-    plugins {
-      create(project.name) {
-        val pluginId: String by project
-        id = pluginId
+  config {
+    plugin {
+      val pluginId: String by project
+      id = pluginId
 
-        val pluginImplementationClass: String by project
-        implementationClass = pluginImplementationClass
-      }
+      val pluginImplementationClass: String by project
+      implementationClass = pluginImplementationClass
     }
   }
 }
