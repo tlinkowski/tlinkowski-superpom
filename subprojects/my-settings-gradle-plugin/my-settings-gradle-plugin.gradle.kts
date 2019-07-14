@@ -15,3 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+//region JAVA PLATFORM MODULE SYSTEM
+// https://github.com/java9-modularity/gradle-modules-plugin#compilation-to-a-specific-java-release
+modularity.standardJavaRelease(9) // `module-info.java` in JDK 9 format
+
+// https://github.com/java9-modularity/gradle-modules-plugin#patching-modules-to-prevent-split-packages
+patchModules.config = listOf(
+        // org.gradle.kotlin.dsl & org.gradle.kotlin.dsl.extensions
+        "org.gradle.kotlin.dsl=gradle-kotlin-dsl-extensions-${gradle.gradleVersion}.jar"
+)
+
+tasks {
+  javadoc {
+    // caused "error: No public or protected classes found to document." (only `module-info.java` in `java` dir)
+    enabled = false
+  }
+}
+//endregion
