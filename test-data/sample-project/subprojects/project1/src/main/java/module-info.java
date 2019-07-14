@@ -16,14 +16,11 @@
  * limitations under the License.
  */
 
-plugins {
-  java
-}
+/**
+ * @author Tomasz Linkowski
+ */
+module pl.tlinkowski.sample.project1 {
+  exports pl.tlinkowski.sample.project1;
 
-modularity.mixedJavaRelease(8)
-
-dependencies {
-  val guavaVersion: String by project
-
-  compile(group = "com.google.guava", name = "guava", version = guavaVersion)
+  requires com.google.common;
 }
