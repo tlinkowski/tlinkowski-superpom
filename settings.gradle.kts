@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+// https://docs.gradle.org/current/userguide/plugins.html#sec:plugin_management
 pluginManagement {
   //region SOLVES: https://github.com/gradle/gradle/issues/1697
   resolutionStrategy {
@@ -48,6 +49,7 @@ apply(plugin = "org.kordamp.gradle.settings")
 
 rootProject.name = "tlinkowski-superpom"
 
+// https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_settings_dsl
 configure<org.kordamp.gradle.plugin.settings.ProjectsExtension> {
   directories = listOf("subprojects")
 }

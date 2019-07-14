@@ -28,6 +28,7 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
       fun File.isLocked() = !renameTo(this)
 
       val waitUntilJacocoTestExecIsUnlocked = Action<Task> {
+        // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_specific_task_configuration
         val jacocoTestExec = checkNotNull(extensions.getByType(JacocoTaskExtension::class).destinationFile)
         val waitMillis = 100L
         while (jacocoTestExec.isLocked()) {

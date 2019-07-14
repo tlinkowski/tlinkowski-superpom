@@ -24,6 +24,7 @@ import java.time.LocalTime
  * See: https://github.com/tlinkowski/tlinkowski-superpom/issues/6
  */
 tasks {
+  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
   val generateMySuperpomGradlePluginKt by registering {
     val buildGradleKts = rootDir.resolve("build.gradle.kts")
     val superpomPluginKt = file("src/main/kotlin/pl/tlinkowski/gradle/my/superpom/MySuperpomGradlePlugin.kt")

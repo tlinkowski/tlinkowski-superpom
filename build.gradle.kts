@@ -17,8 +17,13 @@
  */
 
 plugins {
+  // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
   `java-gradle-plugin`
+
+  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
   `kotlin-dsl` apply false
+
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
   id("org.kordamp.gradle.kotlindoc")
 
   // https://github.com/koral--/jacoco-gradle-testkit-plugin
@@ -28,8 +33,13 @@ plugins {
    * ATTENTION: The same plugins must be included in the `dependencies` block in `my-superpom-gradle-plugin.gradle.kts`.
    */
   //region SHARED PLUGINS
+  // https://kotlinlang.org/docs/reference/using-gradle.html
   kotlin("jvm") apply false // for test code
+
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
   id("org.kordamp.gradle.project")
+
+  // https://github.com/java9-modularity/gradle-modules-plugin
   id("org.javamodularity.moduleplugin") apply false
   //endregion
 }
@@ -40,9 +50,11 @@ plugins {
  */
 //region SHARED BUILD SCRIPT
 apply {
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
   plugin("org.kordamp.gradle.project")
 }
 
+// https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
 configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
   release = rootProject.findProperty("release") == "true"
 
@@ -80,6 +92,7 @@ configure<org.kordamp.gradle.plugin.base.ProjectConfigurationExtension> {
 }
 
 allprojects {
+  // https://docs.gradle.org/current/userguide/idea_plugin.html
   apply(plugin = "idea")
 
   repositories {
@@ -89,7 +102,10 @@ allprojects {
 
 subprojects {
   apply {
+    // https://kotlinlang.org/docs/reference/using-gradle.html
     plugin("org.jetbrains.kotlin.jvm") // for test code
+
+    // https://docs.gradle.org/current/userguide/groovy_plugin.html
     plugin("groovy") // for Spock
   }
 
@@ -107,15 +123,19 @@ subprojects {
 
   tasks {
     withType<org.gradle.api.tasks.testing.Test>().configureEach {
+      // https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html
       testLogging {
         events("PASSED", "FAILED", "SKIPPED")
       }
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+      // https://kotlinlang.org/docs/reference/using-gradle.html#attributes-specific-for-jvm
       kotlinOptions.jvmTarget = "1.8"
     }
 
     //region TEST-GROOVY CAN ACCESS TEST-KOTLIN: https://stackoverflow.com/a/37851957/2032415
+
+    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
     val compileTestGroovy by existing(org.gradle.api.tasks.compile.GroovyCompile::class)
     val compileTestKotlin by existing(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class)
 
@@ -130,6 +150,7 @@ subprojects {
     val jacocoTestCoverageVerification by existing(org.gradle.testing.jacoco.tasks.JacocoCoverageVerification::class)
 
     jacocoTestCoverageVerification {
+      // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_report_violation_rules
       violationRules {
         rule {
           limit {
@@ -146,10 +167,11 @@ subprojects {
     }
     //endregion
 
-    //region DEPENDENCY UPDATES: https://github.com/ben-manes/gradle-versions-plugin#revisions
+    //region DEPENDENCY UPDATES (applied through Kordamp Project Plugin)
     val dependencyUpdates by existing(com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask::class)
 
     dependencyUpdates {
+      // https://github.com/ben-manes/gradle-versions-plugin#revisions
       resolutionStrategy {
         componentSelection {
           all {
@@ -171,8 +193,13 @@ subprojects {
 //region PRIVATE BUILD SCRIPT
 subprojects {
   apply {
+    // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
     plugin("java-gradle-plugin")
+
+    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
     plugin("org.gradle.kotlin.kotlin-dsl")
+
+    // https://github.com/koral--/jacoco-gradle-testkit-plugin
     plugin("pl.droidsonroids.jacoco.testkit")
 
     // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
@@ -183,6 +210,7 @@ subprojects {
     implementation(kotlin("stdlib-jdk8"))
   }
 
+  // https://docs.gradle.org/current/userguide/java_gradle_plugin.html#sec:gradle_plugin_dev_usage
   gradlePlugin {
     plugins {
       create(project.name) {
@@ -211,6 +239,7 @@ allprojects {
   //endregion
 }
 
+// https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
 config {
   info {
     name = "tlinkowski-superpom"

@@ -21,12 +21,15 @@
  */
 //region SHARED PLUGINS
 dependencies {
+  // https://kotlinlang.org/docs/reference/using-gradle.html
   val kotlinVersion: String by project
   compile(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = kotlinVersion)
 
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
   val kordampVersion: String by project
   compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
 
+  // https://github.com/java9-modularity/gradle-modules-plugin
   val modularityVersion: String by project
   compile(group = "org.javamodularity", name = "moduleplugin", version = modularityVersion)
 }
@@ -41,10 +44,12 @@ apply(from = "gradle/configureSharedFileExport.gradle.kts")
 
 tasks {
   licenseMain {
+    // files exported by `configureSharedFileExport.gradle.kts.
     exclude("/pl/tlinkowski/gradle/my/superpom/exported/*")
   }
 
   //region FOR SMOKE TEST
+  // https://docs.gradle.org/current/userguide/test_kit.html#sub:test-kit-automatic-classpath-injection
   pluginUnderTestMetadata {
     // https://discuss.gradle.org/t/how-to-make-gradle-testkit-depend-on-output-jar-rather-than-just-classes/18940/2
     pluginClasspath.from(project(":my-settings-gradle-plugin").tasks.jar)

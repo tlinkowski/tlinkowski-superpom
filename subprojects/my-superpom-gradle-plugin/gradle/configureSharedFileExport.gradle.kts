@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-/**
+/*
  * Counterpart of `configureSharedFileImport()` in `BaseMySuperpomGradlePlugin.kt`.
  */
 tasks {
@@ -29,6 +29,7 @@ tasks {
 
   val exportedDir = file("src/main/resources/pl/tlinkowski/gradle/my/superpom/exported")
 
+  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
   val exportPluginVersion by registering {
     group = superpomGroup
     description = "Exports the plugin version to a text file"

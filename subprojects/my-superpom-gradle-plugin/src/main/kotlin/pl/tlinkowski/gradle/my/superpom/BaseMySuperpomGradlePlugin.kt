@@ -59,6 +59,7 @@ abstract class BaseMySuperpomGradlePlugin : Plugin<Project> {
       }
       //endregion
 
+      // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
       val importSharedIdeaFiles by registering(Copy::class) {
         group = superpomGroup
         fromSharedFilesZip("idea")

@@ -18,6 +18,7 @@
 
 tasks {
   //region FOR SMOKE TEST
+  // https://docs.gradle.org/current/userguide/test_kit.html#sub:test-kit-automatic-classpath-injection
   pluginUnderTestMetadata {
     // https://discuss.gradle.org/t/how-to-make-gradle-testkit-depend-on-output-jar-rather-than-just-classes/18940/2
     pluginClasspath.from(project(":my-superpom-gradle-plugin").tasks.jar)
