@@ -56,7 +56,7 @@ class MySettingsGradlePluginSmokeTest extends Specification {
     when:
       def result = runner.buildAndFail()
     then:
-      result.output.contains("[id: '$superpomPluginId', version: '$mySuperpomVersion']")
+      result.output.contains("Plugin [id: '$superpomPluginId', version: '$mySuperpomVersion'] was not found")
   }
 
   def 'plugin fails when `subprojects` dir is missing'() {
