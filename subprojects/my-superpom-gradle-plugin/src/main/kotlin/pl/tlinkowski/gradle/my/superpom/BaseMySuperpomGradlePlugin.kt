@@ -18,6 +18,7 @@
 package pl.tlinkowski.gradle.my.superpom
 
 import org.gradle.api.*
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.*
@@ -101,6 +102,17 @@ abstract class BaseMySuperpomGradlePlugin : Plugin<Project> {
 
     description = "Imports shared files from $filename exported by the SuperPOM plugin"
     from(project.zipTree(sharedZipTempFile))
+  }
+  //endregion
+
+  //region DUPLICATED IN `build.gradle.kts`
+  /**
+   * Executes the given configuration block against the [extension][ExtensionAware] of the specified type (if found).
+   *
+   * @see [ExtensionAware.configure]
+   */
+  inline fun <reified T : Any> ExtensionAware.configureIfPresent(noinline configuration: T.() -> Unit) {
+    extensions.findByType(typeOf<T>())?.apply(configuration)
   }
   //endregion
 

@@ -45,6 +45,17 @@ plugins {
   //endregion
 }
 
+//region DUPLICATED IN `BaseMySuperpomGradlePlugin.kt`
+/**
+ * Executes the given configuration block against the [extension][ExtensionAware] of the specified type (if found).
+ *
+ * @see [ExtensionAware.configure]
+ */
+inline fun <reified T : Any> ExtensionAware.configureIfPresent(noinline configuration: T.() -> Unit) {
+  extensions.findByType(typeOf<T>())?.apply(configuration)
+}
+//endregion
+
 /**
  * ATTENTION: The contents of the `SHARED BUILD SCRIPT` region are copied to `MySuperpomGradlePlugin.kt`.
  * As a result, all configuration here should be explicit (no imports, no auto-generated Kotlin DSL accessors).
@@ -108,6 +119,9 @@ subprojects {
 
     // https://docs.gradle.org/current/userguide/groovy_plugin.html
     plugin(org.gradle.api.plugins.GroovyPlugin::class) // for Spock
+
+    // https://github.com/java9-modularity/gradle-modules-plugin
+    plugin(org.javamodularity.moduleplugin.ModuleSystemPlugin::class)
   }
 
   dependencies {
@@ -133,6 +147,15 @@ subprojects {
       // https://kotlinlang.org/docs/reference/using-gradle.html#attributes-specific-for-jvm
       kotlinOptions.jvmTarget = "1.8"
     }
+
+    //region https://github.com/java9-modularity/gradle-modules-plugin#fall-back-to-classpath-mode
+    "test" {
+      // extension will be absent if `module-info.java` is not found for given subproject
+      configureIfPresent<org.javamodularity.moduleplugin.tasks.TestModuleOptions> {
+        runOnClasspath = true // Groovy doesn't work on module-path yet
+      }
+    }
+    //endregion
 
     //region TEST-GROOVY CAN ACCESS TEST-KOTLIN: https://stackoverflow.com/a/37851957/2032415
 
