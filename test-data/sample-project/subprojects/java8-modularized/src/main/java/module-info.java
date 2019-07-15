@@ -19,8 +19,8 @@
 /**
  * @author Tomasz Linkowski
  */
-module pl.tlinkowski.sample.project1 {
-  exports pl.tlinkowski.sample.project1;
+module pl.tlinkowski.sample.java8.modularized {
+  exports pl.tlinkowski.sample.java8.modularized;
 
   requires com.google.common;
 }

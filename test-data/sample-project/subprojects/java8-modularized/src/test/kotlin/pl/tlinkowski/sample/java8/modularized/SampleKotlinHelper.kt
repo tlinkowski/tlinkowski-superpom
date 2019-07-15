@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.sample.project1
+package pl.tlinkowski.sample.java8.modularized
 
 /**
  * @author Tomasz Linkowski

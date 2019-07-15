@@ -62,8 +62,10 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
       taskDidNotFail(result, ':build')
-      taskWasSuccessful(result, ':project1:test')
-      taskWasSuccessful(result, ':project1:build')
+      ['java8-modularized'].forEach {
+        taskWasSuccessful(result, ":$it:test")
+        taskWasSuccessful(result, ":$it:build")
+      }
   }
 
   def 'gradle dependencyUpdates'() {
