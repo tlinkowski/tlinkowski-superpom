@@ -16,14 +16,4 @@
  * limitations under the License.
  */
 
-plugins {
-  java
-}
-
 modularity.mixedJavaRelease(8)
-
-dependencies {
-  val guavaVersion: String by project
-
-  compile(group = "com.google.guava", name = "guava", version = guavaVersion)
-}
