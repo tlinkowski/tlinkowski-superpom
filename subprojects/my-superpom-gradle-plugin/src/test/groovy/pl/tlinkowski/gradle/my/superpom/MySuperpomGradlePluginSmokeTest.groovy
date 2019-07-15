@@ -62,7 +62,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
       taskDidNotFail(result, ':build')
-      ['java8-unmodularized', 'java8-modularized'].forEach {
+      ['java8-unmodularized', 'java8-modularized', 'java11-modularized'].forEach {
         taskWasSuccessful(result, ":$it:test")
         taskWasSuccessful(result, ":$it:build")
       }
