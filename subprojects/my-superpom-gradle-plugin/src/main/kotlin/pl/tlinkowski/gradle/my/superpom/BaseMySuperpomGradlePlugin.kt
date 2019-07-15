@@ -21,7 +21,9 @@ import org.gradle.api.*
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
@@ -45,6 +47,7 @@ abstract class BaseMySuperpomGradlePlugin : Plugin<Project> {
       throw GradleException("This plugin can be applied to a root project only")
     }
     configureSharedFileImport()
+    fixCompileJavaDestinationDirIfNecessary()
   }
 
   //region SHARED FILE IMPORT
@@ -104,6 +107,36 @@ abstract class BaseMySuperpomGradlePlugin : Plugin<Project> {
     from(project.zipTree(sharedZipTempFile))
   }
   //endregion
+
+  /**
+   * Fixes too eager modification of `compileJava.destinationDir`. This modification should be performed only
+   * for Kotlin-only project (i.e. when `compileKotlin` has some sources), but - currently - it's performed always.
+   *
+   * This breaks in a scenario when Kotlin is used for tests only, as happens in this plugin.
+   *
+   * The original modification can be found in `org.javamodularity.moduleplugin` - `CompileJavaTaskMutator.java:57`.
+   *
+   * TODO: Remove this as soon as it's fixed in `org.javamodularity.moduleplugin`
+   */
+  private fun Project.fixCompileJavaDestinationDirIfNecessary() {
+    subprojects {
+      afterEvaluate {
+        tasks {
+          val mutatedJavaCompileName = "compileModuleInfoJava".takeIf { findByName(it) != null } ?: "compileJava"
+          named<JavaCompile>(mutatedJavaCompileName) {
+            if (fileTree("src/main/kotlin").isEmpty) {
+              doFirst {
+                val compileKotlin by getting(KotlinCompile::class)
+                assert(destinationDir == compileKotlin.destinationDir) { "Redundant fix - remove!" }
+                destinationDir = buildDir.resolve("classes/java/main")
+                logger.info("Fixed {}.destinationDir = {}", name, destinationDir)
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   //region DUPLICATED IN `build.gradle.kts`
   /**
