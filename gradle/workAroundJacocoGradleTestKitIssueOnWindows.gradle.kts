@@ -32,7 +32,7 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         val jacocoTestExec = checkNotNull(extensions.getByType(JacocoTaskExtension::class).destinationFile)
         val waitMillis = 100L
         while (jacocoTestExec.isLocked()) {
-          logger.info("Waiting $waitMillis ms (${jacocoTestExec.name} is locked)...")
+          logger.warn("Waiting $waitMillis ms (${jacocoTestExec.name} is locked)...")
           Thread.sleep(waitMillis)
         }
         logger.info("Done waiting (${jacocoTestExec.name} is unlocked).")
