@@ -25,11 +25,4 @@ patchModules.config = listOf(
         // org.gradle.kotlin.dsl & org.gradle.kotlin.dsl.extensions
         "org.gradle.kotlin.dsl=gradle-kotlin-dsl-extensions-${gradle.gradleVersion}.jar"
 )
-
-tasks {
-  javadoc {
-    // caused "error: No public or protected classes found to document." (only `module-info.java` in `java` dir)
-    enabled = false
-  }
-}
 //endregion

@@ -210,6 +210,16 @@ subprojects {
       }
     }
     //endregion
+
+    //region MODULARIZED KOTLIN PROJECTS: WORKAROUND FOR https://github.com/tlinkowski/tlinkowski-superpom/issues/30
+    val isModularizedKotlinProject = !fileTree("src/main/kotlin").isEmpty
+            && fileTree("src/main/java").files == setOf(file("src/main/java/module-info.java"))
+    if (isModularizedKotlinProject) {
+      "javadoc" {
+        enabled = false
+      }
+    }
+    //endregion
   }
 }
 //endregion
