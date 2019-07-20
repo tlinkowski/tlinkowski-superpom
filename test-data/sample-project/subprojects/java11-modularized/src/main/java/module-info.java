@@ -19,6 +19,7 @@
 /**
  * @author Tomasz Linkowski
  */
+@SuppressWarnings("JavaModuleNaming")
 module pl.tlinkowski.sample.java11.modularized {
   exports pl.tlinkowski.sample.java11.modularized;
 
