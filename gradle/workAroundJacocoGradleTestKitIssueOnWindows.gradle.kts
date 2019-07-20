@@ -17,6 +17,7 @@
  */
 
 import org.apache.tools.ant.taskdefs.condition.Os
+import java.io.IOException
 
 // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
 if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -25,7 +26,12 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
       /**
        * Checks if a file is locked. Source: [https://stackoverflow.com/a/13706972/2032415]
        */
-      fun File.isLocked() = !renameTo(this)
+      fun File.isLocked() = !renameTo(this) || try {
+        inputStream().use { it.read() }
+        false
+      } catch (_: IOException) {
+        true
+      }
 
       val waitUntilJacocoTestExecIsUnlocked = Action<Task> {
         // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_specific_task_configuration
