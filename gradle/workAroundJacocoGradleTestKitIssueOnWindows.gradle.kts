@@ -17,7 +17,6 @@
  */
 
 import org.apache.tools.ant.taskdefs.condition.Os
-import java.io.IOException
 
 // WORKAROUND FOR: https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
 if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -26,22 +25,23 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
       /**
        * Checks if a file is locked. Source: [https://stackoverflow.com/a/13706972/2032415]
        */
-      fun File.isLocked() = !renameTo(this) || try {
-        inputStream().use { it.read() }
-        false
-      } catch (_: IOException) {
-        true
-      }
+      fun File.isLocked() = !renameTo(this)
 
       val waitUntilJacocoTestExecIsUnlocked = Action<Task> {
         // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_specific_task_configuration
         val jacocoTestExec = checkNotNull(extensions.getByType(JacocoTaskExtension::class).destinationFile)
         val waitMillis = 100L
+
+        // we wait preemptively because sometimes `jacocoTestExec.isLocked()` returns `false`,
+        // but `test` task fails anyway a moment later when it tries to read this file
+        logger.info("Waiting preemptively $waitMillis ms (in case ${jacocoTestExec.name} is locked)...")
+        Thread.sleep(waitMillis)
+
         while (jacocoTestExec.isLocked()) {
-          logger.warn("Waiting $waitMillis ms (${jacocoTestExec.name} is locked)...")
+          logger.warn("Waiting another $waitMillis ms (${jacocoTestExec.name} is still locked)...")
           Thread.sleep(waitMillis)
         }
-        logger.info("Done waiting (${jacocoTestExec.name} is unlocked).")
+        logger.lifecycle("File ${jacocoTestExec.name} is no longer locked.")
       }
 
       doLast(waitUntilJacocoTestExecIsUnlocked)
