@@ -91,6 +91,7 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 2.  for the root project:
 
     -   applies: [`org.kordamp.gradle.project`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project) plugin
+
     -   configures:
         -   main project properties using [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
         -   shared file import tasks (see [shared file export/import](#shared-file-exportimport))
@@ -101,12 +102,15 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
         -   [`org.javamodularity.moduleplugin`](https://github.com/java9-modularity/gradle-modules-plugin) plugin
             (for JPMS support)
+
         -   [`groovy`](https://docs.gradle.org/current/userguide/groovy_plugin.html) plugin
-             (for test code: [Spock](http://spockframework.org/))
+            (for test code: [Spock](http://spockframework.org/))
+
         -   [`kotlin("jvm")`](https://kotlinlang.org/docs/reference/using-gradle.html) plugin
             (for test code: custom helpers)
 
     -   configures:
+
         -   logging of test events
         -   test dependencies on Kotlin, Groovy, and [Spock](http://spockframework.org/)
         -   [running tests on classpath](https://github.com/java9-modularity/gradle-modules-plugin#fall-back-to-classpath-mode) (necessary as Groovy isn't JPMS-compatible)
