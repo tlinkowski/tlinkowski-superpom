@@ -86,6 +86,17 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       !["beta", "RC"].any { result.output.contains(it) }
   }
 
+  def 'gradle bintrayUpload'() {
+    given:
+      runner = sampleProjectRunner('bintrayUpload')
+    when:
+      def result = runner.build()
+    then:
+      SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:bintrayUpload") }
+      taskDidNotFail(result, ':bintrayUpload')
+      taskWasSuccessful(result, ':bintrayPublish')
+  }
+
   //region HELPERS
   private static MySuperpomSmokeTestRunner sampleProjectRunner(String... args) {
     new MySuperpomSmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(args))

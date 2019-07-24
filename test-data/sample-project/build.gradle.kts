@@ -28,6 +28,7 @@ config {
 
     links {
       website = "https://github.com/tlinkowski/FAKE-NAME"
+      issueTracker = "https://github.com/tlinkowski/FAKE-NAME/issues"
       scm = "https://github.com/tlinkowski/FAKE-NAME.git"
     }
   }
@@ -38,5 +39,9 @@ subprojects {
     val guavaVersion: String by project
 
     "compile"(group = "com.google.guava", name = "guava", version = guavaVersion)
+  }
+
+  config {
+    bintray.enabled = true
   }
 }
