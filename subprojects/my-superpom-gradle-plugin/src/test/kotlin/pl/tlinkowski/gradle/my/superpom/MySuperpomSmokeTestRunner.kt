@@ -28,14 +28,14 @@ import java.nio.file.Path
  *
  * @author Tomasz Linkowski
  */
-internal class MySuperpomSmokeTestRunner(projectDir: Path, tasks: List<String>) : AutoCloseable {
+internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) : AutoCloseable {
 
   private val gradleRunner: GradleRunner
   private val shadedGradleProperties: ShadedFile
   private val shadedSettingsGradleKts: ShadedFile
 
   init {
-    gradleRunner = createGradleRunner(projectDir, tasks)
+    gradleRunner = createGradleRunner(projectDir, args)
     shadedGradleProperties = ShadedFile(projectDir.resolve("gradle.properties")) {
       it + readTestkitPropertiesContent()
     }
@@ -54,10 +54,10 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, tasks: List<String>) 
 
   fun build(): BuildResult = gradleRunner.build()
 
-  private fun createGradleRunner(projectDir: Path, tasks: List<String>) = GradleRunner.create()
+  private fun createGradleRunner(projectDir: Path, args: List<String>) = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(projectDir.toFile())
-          .withArguments(tasks)
+          .withArguments(args)
           .forwardOutput()
 
   //region GRADLE.PROPERTIES (duplicated in `MySettingsSmokeTestRunner.kt`)

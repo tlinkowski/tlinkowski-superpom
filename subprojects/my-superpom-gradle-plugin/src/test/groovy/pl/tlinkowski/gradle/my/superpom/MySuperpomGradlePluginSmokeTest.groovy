@@ -37,6 +37,10 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   private static final String IDEA_CODE_STYLES_XML = '.idea/codeStyles/Project.xml'
   private static final String IDEA_INSPECTION_PROFILES_XML = '.idea/inspectionProfiles/Project_Default.xml'
 
+  private static final List<String> SUBPROJECTS = [
+          'java8-unmodularized', 'java8-modularized', 'java11-modularized', 'kotlin-modularized'
+  ]
+
   @AutoCleanup
   private MySuperpomSmokeTestRunner runner
 
@@ -62,7 +66,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
     and:
       taskDidNotFail(result, ':build')
-      ['java8-unmodularized', 'java8-modularized', 'java11-modularized', 'kotlin-modularized'].forEach {
+      SUBPROJECTS.forEach {
         taskWasSuccessful(result, ":$it:test")
         taskWasSuccessful(result, ":$it:build")
       }
@@ -79,8 +83,8 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   }
 
   //region HELPERS
-  private static MySuperpomSmokeTestRunner sampleProjectRunner(String... tasks) {
-    new MySuperpomSmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(tasks))
+  private static MySuperpomSmokeTestRunner sampleProjectRunner(String... args) {
+    new MySuperpomSmokeTestRunner(SAMPLE_PROJECT_DIR, Arrays.asList(args))
   }
 
   private static boolean sampleProjectFileExists(String subpath) {
