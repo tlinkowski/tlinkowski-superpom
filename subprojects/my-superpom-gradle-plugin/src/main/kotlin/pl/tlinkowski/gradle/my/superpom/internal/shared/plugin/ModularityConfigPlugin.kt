@@ -59,7 +59,10 @@ internal class ModularityConfigPlugin : AbstractRootPlugin() {
 
     "javadoc" {
       // workaround for: https://github.com/tlinkowski/tlinkowski-superpom/issues/30
-      enabled = !project.isModularizedKotlinProject()
+      if (project.isModularizedKotlinProject()) {
+        logger.debug("Disabling 'javadoc' task")
+        enabled = false
+      }
     }
   }
 

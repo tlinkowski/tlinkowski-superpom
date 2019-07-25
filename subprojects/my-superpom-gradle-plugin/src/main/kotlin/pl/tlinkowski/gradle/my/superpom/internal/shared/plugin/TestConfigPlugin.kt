@@ -106,7 +106,11 @@ internal class TestConfigPlugin : AbstractRootPlugin() {
     val compileTestKotlin by existing(KotlinCompile::class)
 
     compileTestGroovy {
-      classpath += project.files(compileTestKotlin.get().destinationDir)
+      val testKotlinDestinationDir = compileTestKotlin.get().destinationDir
+
+      logger.debug("Appending {} to the classpath of {}", testKotlinDestinationDir, this)
+      classpath += project.files(testKotlinDestinationDir)
+
       dependsOn(compileTestKotlin)
     }
   }

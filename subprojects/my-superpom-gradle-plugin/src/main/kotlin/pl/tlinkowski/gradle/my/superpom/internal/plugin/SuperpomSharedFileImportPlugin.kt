@@ -83,6 +83,8 @@ class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
     val filename = "shared-$subname-files.zip"
     val sharedZipTempFile = sharedZipTempDir.resolve(filename)
 
+    logger.info("Copying {} to {}", filename, sharedZipTempDir)
+
     MySuperpomGradlePluginExportedFiles.exportedResourceAsStream(filename).use { zipInputStream ->
       Files.copy(zipInputStream, sharedZipTempFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
