@@ -43,6 +43,7 @@ class MySuperpomGradlePluginSpec extends Specification {
   def 'plugin can be applied to a multi-project root'() {
     given:
       project = newMultiProject()
+      setDummyDependencyVersions()
     when:
       applyMySuperpomPlugin()
     then:
@@ -80,5 +81,9 @@ class MySuperpomGradlePluginSpec extends Specification {
 
   private ProjectConfigurationExtension kordampConfig() {
     project.extensions.getByType ProjectConfigurationExtension
+  }
+
+  private setDummyDependencyVersions() {
+    ["kotlinVersion", "groovyVersion", "spockVersion"].forEach { project.ext.set(it, "?") }
   }
 }

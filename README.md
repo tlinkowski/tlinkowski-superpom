@@ -92,7 +92,10 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 1.  for all projects:
 
     -   applies: [`idea`](https://docs.gradle.org/current/userguide/idea_plugin.html) plugin
-    -   configures: Maven Central repository
+
+    -   configures:
+        -   Maven Central repository
+        -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
 
 2.  for the root project:
 
@@ -130,8 +133,6 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
         -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
 
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
-
-        -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
 
 #### Shared File Export/Import
 

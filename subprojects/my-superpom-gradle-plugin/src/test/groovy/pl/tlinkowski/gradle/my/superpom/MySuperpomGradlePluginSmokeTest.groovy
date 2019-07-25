@@ -75,6 +75,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       def result = runner.build()
     then:
       taskWasSuccessful(result, ':dependencyUpdates')
+      !["beta", "RC"].any { result.output.contains(it) }
   }
 
   //region HELPERS

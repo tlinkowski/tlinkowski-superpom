@@ -29,7 +29,7 @@ import org.gradle.kotlin.dsl.*
 internal class DependencyUpdatesConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    subprojects {
+    allprojects {
       tasks {
         configureDependencyUpdates()
       }
