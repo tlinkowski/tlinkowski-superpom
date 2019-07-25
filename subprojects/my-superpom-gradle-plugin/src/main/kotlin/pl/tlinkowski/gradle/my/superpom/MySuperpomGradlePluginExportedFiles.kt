@@ -18,6 +18,7 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
+import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import java.io.InputStream
 
 /**
@@ -31,7 +32,7 @@ internal object MySuperpomGradlePluginExportedFiles {
    * Returns an [InputStream] for a resource with given [name].
    */
   fun exportedResourceAsStream(name: String): InputStream = javaClass.getResourceAsStream("exported/$name")
-          ?: throw IllegalArgumentException("Resource /pl/tlinkowski/superpom/gradle/my/exported/$name not found")
+          ?: throw IllegalArgumentException("Resource ${SuperpomFileSharing.RESOURCE_PATH}/$name not found")
 
   /**
    * Returns the SuperPOM plugin version stored as a resource.

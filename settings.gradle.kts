@@ -20,14 +20,10 @@
 pluginManagement {
   //region SOLVES: https://github.com/gradle/gradle/issues/1697
   resolutionStrategy {
-    val namespacesToPropertyNames = mapOf(
-            "org.jetbrains.kotlin" to "kotlinVersion",
-            "org.kordamp.gradle" to "kordampVersion",
-            "org.javamodularity" to "modularityVersion"
-    )
     eachPlugin {
-      namespacesToPropertyNames[requested.id.namespace]?.let { propertyName ->
-        useVersion(extra[propertyName] as String)
+      if (requested.id.namespace == "org.kordamp.gradle") { // for org.kordamp.gradle.kotlindoc
+        val kordampVersion: String by settings
+        useVersion(kordampVersion)
       }
     }
   }

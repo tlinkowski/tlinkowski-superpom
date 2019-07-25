@@ -10,8 +10,11 @@ This project is inspired by [The Gradle SuperPOM](http://andresalmiray.com/the-g
 
 This projects provides two plugins:
 
-1.  A Gradle [`Project`](https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html) plugin (id: `pl.tlinkowski.gradle.my.superpom`)
-2.  A Gradle [`Settings`](https://docs.gradle.org/current/javadoc/org/gradle/api/initialization/Settings.html) plugin (id: `pl.tlinkowski.gradle.my.settings`)
+1.  A Gradle [`Project`](https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html)
+    plugin (id: [`pl.tlinkowski.gradle.my.superpom`](subprojects/my-superpom-gradle-plugin))
+
+2.  A Gradle [`Settings`](https://docs.gradle.org/current/javadoc/org/gradle/api/initialization/Settings.html)
+    plugin (id: [`pl.tlinkowski.gradle.my.settings`](subprojects/my-settings-gradle-plugin))
 
 Together, those two plugins preconfigure Gradle builds for each of my projects.
 
@@ -55,7 +58,7 @@ For a complete usage example, see [sample-project](test-data/sample-project).
 If you like what this plugin does, you can:
 
 1.  [Fork](https://github.com/tlinkowski/tlinkowski-superpom/fork) this project.
-2.  Change all the data related to Tomasz Linkowski to match your person / organization.
+2.  Change data related to Tomasz Linkowski to match your person / organization (especially classes with `My` prefix).
 3.  Set up your Bintray and Maven Central accounts.
 4.  Release **your own** version of the Gradle Settings & SuperPOM plugin.
 
@@ -67,8 +70,11 @@ Configures:
 
 1.  plugin management:
 
-    -   Maven Central repository for `pl.tlinkowski.gradle.my.superpom` (this plugin is not deployed to Gradle Plugin Portal as it's not a general-use plugin)
-    -   automatic version resolution for `pl.tlinkowski.gradle.my.superpom` (using `mySuperpomVersion` property in `gradle.properties`)
+    -   Maven Central repository for `pl.tlinkowski.gradle.my.superpom` (this plugin is not deployed to Gradle Plugin
+        Portal as it's not a general-use plugin)
+
+    -   automatic version resolution for `pl.tlinkowski.gradle.my.superpom`
+        (using `mySuperpomVersion` property in `gradle.properties`)
 
 2.  project structure (inspired by [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure)):
 
@@ -93,7 +99,10 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
     -   applies: [`org.kordamp.gradle.project`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project) plugin
 
     -   configures:
-        -   main project properties using [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
+
+        -   main project properties using
+            [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
+
         -   shared file import tasks (see [shared file export/import](#shared-file-exportimport))
 
 3.  for subprojects:
@@ -112,10 +121,16 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
     -   configures:
 
         -   logging of test events
+
         -   test dependencies on Kotlin, Groovy, and [Spock](http://spockframework.org/)
-        -   [running tests on classpath](https://github.com/java9-modularity/gradle-modules-plugin#fall-back-to-classpath-mode) (necessary as Groovy isn't JPMS-compatible)
+
+        -   [running tests on classpath](https://github.com/java9-modularity/gradle-modules-plugin#fall-back-to-classpath-mode)
+            (necessary as Groovy isn't JPMS-compatible)
+
         -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
+
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
+
         -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
 
 #### Shared File Export/Import
@@ -123,42 +138,51 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed
 as a "sync" operation between this (*source*) project and all *target* projects.
 
-Currently, the following files are taken into account (usually, it's a good idea to git-ignore these files in *target* projects):
+Currently, the following files are taken into account
+(usually, it's a good idea to git-ignore these files in *target* projects):
 
 -   parts of IntelliJ configuration from `.idea` directory
     (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
 
 This feature is implemented:
 
--   in [`configureSharedFileExport.gradle.kts`](subprojects/my-superpom-gradle-plugin/gradle/configureSharedFileExport.gradle.kts),
+-   in [`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt),
     by registering a special `exportSharedFiles` task for this (*source*) project
 
     -   the task zips files to be exported and places the resulting archive in the
         [resources](subprojects/my-superpom-gradle-plugin/src/main/resources) of the SuperPOM plugin
 
--   in [`BaseMySuperpomGradlePlugin.kt`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/BaseMySuperpomGradlePlugin.kt),
+-   in [`SuperpomSharedFileImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedFileImportPlugin.kt),
     by registering a special `importSharedFiles` task for a *target* project
 
     -   the task reads the archive as a resource and unzips it in the corresponding location
 
-#### Partial `build.gradle.kts` Configuration Sharing
+#### Gradle Configuration Sharing
 
-The part of [`build.gradle.kts`](build.gradle.kts) enclosed with `//region SHARED BUILD SCRIPT` and `//endregion`
-is automatically included in the `Project` plugin.
+A large part of the build configuration for:
+
+-   this (*source*) project
+    (defined mostly in the included [`buildSrc`](buildSrc) build), and
+
+-   *target* projects
+    (defined in [`pl.tlinkowski.gradle.my.superpom`](subprojects/my-superpom-gradle-plugin) plugin project)
+
+is *shared* as [`pl.tlinkowski.gradle.my.internal.shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared)
+package (see [`MyCompleteSharedConfigPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared/plugin/MyCompleteSharedConfigPlugin.kt)).
 
 Thanks to this, we don't have to:
 
--   duplicate large portions of configuration between this (*source*) project and *target* projects, or
+-   duplicate large portions of configuration between the *source* and *target* projects, nor
 
--   apply the previous version of this plugin to itself to avoid the duplication mentioned above (as Andres Almiray suggests in
-    [his post](http://andresalmiray.com/the-gradle-superpom/))
+-   apply the previous version of this plugin to itself to avoid the duplication mentioned above
+    (as Andres Almiray suggests in [his post](http://andresalmiray.com/the-gradle-superpom/))
 
     -   such approach would be problematic for [shared file export/import](#shared-file-exportimport)
 
-This is achieved in
-[`generateMySuperpomGradlePluginKt.gradle.kts`](subprojects/my-superpom-gradle-plugin/gradle/generateMySuperpomGradlePluginKt.gradle.kts)
-by generating `MySuperpomGradlePlugin.kt` as a subclass of
-[`BaseMySuperpomGradlePlugin.kt`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/BaseMySuperpomGradlePlugin.kt).
+This is achieved by synchronizing the contents of the SuperPOM's
+[`shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared) 
+package with a corresponding `shared` package in `buildSrc`
+(see [`buildSrc/build.gradle.kts`](buildSrc/build.gradle.kts) for details).
 
 ## Requirements
 
@@ -166,4 +190,5 @@ Gradle 5+, JDK 11+.
 
 ## About the Author
 
-See my webpage ([tlinkowski.pl](https://tlinkowski.pl/)) or find me on Twitter ([@t_linkowski](https://twitter.com/t_linkowski)).
+See my webpage ([tlinkowski.pl](https://tlinkowski.pl/)) or
+find me on Twitter ([@t_linkowski](https://twitter.com/t_linkowski)).

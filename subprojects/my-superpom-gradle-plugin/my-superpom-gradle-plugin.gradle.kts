@@ -16,36 +16,18 @@
  * limitations under the License.
  */
 
-/**
- * ATTENTION: The same plugins must be included in the `plugins` block in `build.gradle.kts`.
- */
-//region SHARED PLUGINS
-dependencies {
-  // https://kotlinlang.org/docs/reference/using-gradle.html
-  val kotlinVersion: String by project
-  compile(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = kotlinVersion)
+import pl.tlinkowski.gradle.my.buildsrc.plugin.SuperpomSharedFileExportPlugin
+import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 
-  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
-  val kordampVersion: String by project
-  compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
-
-  // https://github.com/java9-modularity/gradle-modules-plugin
-  val modularityVersion: String by project
-  compile(group = "org.javamodularity", name = "moduleplugin", version = modularityVersion)
+apply {
+  from("$rootDir/gradle/shared-plugin-dependencies.gradle.kts")
+  plugin(SuperpomSharedFileExportPlugin::class)
 }
-
-repositories {
-  gradlePluginPortal() // for shared Gradle plugins
-}
-//endregion
-
-apply(from = "gradle/generateMySuperpomGradlePluginKt.gradle.kts")
-apply(from = "gradle/configureSharedFileExport.gradle.kts")
 
 tasks {
   licenseMain {
-    // files exported by `configureSharedFileExport.gradle.kts.
-    exclude("/pl/tlinkowski/gradle/my/superpom/exported/*")
+    // files exported by `SuperpomSharedFileExportPlugin`
+    exclude("${SuperpomFileSharing.RESOURCE_PATH}/*")
   }
 
   //region FOR SMOKE TEST
