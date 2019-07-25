@@ -35,6 +35,9 @@ object SuperpomFileSharing {
    */
   const val RESOURCE_PATH = "/pl/tlinkowski/gradle/my/superpom/exported"
 
+  const val PLUGIN_VERSION_FILENAME = "plugin-version.txt"
+  const val SHARED_PROPERTIES_FILENAME = "shared-gradle.properties"
+
   fun sharedIdeaFiles(project: Project) = project.sharedIdeaFileTree()
 
   private fun Project.sharedIdeaFileTree() = fileTree("$rootDir/.idea") {

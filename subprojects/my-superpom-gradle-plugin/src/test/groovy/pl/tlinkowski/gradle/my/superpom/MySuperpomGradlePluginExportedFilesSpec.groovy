@@ -34,14 +34,15 @@ class MySuperpomGradlePluginExportedFilesSpec extends Specification {
   }
 
   @Unroll
-  def "#zipFileName can be loaded"(String zipFileName) {
+  def "#fileName can be loaded"(String fileName) {
     when:
-      MySuperpomGradlePluginExportedFiles.INSTANCE.exportedResourceAsStream(zipFileName).close()
+      MySuperpomGradlePluginExportedFiles.INSTANCE.exportedResourceAsStream(fileName).close()
     then:
       noExceptionThrown()
     where:
-      zipFileName             | _
-      "shared-idea-files.zip" | _
+      fileName                   | _
+      "shared-gradle.properties" | _
+      "shared-idea-files.zip"    | _
   }
 
   def "missing resource throws an exception"() {

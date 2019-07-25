@@ -15,28 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.tlinkowski.gradle.my.superpom
+
+package pl.tlinkowski.gradle.my.superpom.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.internal.plugin.*
+import pl.tlinkowski.gradle.my.superpom.MySuperpomGradlePluginExportedFiles
+import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.MyCompleteSharedConfigPlugin
+import java.util.*
 
 /**
- * Applies [The Gradle SuperPOM](http://andresalmiray.com/the-gradle-superpom/) concept of Andres Almiray
- * to all projects of Tomasz Linkowski.
+ * Imports all properties from `shared-gradle.properties` exported from the SuperPOM project.
+ *
+ * Analogue of `gradle/shared-gradle-properties.gradle.kts`
  *
  * @author Tomasz Linkowski
  */
-class MySuperpomGradlePlugin : AbstractRootPlugin() {
+class SuperpomSharedGradlePropertyImportPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(SuperpomSharedFileImportPlugin::class)
-      plugin(SuperpomSharedGradlePropertyImportPlugin::class)
-      plugin(EagerDestinationDirModificationFixPlugin::class) // this must come BEFORE `MyCompleteSharedConfigPlugin`
-      plugin(MyCompleteSharedConfigPlugin::class) // shared build script
+    val properties = Properties()
+    MySuperpomGradlePluginExportedFiles.exportedResourceAsStream(SuperpomFileSharing.SHARED_PROPERTIES_FILENAME).use {
+      properties.load(it)
+    }
+
+    properties.stringPropertyNames().forEach { name ->
+      if (hasProperty(name)) {
+        logger.warn("Overwriting property: {}", name)
+      }
+      extra[name] = properties[name]
     }
   }
 }

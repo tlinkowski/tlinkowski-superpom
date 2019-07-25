@@ -37,5 +37,6 @@ internal object MySuperpomGradlePluginExportedFiles {
   /**
    * Returns the SuperPOM plugin version stored as a resource.
    */
-  fun readPluginVersion(): String = exportedResourceAsStream("plugin-version.txt").reader().use { it.readText() }
+  fun readPluginVersion(): String =
+          exportedResourceAsStream(SuperpomFileSharing.PLUGIN_VERSION_FILENAME).reader().use { it.readText() }
 }

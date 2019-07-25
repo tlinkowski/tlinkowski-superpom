@@ -94,7 +94,9 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
     -   applies: [`idea`](https://docs.gradle.org/current/userguide/idea_plugin.html) plugin
 
     -   configures:
+
         -   Maven Central repository
+
         -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
 
 2.  for the root project:
@@ -157,6 +159,20 @@ This feature is implemented:
     by registering a special `importSharedFiles` task for a *target* project
 
     -   the task reads the archive as a resource and unzips it in the corresponding location
+
+#### Gradle Property Sharing
+
+Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.properties) are also shared by
+[`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt).
+Then, these properties are imported by:
+
+-   [`shared-gradle-properties.gradle.kts`](gradle/shared-gradle-properties.gradle.kts) in:
+    -   [`buildSrc`](buildSrc) build
+    -   root [`settings.gradle.kts`](settings.gradle.kts)
+    -   root [`build.gradle.kts`](build.gradle.kts)
+
+-   [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt)
+    in: all *target* projects
 
 #### Gradle Configuration Sharing
 

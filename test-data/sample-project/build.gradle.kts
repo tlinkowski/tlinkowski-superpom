@@ -34,8 +34,6 @@ config {
 }
 
 subprojects {
-  apply(plugin = "java")
-
   dependencies {
     val guavaVersion: String by project
 

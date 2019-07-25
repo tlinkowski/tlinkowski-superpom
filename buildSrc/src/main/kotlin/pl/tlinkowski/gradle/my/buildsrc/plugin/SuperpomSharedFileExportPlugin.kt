@@ -19,6 +19,7 @@
 package pl.tlinkowski.gradle.my.buildsrc.plugin
 
 import org.gradle.api.*
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.api.tasks.bundling.ZipEntryCompression
@@ -54,6 +55,9 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
     val exportPluginVersion by registering {
       configureExportPluginVersion()
     }
+    val exportSharedGradleProperties by registering(Copy::class) {
+      configureExportSharedGradleProperties()
+    }
     val exportSharedIdeaFiles by registering(Zip::class) {
       configureExportSharedIdeaFiles()
     }
@@ -61,7 +65,7 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
     //region MAIN TASKS
     val exportSharedFiles by registering {
       configureExportSharedFiles()
-      dependsOn(exportPluginVersion, exportSharedIdeaFiles)
+      dependsOn(exportPluginVersion, exportSharedGradleProperties, exportSharedIdeaFiles)
     }
     val cleanExportSharedFiles by existing(Delete::class) {
       configureCleanExportSharedFiles()
@@ -79,10 +83,11 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
   }
 
   private fun Task.configureExportPluginVersion() {
-    group = SuperpomTasks.GROUP
-    description = "Exports the plugin version to a text file"
+    val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
+    val pluginVersionFile = exportedDir.resolve(filename)
 
-    val pluginVersionFile = exportedDir.resolve("plugin-version.txt")
+    group = SuperpomTasks.GROUP
+    description = "Exports the plugin version to a text file ($filename)"
 
     inputs.property("version", project.version)
     outputs.file(pluginVersionFile)
@@ -91,6 +96,16 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
       val version: String by project
       pluginVersionFile.writeText(version)
     }
+  }
+
+  private fun Copy.configureExportSharedGradleProperties() {
+    val filename = SuperpomFileSharing.SHARED_PROPERTIES_FILENAME
+
+    group = SuperpomTasks.GROUP
+    description = "Exports shared Gradle properties ($filename)"
+
+    from(project.file("${project.rootDir}/gradle/$filename"))
+    into(exportedDir)
   }
 
   private fun Zip.configureExportSharedIdeaFiles() {

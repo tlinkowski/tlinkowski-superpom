@@ -19,5 +19,6 @@
 modularity.standardJavaRelease(9)
 
 dependencies {
-  implementation(kotlin("stdlib-jdk8"))
+  val kotlinVersion: String by project
+  implementation(kotlin(module = "stdlib-jdk8", version = kotlinVersion))
 }
