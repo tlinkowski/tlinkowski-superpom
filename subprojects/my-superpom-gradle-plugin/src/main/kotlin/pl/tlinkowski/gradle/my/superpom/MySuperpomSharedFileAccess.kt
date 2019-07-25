@@ -26,7 +26,7 @@ import java.io.InputStream
  *
  * @author Tomasz Linkowski
  */
-internal object MySuperpomGradlePluginExportedFiles {
+internal object MySuperpomSharedFileAccess {
 
   /**
    * Returns an [InputStream] for a resource with given [name].

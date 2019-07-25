@@ -22,7 +22,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.MySuperpomGradlePluginExportedFiles
+import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomTasks
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
@@ -77,7 +77,7 @@ class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
   private fun Copy.fromSharedFilesZip(subname: String) {
     val sharedZipTempDir = project.file(System.getProperty("java.io.tmpdir"))
             .resolve("tlinkowski-superpom")
-            .resolve(MySuperpomGradlePluginExportedFiles.readPluginVersion())
+            .resolve(MySuperpomSharedFileAccess.readPluginVersion())
     sharedZipTempDir.mkdirs()
 
     val filename = "shared-$subname-files.zip"
@@ -85,7 +85,7 @@ class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
 
     logger.info("Copying {} to {}", filename, sharedZipTempDir)
 
-    MySuperpomGradlePluginExportedFiles.exportedResourceAsStream(filename).use { zipInputStream ->
+    MySuperpomSharedFileAccess.exportedResourceAsStream(filename).use { zipInputStream ->
       Files.copy(zipInputStream, sharedZipTempFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 

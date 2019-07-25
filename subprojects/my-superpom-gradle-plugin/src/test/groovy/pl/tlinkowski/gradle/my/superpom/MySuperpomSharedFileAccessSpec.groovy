@@ -24,11 +24,11 @@ import spock.lang.Unroll
 /**
  * @author Tomasz Linkowski
  */
-class MySuperpomGradlePluginExportedFilesSpec extends Specification {
+class MySuperpomSharedFileAccessSpec extends Specification {
 
   def "plugin version can be read"() {
     when:
-      def pluginVersion = MySuperpomGradlePluginExportedFiles.INSTANCE.readPluginVersion()
+      def pluginVersion = MySuperpomSharedFileAccess.INSTANCE.readPluginVersion()
     then:
       !pluginVersion.isBlank()
   }
@@ -36,7 +36,7 @@ class MySuperpomGradlePluginExportedFilesSpec extends Specification {
   @Unroll
   def "#fileName can be loaded"(String fileName) {
     when:
-      MySuperpomGradlePluginExportedFiles.INSTANCE.exportedResourceAsStream(fileName).close()
+      MySuperpomSharedFileAccess.INSTANCE.exportedResourceAsStream(fileName).close()
     then:
       noExceptionThrown()
     where:
@@ -47,7 +47,7 @@ class MySuperpomGradlePluginExportedFilesSpec extends Specification {
 
   def "missing resource throws an exception"() {
     when:
-      MySuperpomGradlePluginExportedFiles.INSTANCE.exportedResourceAsStream("FAKE.zip")
+      MySuperpomSharedFileAccess.INSTANCE.exportedResourceAsStream("FAKE.zip")
     then:
       thrown(IllegalArgumentException)
   }

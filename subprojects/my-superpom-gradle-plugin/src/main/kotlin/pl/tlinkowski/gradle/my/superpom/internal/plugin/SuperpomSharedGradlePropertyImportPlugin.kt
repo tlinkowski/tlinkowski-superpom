@@ -20,7 +20,7 @@ package pl.tlinkowski.gradle.my.superpom.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.MySuperpomGradlePluginExportedFiles
+import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
 import java.util.*
@@ -36,7 +36,7 @@ class SuperpomSharedGradlePropertyImportPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     val properties = Properties()
-    MySuperpomGradlePluginExportedFiles.exportedResourceAsStream(SuperpomFileSharing.SHARED_PROPERTIES_FILENAME).use {
+    MySuperpomSharedFileAccess.exportedResourceAsStream(SuperpomFileSharing.SHARED_PROPERTIES_FILENAME).use {
       properties.load(it)
     }
 
