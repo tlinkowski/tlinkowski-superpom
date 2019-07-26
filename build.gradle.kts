@@ -34,6 +34,7 @@ plugins {
 }
 
 apply {
+  from("gradle/shared-gradle-properties.gradle.kts")
   plugin(MyCompleteSharedConfigPlugin::class) // shared build script
 
   if (JacocoGradleTestkitWindowsIssueWorkaroundPlugin.isWindows()) {

@@ -15,27 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `kotlin-dsl`
-  idea
-}
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-plugin-dependencies.gradle.kts")
-}
+import org.slf4j.LoggerFactory
+import java.util.*
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'my-superpom-gradle-plugin' into 'buildSrc'"
+/**
+ * Loads `shared-gradle.properties` as extra properties of this [Project]/[Settings].
+ */
+run {
+  val buildscriptFile = checkNotNull(buildscript.sourceFile)
 
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared"
-    from("../subprojects/my-superpom-gradle-plugin/$sharedSourceDir")
-    into(sharedSourceDir)
-  }
+  val properties = Properties()
+  buildscriptFile.resolveSibling("shared-gradle.properties").inputStream().use { properties.load(it) }
 
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
+  properties.stringPropertyNames().forEach { name ->
+    if (extra.has(name)) {
+      val logger = LoggerFactory.getLogger(buildscriptFile.name)
+      logger.warn("Overwriting property: {}", name)
+    }
+    extra[name] = properties[name]
   }
 }

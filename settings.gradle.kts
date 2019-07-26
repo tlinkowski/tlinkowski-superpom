@@ -35,6 +35,8 @@ buildscript {
   repositories {
     gradlePluginPortal()
   }
+
+  apply(from = "gradle/shared-gradle-properties.gradle.kts")
   dependencies {
     val kordampVersion: String by settings
     classpath(group = "org.kordamp.gradle", name = "settings-gradle-plugin", version = kordampVersion)
