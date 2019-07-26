@@ -108,7 +108,7 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
         -   main project properties using
             [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
 
-        -   shared file import tasks (see [shared file export/import](#shared-file-exportimport))
+        -   shared file import tasks (see [direct file sharing](#direct-file-sharing))
 
 3.  for subprojects:
 
@@ -136,44 +136,6 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
 
-#### Shared File Export/Import
-
-Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed
-as a "sync" operation between this (*source*) project and all *target* projects.
-
-Currently, the following files are taken into account
-(usually, it's a good idea to git-ignore these files in *target* projects):
-
--   parts of IntelliJ configuration from `.idea` directory
-    (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
-
-This feature is implemented:
-
--   in [`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt),
-    by registering a special `exportSharedFiles` task for this (*source*) project
-
-    -   the task zips files to be exported and places the resulting archive in the
-        [resources](subprojects/my-superpom-gradle-plugin/src/main/resources) of the SuperPOM plugin
-
--   in [`SuperpomSharedFileImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedFileImportPlugin.kt),
-    by registering a special `importSharedFiles` task for a *target* project
-
-    -   the task reads the archive as a resource and unzips it in the corresponding location
-
-#### Gradle Property Sharing
-
-Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.properties) are also shared by
-[`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt).
-Then, these properties are imported by:
-
--   [`shared-gradle-properties.gradle.kts`](gradle/shared-gradle-properties.gradle.kts) in:
-    -   [`buildSrc`](buildSrc) build
-    -   root [`settings.gradle.kts`](settings.gradle.kts)
-    -   root [`build.gradle.kts`](build.gradle.kts)
-
--   [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt)
-    in: all *target* projects
-
 #### Gradle Configuration Sharing
 
 A large part of the build configuration for:
@@ -194,12 +156,49 @@ Thanks to this, we don't have to:
 -   apply the previous version of this plugin to itself to avoid the duplication mentioned above
     (as Andres Almiray suggests in [his post](http://andresalmiray.com/the-gradle-superpom/))
 
-    -   such approach would be problematic for [shared file export/import](#shared-file-exportimport)
+    -   such approach would be problematic for [direct file sharing](#direct-file-sharing)
 
-This is achieved by synchronizing the contents of the SuperPOM's
+This is achieved by synchronizing the contents of the SuperPOM plugin's
 [`shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared) 
 package with a corresponding `shared` package in `buildSrc`
 (see [`buildSrc/build.gradle.kts`](buildSrc/build.gradle.kts) for details).
+
+#### Gradle Property Sharing
+
+Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.properties) are shared by
+[`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt)
+(a part of [direct file sharing](#direct-file-sharing) mechanism). Then, these properties are imported by:
+
+-   by [`shared-gradle-properties.gradle.kts`](gradle/shared-gradle-properties.gradle.kts),
+    for [`buildSrc`](buildSrc), root [`settings.gradle.kts`](settings.gradle.kts),
+    and root [`build.gradle.kts`](build.gradle.kts)
+
+-   by [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt),
+    for all *target* projects
+
+#### Direct File Sharing
+
+Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed
+as a "sync" operation between this (*source*) project and all *target* projects.
+
+The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared/SuperpomFileSharing.kt)
+(usually, it's a good idea to git-ignore them in *target* projects). Currently, the following files are shared *directly*:
+
+-   parts of IntelliJ configuration from `.idea` directory
+    (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
+
+This feature is implemented:
+
+-   in [`SuperpomSharedFileExportPlugin`](buildSrc/src/main/kotlin/pl/tlinkowski/gradle/my/buildsrc/plugin/SuperpomSharedFileExportPlugin.kt),
+    by registering a special `exportSharedFiles` task for this (*source*) project
+
+    -   the task zips files to be exported and places the resulting archive in the
+        [resources](subprojects/my-superpom-gradle-plugin/src/main/resources) of the SuperPOM plugin
+
+-   in [`SuperpomSharedFileImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedFileImportPlugin.kt),
+    by registering a special `importSharedFiles` task for a *target* project
+
+    -   the task reads the archive as a resource and unzips it in the corresponding location
 
 ## Requirements
 
