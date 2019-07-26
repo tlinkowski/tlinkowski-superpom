@@ -38,6 +38,9 @@ object SuperpomFileSharing {
   const val PLUGIN_VERSION_FILENAME = "plugin-version.txt"
   const val SHARED_PROPERTIES_FILENAME = "shared-gradle.properties"
 
+  /**
+   * Specifies files to share from `.idea` directory.
+   */
   fun sharedIdeaFiles(project: Project) = project.sharedIdeaFileTree()
 
   private fun Project.sharedIdeaFileTree() = fileTree("$rootDir/.idea") {

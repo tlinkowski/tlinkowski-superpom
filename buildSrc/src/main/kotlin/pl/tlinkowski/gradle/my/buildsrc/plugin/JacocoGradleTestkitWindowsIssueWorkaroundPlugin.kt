@@ -34,6 +34,9 @@ import java.io.File
 class JacocoGradleTestkitWindowsIssueWorkaroundPlugin : AbstractRootPlugin() {
 
   companion object {
+    /**
+     * @return `true` if current OS is Windows
+     */
     fun isWindows() = Os.isFamily(Os.FAMILY_WINDOWS)
   }
 
