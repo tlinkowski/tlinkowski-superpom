@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
+import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.MyCompleteSharedConfigPlugin
 
@@ -37,6 +38,7 @@ apply {
   from("gradle/shared-gradle-properties.gradle.kts")
   plugin(MyCompleteSharedConfigPlugin::class) // shared build script
 
+  plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
   if (JacocoGradleTestkitWindowsIssueWorkaroundPlugin.isWindows()) {
     plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
   }
@@ -62,21 +64,6 @@ subprojects {
       implementationClass = pluginImplementationClass
     }
   }
-}
-
-allprojects {
-  //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
-  configurations {
-    create("dokkaRuntime")
-  }
-  repositories {
-    gradlePluginPortal {
-      content {
-        includeGroup("org.jetbrains.dokka")
-      }
-    }
-  }
-  //endregion
 }
 
 // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
