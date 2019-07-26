@@ -35,7 +35,7 @@ class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
       plugin(ModularityConfigPlugin::class)
       plugin(TestConfigPlugin::class)
       plugin(JacocoConfigPlugin::class)
-      plugin(MyReleaseConfigPlugin::class)
+      plugin(MyCentralPublishConfigPlugin::class)
 
       plugin(DependencyUpdatesConfigPlugin::class)
     }

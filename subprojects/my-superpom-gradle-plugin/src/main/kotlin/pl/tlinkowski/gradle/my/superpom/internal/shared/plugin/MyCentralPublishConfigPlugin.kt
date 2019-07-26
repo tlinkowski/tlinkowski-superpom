@@ -28,11 +28,11 @@ import pl.tlinkowski.gradle.my.superpom.internal.shared.isFinalRelease
 import pl.tlinkowski.gradle.my.superpom.internal.shared.task.InjectReleasePasswordsTask
 
 /**
- * Configures things related to releasing the project.
+ * Configures things related to publishing the project to JCenter and Maven Central.
  *
  * @author Tomasz Linkowski
  */
-internal class MyReleaseConfigPlugin : AbstractRootPlugin() {
+internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
 
   /**
    * If `false`, the release is published to JCenter and Maven Central without the possibility of reverting.
