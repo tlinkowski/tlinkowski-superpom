@@ -54,9 +54,12 @@ subprojects {
     plugin(JaCoCoTestKitPlugin::class)
   }
 
-  // https://docs.gradle.org/current/userguide/java_gradle_plugin.html#sec:gradle_plugin_dev_usage
   config {
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
+    // NOTE: simply replaces more verbose `gradlePlugin { plugins { create(project.name) { ... }}}`
     plugin {
+      enabled = false // these plugins are NOT to be published to Gradle Plugin Portal
+
       val pluginId: String by project
       id = pluginId
 
