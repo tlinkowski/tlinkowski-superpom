@@ -33,3 +33,9 @@ gradle-app.setting
 #
 out/
 *.iml
+
+#
+# Node.js
+#
+/node_modules/
+/package-lock.json

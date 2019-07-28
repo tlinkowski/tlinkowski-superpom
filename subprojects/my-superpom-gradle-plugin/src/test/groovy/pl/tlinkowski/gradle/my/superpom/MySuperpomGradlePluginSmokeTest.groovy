@@ -34,11 +34,17 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   private static final Path TEST_DATA_DIR = Path.of('../../test-data')
   private static final Path SAMPLE_PROJECT_DIR = TEST_DATA_DIR.resolve('sample-project')
 
-  private static final String IDEA_CODE_STYLES_XML = '.idea/codeStyles/Project.xml'
-  private static final String IDEA_INSPECTION_PROFILES_XML = '.idea/inspectionProfiles/Project_Default.xml'
+  private static final List<String> SAMPLE_SHARED_FILES = [
+          '.idea/codeStyles/Project.xml',
+          '.idea/inspectionProfiles/Project_Default.xml',
+          'package.json'
+  ]
 
   private static final List<String> SUBPROJECTS = [
-          'java8-unmodularized', 'java8-modularized', 'java11-modularized', 'kotlin-modularized'
+          'java8-unmodularized',
+          'java8-modularized',
+          'java11-modularized',
+          'kotlin-modularized'
   ]
 
   @AutoCleanup
@@ -50,8 +56,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
     when:
       def result = runner.build()
     then:
-      !sampleProjectFileExists(IDEA_CODE_STYLES_XML)
-      !sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
+      SAMPLE_SHARED_FILES.forEach { !sampleProjectFileExists(it) }
     and:
       taskDidNotFail(result, ':clean')
   }
@@ -62,8 +67,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
     when:
       def result = runner.build()
     then:
-      sampleProjectFileExists(IDEA_CODE_STYLES_XML)
-      sampleProjectFileExists(IDEA_INSPECTION_PROFILES_XML)
+      SAMPLE_SHARED_FILES.forEach { sampleProjectFileExists(it) }
     and:
       taskDidNotFail(result, ':build')
       SUBPROJECTS.forEach {

@@ -1,2 +1,10 @@
-/.idea/
 /gradle/wrapper/
+
+# standard ignores
+/node_modules/
+/package-lock.json
+
+# imported files
+/.idea/
+/package.json
+/.grenrc.yml

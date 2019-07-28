@@ -42,12 +42,22 @@ object SuperpomFileSharing {
    * Mappings defining Zip export/import tasks to be added (see [zipFileName]).
    */
   private val ZIP_FILE_TREE_PROVIDER_MAP = mapOf(
-          "idea" to this::sharedIdeaFiles
+          "idea" to this::sharedIdeaFiles,
+          "npm" to this::sharedNpmFiles
   )
 
   private fun sharedIdeaFiles(project: Project) = with(project) {
     fileTree("$rootDir/.idea") {
       include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
+    }
+  }
+
+  /**
+   * Files for Node Package Manager (currently, only [gren](https://github.com/github-tools/github-release-notes)).
+   */
+  private fun sharedNpmFiles(project: Project) = with(project) {
+    fileTree(rootDir) {
+      include("/package.json", "/.grenrc.yml")
     }
   }
 

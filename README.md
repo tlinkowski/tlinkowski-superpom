@@ -4,6 +4,7 @@
 [![Build (Windows)](https://img.shields.io/appveyor/ci/tlinkowski/tlinkowski-superpom/master.svg?logo=windows)](https://ci.appveyor.com/project/tlinkowski/tlinkowski-superpom/branch/master)
 [![Code coverage](https://img.shields.io/codecov/c/github/tlinkowski/tlinkowski-superpom.svg)](https://codecov.io/gh/tlinkowski/tlinkowski-superpom)
 [![Codacy grade](https://img.shields.io/codacy/grade/81a0cef956a34083accd2f8e401a66de.svg)](https://app.codacy.com/project/tlinkowski/tlinkowski-superpom/dashboard)
+[![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 This project is inspired by [The Gradle SuperPOM](http://andresalmiray.com/the-gradle-superpom/) post by
 [Andres Almiray](https://twitter.com/aalmiray).
@@ -184,8 +185,11 @@ as a "sync" operation between this (*source*) project and all *target* projects.
 The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared/SuperpomFileSharing.kt)
 (usually, it's a good idea to git-ignore them in *target* projects). Currently, the following files are shared *directly*:
 
--   parts of IntelliJ configuration from `.idea` directory
+-   `idea`: parts of IntelliJ configuration from `.idea` directory
     (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
+
+-   `npm`: files related to Node Package Manager
+    (currently, only [gren](https://github.com/github-tools/github-release-notes))
 
 This feature is implemented:
 

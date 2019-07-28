@@ -1,0 +1,11 @@
+{
+  "name": "gren-runner",
+  "version": "0.0.0",
+  "scripts": {
+    "gren-changelog": "gren changelog --generate --override",
+    "gren-release": "gren release"
+  },
+  "dependencies": {
+    "github-release-notes": "0.17.0"
+  }
+}

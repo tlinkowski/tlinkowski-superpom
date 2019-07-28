@@ -1,0 +1,11 @@
+dataSource: "milestones"
+prefix: ""
+milestoneMatch: "{{tag_name}}"
+ignoreIssuesWith:
+  - wontfix
+  - duplicate
+groupBy:
+  'Enhancements:': enhancement
+  'Bug Fixes:': bug
+template:
+  issue: "- [{{text}}]({{url}}): {{name}}"
