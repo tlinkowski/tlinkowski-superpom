@@ -15,29 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package pl.tlinkowski.gradle.my.superpom.internal.shared.plugin
 
+import org.ajoberstar.reckon.gradle.ReckonExtension
+import org.ajoberstar.reckon.gradle.ReckonPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
 /**
- * Configuration shared between this project and the projects to which the SuperPOM plugin is applied.
+ * Applies [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon/) plugin and configures it to use
+ * SNAPSHOT version scheme.
  *
  * @author Tomasz Linkowski
  */
-class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
+class VersionConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     apply {
-      plugin(VersionConfigPlugin::class) // adds project.grgit + modified project.version
+      plugin(ReckonPlugin::class)
+    }
 
-      plugin(MyCoreConfigPlugin::class)
-      plugin(ModularityConfigPlugin::class)
-      plugin(TestConfigPlugin::class)
-      plugin(JacocoConfigPlugin::class)
-      plugin(MyReleaseConfigPlugin::class)
-
-      plugin(DependencyUpdatesConfigPlugin::class)
+    configure<ReckonExtension> {
+      scopeFromProp()
+      snapshotFromProp()
     }
   }
 }

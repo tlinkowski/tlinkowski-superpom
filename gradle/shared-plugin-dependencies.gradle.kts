@@ -34,4 +34,8 @@ dependencies {
   // https://github.com/java9-modularity/gradle-modules-plugin
   val modularityVersion: String by project
   compile(group = "org.javamodularity", name = "moduleplugin", version = modularityVersion)
+
+  // https://github.com/ajoberstar/reckon/
+  val reckonVersion: String by project
+  compile(group = "org.ajoberstar.reckon", name = "reckon-gradle", version = reckonVersion)
 }

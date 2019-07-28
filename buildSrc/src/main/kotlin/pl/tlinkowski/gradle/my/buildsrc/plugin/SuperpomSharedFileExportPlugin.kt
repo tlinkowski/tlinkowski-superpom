@@ -83,18 +83,19 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
   }
 
   private fun Task.configureExportPluginVersion() {
-    val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
-    val pluginVersionFile = exportedDir.resolve(filename)
-
     group = TaskGroupNames.FILE_SHARING
+
+    val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
     description = "Exports the plugin version to a text file ($filename)"
 
-    inputs.property("version", project.version)
+    val pluginVersion = project.version.toString()
+    inputs.property("version", pluginVersion)
+
+    val pluginVersionFile = exportedDir.resolve(filename)
     outputs.file(pluginVersionFile)
 
     doLast {
-      val version: String by project
-      pluginVersionFile.writeText(version)
+      pluginVersionFile.writeText(pluginVersion)
     }
   }
 
