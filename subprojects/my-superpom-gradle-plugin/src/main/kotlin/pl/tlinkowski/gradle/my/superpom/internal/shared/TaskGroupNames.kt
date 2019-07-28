@@ -18,10 +18,13 @@
 package pl.tlinkowski.gradle.my.superpom.internal.shared
 
 /**
- * Utilities for creating our tasks.
- *
  * @author Tomasz Linkowski
  */
-object SuperpomTasks {
-  const val GROUP = "superpom"
+object TaskGroupNames {
+  /**
+   * Tasks that are not to be called directly.
+   */
+  const val INTERNAL = "internal"
+  const val FILE_SHARING = "file sharing"
+  const val RELEASING = "releasing"
 }

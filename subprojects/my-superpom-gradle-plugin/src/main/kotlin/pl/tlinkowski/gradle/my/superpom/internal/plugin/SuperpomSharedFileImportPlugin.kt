@@ -24,7 +24,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomTasks
+import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -47,24 +47,24 @@ class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
   private fun TaskContainerScope.configureRootTasks() {
     // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
     val importSharedIdeaFiles by registering(Copy::class) {
-      group = SuperpomTasks.GROUP
+      group = TaskGroupNames.FILE_SHARING
       fromSharedFilesZip("idea")
       into(".idea")
     }
     val cleanImportSharedIdeaFiles by registering(Delete::class) {
-      group = SuperpomTasks.GROUP
+      group = TaskGroupNames.FILE_SHARING
       description = "Cleans shared .idea files imported from the SuperPOM plugin"
       delete(SuperpomFileSharing.sharedIdeaFiles(project))
     }
 
     //region MAIN TASKS (no dependency on them - should be run manually whenever needed)
     register("importSharedFiles") {
-      group = SuperpomTasks.GROUP
+      group = TaskGroupNames.FILE_SHARING
       description = "Imports all files shared by the SuperPOM plugin"
       dependsOn(importSharedIdeaFiles)
     }
     register("cleanImportSharedFiles") {
-      group = SuperpomTasks.GROUP
+      group = TaskGroupNames.FILE_SHARING
       description = "Cleans all files imported from the SuperPOM plugin"
       dependsOn(cleanImportSharedIdeaFiles)
     }

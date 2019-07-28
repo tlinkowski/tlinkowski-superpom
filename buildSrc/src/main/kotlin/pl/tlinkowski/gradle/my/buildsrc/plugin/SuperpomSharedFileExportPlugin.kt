@@ -25,7 +25,7 @@ import org.gradle.api.tasks.bundling.Zip
 import org.gradle.api.tasks.bundling.ZipEntryCompression
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomTasks
+import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
 import java.io.File
 
 /**
@@ -86,7 +86,7 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
     val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
     val pluginVersionFile = exportedDir.resolve(filename)
 
-    group = SuperpomTasks.GROUP
+    group = TaskGroupNames.FILE_SHARING
     description = "Exports the plugin version to a text file ($filename)"
 
     inputs.property("version", project.version)
@@ -101,26 +101,26 @@ class SuperpomSharedFileExportPlugin : Plugin<Project> {
   private fun Copy.configureExportSharedGradleProperties() {
     val filename = SuperpomFileSharing.SHARED_PROPERTIES_FILENAME
 
-    group = SuperpomTasks.GROUP
+    group = TaskGroupNames.FILE_SHARING
     description = "Exports shared Gradle properties ($filename)"
 
-    from(project.file("${project.rootDir}/gradle/$filename"))
+    from("${project.rootDir}/gradle/$filename")
     into(exportedDir)
   }
 
   private fun Zip.configureExportSharedIdeaFiles() {
-    group = SuperpomTasks.GROUP
+    group = TaskGroupNames.FILE_SHARING
     from(SuperpomFileSharing.sharedIdeaFiles(project))
     intoSharedFilesZip("idea")
   }
 
   private fun Task.configureExportSharedFiles() {
-    group = SuperpomTasks.GROUP
+    group = TaskGroupNames.FILE_SHARING
     description = "Exports all files shared by the SuperPOM plugin"
   }
 
   private fun Delete.configureCleanExportSharedFiles() {
-    group = SuperpomTasks.GROUP
+    group = TaskGroupNames.FILE_SHARING
     description = "Cleans all files to be exported by the plugin"
     delete(exportedDir)
   }

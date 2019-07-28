@@ -41,9 +41,9 @@ object SuperpomFileSharing {
   /**
    * Specifies files to share from `.idea` directory.
    */
-  fun sharedIdeaFiles(project: Project) = project.sharedIdeaFileTree()
-
-  private fun Project.sharedIdeaFileTree() = fileTree("$rootDir/.idea") {
-    include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
+  fun sharedIdeaFiles(project: Project) = with(project) {
+    fileTree("$rootDir/.idea") {
+      include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
+    }
   }
 }
