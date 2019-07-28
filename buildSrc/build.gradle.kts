@@ -22,7 +22,7 @@ plugins {
 
 apply {
   from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-plugin-dependencies.gradle.kts")
+  from("../gradle/shared-buildscript-dependencies.gradle.kts")
 }
 
 tasks {

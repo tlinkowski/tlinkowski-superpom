@@ -20,7 +20,7 @@ import pl.tlinkowski.gradle.my.buildsrc.plugin.SuperpomSharedFileExportPlugin
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 
 apply {
-  from("$rootDir/gradle/shared-plugin-dependencies.gradle.kts")
+  from("$rootDir/gradle/shared-buildscript-dependencies.gradle.kts")
   plugin(SuperpomSharedFileExportPlugin::class)
 }
 
