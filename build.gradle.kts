@@ -55,6 +55,8 @@ subprojects {
   }
 
   config {
+    bintray.enabled = true
+
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
     // NOTE: simply replaces more verbose `gradlePlugin { plugins { create(project.name) { ... }}}`
     plugin {
@@ -75,6 +77,7 @@ config {
     name = "tlinkowski-superpom"
     description = "Gradle Settings & Gradle SuperPOM plugins for all projects of Tomasz Linkowski."
     inceptionYear = "2019"
+    tags = listOf("gradle", "gradle-plugin", "configuration", "sharing")
 
     links {
       website = "https://github.com/tlinkowski/tlinkowski-superpom"

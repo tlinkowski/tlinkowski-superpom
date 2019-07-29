@@ -102,7 +102,11 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
 2.  for the root project:
 
-    -   applies: [`org.kordamp.gradle.project`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project) plugin
+    -   applies:
+
+        -   [`org.kordamp.gradle.project`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project) plugin
+        -   [`org.kordamp.gradle.bintray`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray) plugin
+        -   [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon) plugin
 
     -   configures:
 
@@ -110,6 +114,13 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
             [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
 
         -   shared file import tasks (see [direct file sharing](#direct-file-sharing))
+
+        -   `SNAPSHOT`/`FINAL` release stages for [reckon](https://github.com/ajoberstar/reckon)
+
+        -   `injectReleasePasswords` task, which obtains passwords for performing a release:
+
+            -   `bintrayApiKey`: from Gradle properties (i.e. `~/.gradle/gradle.properties`),
+            -   `gnupgPassphrase`, `sonatypePassword`: by requesting them in a Swing dialog (not suitable for CI)
 
 3.  for subprojects:
 
@@ -136,6 +147,11 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
         -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
 
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
+    
+        -   publishing to JCenter and Maven Central
+
+Note that in order to perform a release that requires no manual actions, a `finalizeRelease` Gradle property must be
+set (e.g. by calling `gradlew bintrayUpload -PfinalizeRelease`).
 
 #### Gradle Configuration Sharing
 
