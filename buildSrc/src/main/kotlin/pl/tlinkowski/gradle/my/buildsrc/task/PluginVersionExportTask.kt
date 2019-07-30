@@ -43,6 +43,9 @@ open class PluginVersionExportTask : DefaultTask() {
     description = "Exports the plugin version to a text file ($filename)"
   }
 
+  /**
+   * Exports plugin version to a file exported as a resource.
+   */
   @TaskAction
   fun exportVersionToFile() {
     pluginVersionFile.writeText(pluginVersion)
