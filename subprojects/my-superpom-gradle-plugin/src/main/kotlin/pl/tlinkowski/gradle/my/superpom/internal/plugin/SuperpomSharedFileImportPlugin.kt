@@ -19,15 +19,12 @@
 package pl.tlinkowski.gradle.my.superpom.internal.plugin
 
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import pl.tlinkowski.gradle.my.superpom.internal.task.CleanZipSharedFileImportTask
+import pl.tlinkowski.gradle.my.superpom.internal.task.ZipSharedFileImportTask
 
 /**
  * Facilitates import of files shared (exported) by the SuperPOM plugin.
@@ -38,58 +35,54 @@ import java.nio.file.StandardCopyOption
  */
 class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
 
+  companion object {
+    const val MAIN_TASK_NAME = "importSharedFiles"
+    const val MAIN_CLEAN_TASK_NAME = "cleanImportSharedFiles"
+  }
+
   override fun Project.configureRootProject() {
     tasks {
-      configureRootTasks()
+      configureRootImportTasks()
     }
   }
 
-  private fun TaskContainerScope.configureRootTasks() {
-    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
-    val importSharedIdeaFiles by registering(Copy::class) {
-      group = TaskGroupNames.FILE_SHARING
-      fromSharedFilesZip("idea")
-      into(".idea")
-    }
-    val cleanImportSharedIdeaFiles by registering(Delete::class) {
-      group = TaskGroupNames.FILE_SHARING
-      description = "Cleans shared .idea files imported from the SuperPOM plugin"
-      delete(SuperpomFileSharing.sharedIdeaFiles(project))
-    }
+  private fun TaskContainerScope.configureRootImportTasks() {
+    registerMainTasks()
 
-    //region MAIN TASKS (no dependency on them - should be run manually whenever needed)
-    register("importSharedFiles") {
-      group = TaskGroupNames.FILE_SHARING
-      description = "Imports all files shared by the SuperPOM plugin"
-      dependsOn(importSharedIdeaFiles)
+    SuperpomFileSharing.zipKeys().forEach {
+      configureImportTasksForKey(it)
     }
-    register("cleanImportSharedFiles") {
-      group = TaskGroupNames.FILE_SHARING
-      description = "Cleans all files imported from the SuperPOM plugin"
-      dependsOn(cleanImportSharedIdeaFiles)
-    }
-    //endregion
   }
 
   /**
-   * Configures a [Copy] task to import files from `shared-$subname-files.zip` resource.
+   * Note: these tasks are not hooked up to lifecycle tasks (should be run manually whenever needed).
    */
-  private fun Copy.fromSharedFilesZip(subname: String) {
-    val sharedZipTempDir = project.file(System.getProperty("java.io.tmpdir"))
-            .resolve("tlinkowski-superpom")
-            .resolve(MySuperpomSharedFileAccess.readPluginVersion())
-    sharedZipTempDir.mkdirs()
+  private fun TaskContainerScope.registerMainTasks() {
+    register(MAIN_TASK_NAME) {
+      group = TaskGroupNames.FILE_SHARING
+      description = "Imports all files shared by the SuperPOM plugin"
+    }
+    register(MAIN_CLEAN_TASK_NAME) {
+      group = TaskGroupNames.FILE_SHARING
+      description = "Cleans all files imported from the SuperPOM plugin"
+    }
+  }
 
-    val filename = "shared-$subname-files.zip"
-    val sharedZipTempFile = sharedZipTempDir.resolve(filename)
-
-    logger.info("Copying {} to {}", filename, sharedZipTempDir)
-
-    MySuperpomSharedFileAccess.exportedResourceAsStream(filename).use { zipInputStream ->
-      Files.copy(zipInputStream, sharedZipTempFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+  private fun TaskContainerScope.configureImportTasksForKey(key: String) {
+    val importTaskName = "importShared${key.capitalize()}Files"
+    register<ZipSharedFileImportTask>(importTaskName) {
+      forKey(key)
+    }
+    MAIN_TASK_NAME {
+      dependsOn(importTaskName)
     }
 
-    description = "Imports shared files from $filename exported by the SuperPOM plugin"
-    from(project.zipTree(sharedZipTempFile))
+    val cleanImportTaskName = "clean" + importTaskName.capitalize()
+    register<CleanZipSharedFileImportTask>(cleanImportTaskName) {
+      forKey(key)
+    }
+    MAIN_CLEAN_TASK_NAME {
+      dependsOn(cleanImportTaskName)
+    }
   }
 }

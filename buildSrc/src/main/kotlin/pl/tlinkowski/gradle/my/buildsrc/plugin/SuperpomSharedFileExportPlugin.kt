@@ -18,124 +18,87 @@
 
 package pl.tlinkowski.gradle.my.buildsrc.plugin
 
-import org.gradle.api.*
-import org.gradle.api.tasks.Copy
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.bundling.Zip
-import org.gradle.api.tasks.bundling.ZipEntryCompression
 import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.buildsrc.task.*
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
-import java.io.File
 
 /**
  * Facilitates export of some files from this SuperPOM project to all target projects.
  *
- * Counterpart of `SuperpomSharedFileImportPlugin` in `my-superpom-gradle-plugin` project.
+ * Counterpart of `SuperpomSharedFileImportPlugin` from `my-superpom-gradle-plugin`.
  *
  * @author Tomasz Linkowski
  */
 class SuperpomSharedFileExportPlugin : Plugin<Project> {
 
-  private lateinit var exportedDir: File
+  companion object {
+    const val MAIN_TASK_NAME = "exportSharedFiles"
+    const val MAIN_CLEAN_TASK_NAME = "cleanExportSharedFiles"
+  }
 
   override fun apply(superpomProject: Project) {
-    superpomProject.configureExport()
-  }
-
-  private fun Project.configureExport() {
-    exportedDir = file("src/main/resources/${SuperpomFileSharing.RESOURCE_PATH}")
-    tasks {
-      configureTasks()
+    superpomProject.tasks {
+      configureSuperpomExportTasks()
     }
   }
 
-  private fun TaskContainerScope.configureTasks() {
-    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
-    val exportPluginVersion by registering {
-      configureExportPluginVersion()
+  private fun TaskContainerScope.configureSuperpomExportTasks() {
+    registerMainTasks()
+    hookUpMainTasksToLifecycleTasks()
+
+    configureSpecialExportTasks()
+
+    SuperpomFileSharing.zipKeys().forEach {
+      configureExportTaskForKey(it)
     }
-    val exportSharedGradleProperties by registering(Copy::class) {
-      configureExportSharedGradleProperties()
-    }
-    val exportSharedIdeaFiles by registering(Zip::class) {
-      configureExportSharedIdeaFiles()
+  }
+
+  private fun TaskContainerScope.registerMainTasks() {
+    register(MAIN_TASK_NAME) {
+      group = TaskGroupNames.FILE_SHARING
+      description = "Exports all files shared by the SuperPOM plugin"
     }
 
-    //region MAIN TASKS
-    val exportSharedFiles by registering {
-      configureExportSharedFiles()
-      dependsOn(exportPluginVersion, exportSharedGradleProperties, exportSharedIdeaFiles)
+    register<Delete>(MAIN_CLEAN_TASK_NAME) {
+      group = TaskGroupNames.FILE_SHARING
+      description = "Cleans all files to be exported by the plugin"
+      delete(SuperpomFileSharing.exportedResourceDir(project))
     }
-    val cleanExportSharedFiles by existing(Delete::class) {
-      configureCleanExportSharedFiles()
-    }
-    //endregion
+  }
 
-    //region LIFECYCLE HOOKS
+  private fun TaskContainerScope.hookUpMainTasksToLifecycleTasks() {
     "processResources" {
-      dependsOn(exportSharedFiles)
+      dependsOn(MAIN_TASK_NAME)
     }
     "clean" {
-      dependsOn(cleanExportSharedFiles)
-    }
-    //endregion
-  }
-
-  private fun Task.configureExportPluginVersion() {
-    group = TaskGroupNames.FILE_SHARING
-
-    val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
-    description = "Exports the plugin version to a text file ($filename)"
-
-    val pluginVersion = project.version.toString()
-    inputs.property("version", pluginVersion)
-
-    val pluginVersionFile = exportedDir.resolve(filename)
-    outputs.file(pluginVersionFile)
-
-    doLast {
-      pluginVersionFile.writeText(pluginVersion)
+      dependsOn(MAIN_CLEAN_TASK_NAME)
     }
   }
 
-  private fun Copy.configureExportSharedGradleProperties() {
-    val filename = SuperpomFileSharing.SHARED_PROPERTIES_FILENAME
+  private fun TaskContainerScope.configureSpecialExportTasks() {
+    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties
+    val exportPluginVersion by registering(PluginVersionExportTask::class)
 
-    group = TaskGroupNames.FILE_SHARING
-    description = "Exports shared Gradle properties ($filename)"
+    val exportSharedGradleProperties by registering(DirectSharedFileExportTask::class) {
+      fromFile(project.rootDir.resolve("gradle").resolve(SuperpomFileSharing.SHARED_PROPERTIES_FILENAME))
+    }
 
-    from("${project.rootDir}/gradle/$filename")
-    into(exportedDir)
+    MAIN_TASK_NAME {
+      dependsOn(exportPluginVersion, exportSharedGradleProperties)
+    }
   }
 
-  private fun Zip.configureExportSharedIdeaFiles() {
-    group = TaskGroupNames.FILE_SHARING
-    from(SuperpomFileSharing.sharedIdeaFiles(project))
-    intoSharedFilesZip("idea")
-  }
-
-  private fun Task.configureExportSharedFiles() {
-    group = TaskGroupNames.FILE_SHARING
-    description = "Exports all files shared by the SuperPOM plugin"
-  }
-
-  private fun Delete.configureCleanExportSharedFiles() {
-    group = TaskGroupNames.FILE_SHARING
-    description = "Cleans all files to be exported by the plugin"
-    delete(exportedDir)
-  }
-
-  /**
-   * Configures the destination of the [Zip] task.
-   */
-  private fun Zip.intoSharedFilesZip(subname: String) {
-    val filename = "shared-$subname-files.zip"
-
-    description = "Packages $filename as an exported resource"
-
-    destinationDirectory.set(exportedDir)
-    archiveFileName.set(filename)
-    entryCompression = ZipEntryCompression.STORED
+  private fun TaskContainerScope.configureExportTaskForKey(key: String) {
+    val exportTaskName = "exportShared${key.capitalize()}Files"
+    register<ZipSharedFileExportTask>(exportTaskName) {
+      forKey(key)
+    }
+    MAIN_TASK_NAME {
+      dependsOn(exportTaskName)
+    }
   }
 }

@@ -39,11 +39,37 @@ object SuperpomFileSharing {
   const val SHARED_PROPERTIES_FILENAME = "shared-gradle.properties"
 
   /**
-   * Specifies files to share from `.idea` directory.
+   * Mappings defining Zip export/import tasks to be added (see [zipFileName]).
    */
-  fun sharedIdeaFiles(project: Project) = with(project) {
+  private val ZIP_FILE_TREE_PROVIDER_MAP = mapOf(
+          "idea" to this::sharedIdeaFiles
+  )
+
+  private fun sharedIdeaFiles(project: Project) = with(project) {
     fileTree("$rootDir/.idea") {
       include("/codeStyles/", "/copyright/", "/inspectionProfiles/")
     }
   }
+
+  /**
+   * A filename of the Zip file for given [key].
+   */
+  fun zipFileName(key: String) = "shared-$key-files.zip"
+
+  /**
+   * A provider of a file tree to be zipped and exported under given [key].
+   */
+  fun zipFileTreeProvider(key: String) = checkNotNull(ZIP_FILE_TREE_PROVIDER_MAP[key]) {
+    "No Zip file tree provider for key '$key' found"
+  }
+
+  /**
+   * Keys for exported Zip files.
+   */
+  fun zipKeys() = ZIP_FILE_TREE_PROVIDER_MAP.keys
+
+  /**
+   * Path to the resources directory with exported files (relative to project).
+   */
+  fun exportedResourceDir(project: Project) = project.file("src/main/resources/$RESOURCE_PATH")
 }
