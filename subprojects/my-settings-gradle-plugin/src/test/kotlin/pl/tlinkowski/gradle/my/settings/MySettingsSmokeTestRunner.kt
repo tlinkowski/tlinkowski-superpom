@@ -32,7 +32,7 @@ internal class MySettingsSmokeTestRunner {
   private val gradleRunner: GradleRunner = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(createTempDir(javaClass.simpleName))
-          .withArguments("clean", "build")
+          .withArguments("clean", "build", "--stacktrace")
           .forwardOutput()
 
   fun createSubprojectsDir() = file("subprojects").apply {

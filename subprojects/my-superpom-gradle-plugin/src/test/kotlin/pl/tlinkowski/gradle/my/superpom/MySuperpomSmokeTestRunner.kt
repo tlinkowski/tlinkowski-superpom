@@ -57,7 +57,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
   private fun createGradleRunner(projectDir: Path, args: List<String>) = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(projectDir.toFile())
-          .withArguments(args)
+          .withArguments(args + listOf("--stacktrace"))
           .forwardOutput()
 
   //region GRADLE.PROPERTIES (duplicated in `MySettingsSmokeTestRunner.kt`)
