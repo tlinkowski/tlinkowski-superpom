@@ -18,7 +18,10 @@
 
 package pl.tlinkowski.gradle.my.superpom.internal.task
 
-import org.gradle.api.tasks.Copy
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileTree
+import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.*
 import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
 import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
 import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
@@ -33,10 +36,38 @@ import java.nio.file.StandardCopyOption
  *
  * @author Tomasz Linkowski
  */
-open class ZipSharedFileImportTask : Copy() {
+open class ZipSharedFileImportTask : DefaultTask() {
 
   init {
     group = TaskGroupNames.FILE_SHARING
+  }
+
+  /**
+   * Represents the Zip file from which we copy (like [Copy.from] but we can't use [Copy] directly).
+   */
+  @InputFiles
+  lateinit var sourceFileTree: FileTree
+    private set
+
+  /**
+   * Represents the original location of the exported files, which is now being used for importing these files
+   * in the corresponding location (like [Copy.into] but we can't use [Copy] directly).
+   */
+  @OutputFiles
+  lateinit var targetFileTree: ConfigurableFileTree
+    private set
+
+  /**
+   * Copies the files from [sourceFileTree] into [targetFileTree] (representing
+   * the original location of the exported files).
+   */
+  @TaskAction
+  fun importFiles() {
+    // impl note: we can't use Gradle's Copy task (see https://github.com/tlinkowski/tlinkowski-superpom/issues/35)
+    project.copy {
+      from(sourceFileTree)
+      into(targetFileTree.dir)
+    }
   }
 
   /**
@@ -44,7 +75,7 @@ open class ZipSharedFileImportTask : Copy() {
    */
   fun forKey(key: String) {
     fromExportedZipFile(key)
-    intoFileTreeBaseDir(key)
+    intoTargetFileTree(key)
   }
 
   /**
@@ -54,14 +85,12 @@ open class ZipSharedFileImportTask : Copy() {
     val filename = SuperpomFileSharing.zipFileName(key)
     description = "Imports files from $filename (as exported by the SuperPOM plugin)"
 
-    val zipFileTree = project.zipTree(prepareSharedZipTempFile(filename))
-    from(zipFileTree)
+    sourceFileTree = project.zipTree(prepareSharedZipTempFile(filename))
   }
 
-  private fun intoFileTreeBaseDir(key: String) {
+  private fun intoTargetFileTree(key: String) {
     val fileTreeProvider = SuperpomFileSharing.zipFileTreeProvider(key)
-    val fileTreeBaseDir = fileTreeProvider(project).dir
-    into(fileTreeBaseDir)
+    targetFileTree = fileTreeProvider(project)
   }
 
   private fun prepareSharedZipTempFile(filename: String): File {
