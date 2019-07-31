@@ -43,7 +43,7 @@ object SuperpomFileSharing {
    */
   private val ZIP_FILE_TREE_PROVIDER_MAP = mapOf(
           "idea" to this::sharedIdeaFiles,
-          "npm" to this::sharedNpmFiles
+          "release" to this::sharedReleaseFiles
   )
 
   private fun sharedIdeaFiles(project: Project) = with(project) {
@@ -53,11 +53,12 @@ object SuperpomFileSharing {
   }
 
   /**
-   * Files for Node Package Manager (currently, only [gren](https://github.com/github-tools/github-release-notes)).
+   * Files needed for performing a release. See:
+   * - [gren](https://github.com/github-tools/github-release-notes) (a Node.js app)
    */
-  private fun sharedNpmFiles(project: Project) = with(project) {
+  private fun sharedReleaseFiles(project: Project) = with(project) {
     fileTree(rootDir) {
-      include("/package.json", "/.grenrc.yml")
+      include("/.grenrc.yml", "/package.json", "/release.bat")
     }
   }
 

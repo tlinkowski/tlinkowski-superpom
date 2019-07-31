@@ -18,6 +18,7 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
+import org.ajoberstar.grgit.Grgit
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.*
@@ -86,15 +87,38 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       !["beta", "RC"].any { result.output.contains(it) }
   }
 
-  def 'gradle bintrayUpload'() {
+  def 'gradle release FAILS without reckon.stage=final'() {
     given:
-      runner = sampleProjectRunner('bintrayUpload')
+      runner = sampleProjectRunner('release')
+    when:
+      def result = runner.buildAndFail()
+    then:
+      result.output.contains("reckon.stage=final")
+  }
+
+  def 'gradle release'() {
+    given:
+      def grgit = Grgit.open()
+      def originalHead = grgit.head()
+    and:
+      runner = sampleProjectRunner('release', '-Preckon.stage=final')
+      grgit.add { patterns = runner.dirtyFilepaths(grgit) }
+      grgit.commit { message = 'SMOKE TEST: shaded files' }
     when:
       def result = runner.build()
     then:
       SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:bintrayUpload") }
-      taskDidNotFail(result, ':bintrayUpload')
       taskWasSuccessful(result, ':bintrayPublish')
+
+      taskWasSkipped(result, ':releaseToGitHub')
+      taskWasSuccessful(result, ':releaseToCentralRepos')
+
+      taskWasSuccessful(result, ':release')
+      taskWasSuccessful(result, ':pushUpdatedGradleProperties')
+    and:
+      grgit.head() != originalHead
+    cleanup:
+      grgit.reset { commit = originalHead }
   }
 
   //region HELPERS
@@ -108,6 +132,10 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
 
   private static boolean taskWasSuccessful(BuildResult result, String taskName) {
     result.task(taskName).outcome == TaskOutcome.SUCCESS
+  }
+
+  private static boolean taskWasSkipped(BuildResult result, String taskName) {
+    result.task(taskName).outcome == TaskOutcome.SKIPPED
   }
 
   private static boolean taskDidNotFail(BuildResult result, String taskName) {

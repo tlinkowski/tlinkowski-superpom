@@ -40,5 +40,11 @@ internal class VersionConfigPlugin : AbstractRootPlugin() {
       scopeFromProp()
       snapshotFromProp()
     }
+
+    tasks {
+      ReckonPlugin.PUSH_TASK {
+        enabled = false // we use our own push task for version tags (MyComprehensiveReleaseConfigPlugin)
+      }
+    }
   }
 }

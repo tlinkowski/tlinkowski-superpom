@@ -106,6 +106,7 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
         -   [`org.kordamp.gradle.project`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project) plugin
         -   [`org.kordamp.gradle.bintray`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray) plugin
+        -   [`org.ajoberstar.grgit`](https://github.com/ajoberstar/grgit) plugin
         -   [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon) plugin
 
     -   configures:
@@ -121,6 +122,8 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
             -   `bintrayApiKey`: from Gradle properties (i.e. `~/.gradle/gradle.properties`),
             -   `gnupgPassphrase`, `sonatypePassword`: by requesting them in a Swing dialog (not suitable for CI)
+
+        -   a [comprehensive release process](#comprehensive-release-process)
 
 3.  for subprojects:
 
@@ -152,6 +155,87 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
 Note that in order to perform a release that requires no manual actions, a `finalizeRelease` Gradle property must be
 set (e.g. by calling `gradlew bintrayUpload -PfinalizeRelease`).
+
+#### Comprehensive Release Process
+
+This plugin configures a comprehensive release process by:
+ 
+-   exposing `release` Gradle task (which serves as the root of a complex task chain)
+
+-   providing [shared](#direct-file-sharing) `release.bat` script
+    (which simply calls `gradle clean` followed by `gradle release -Preckon.stage=final`)
+
+The comprehensive release process is configured by
+[MyComprehensiveReleaseConfigurator](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
+and includes:
+
+1.  Release validation (requirements: clean repo, `master` branch, `reckon.stage=final` property)
+2.  Full clean build (to make 100% sure we can release)
+3.  Confirmations to make sure the release is going fine
+4.  Changelog generation (by [gren](https://github.com/github-tools/github-release-notes), requires Node.js)
+5.  Tagging the release in Git
+6.  Publishing to GitHub (by [gren](https://github.com/github-tools/github-release-notes), requires Node.js)
+7.  Publishing to central repos (JCenter & Maven Central)
+8.  Post-release reset of the release scope for [reckon](https://github.com/ajoberstar/reckon) in `gradle.properties`
+
+This is how a Gradle build log of such a release process looks:
+
+```
+> Task :validateReleasePossible        // 1
+
+> Task :<subproject-1>:[...]           // 2
+> Task :<subproject-1>:build           // 2
+
+> Task :<subproject-2>:[...]           // 2
+> Task :<subproject-2>:build           // 2
+
+> Task :confirmReleaseProcessLaunch    // 3
+=== Do you want to begin the release process for version 0.1.0 of 'sample-project'? [y/N] ===
+y
+
+> Task :addTemporaryVersionTag         // 4 (required by gren)
+> Task :generateChangelog              // 4 (gren)
+> Task :removeTemporaryVersionTag      // 4 (no longer needed)
+
+> Task :confirmChangelogPush           // 3
+=== Do you want to push the updated CHANGELOG.md and continue with the release process? [y/N] ===
+y
+
+> Task :pushUpdatedChangelog           // 4
+> Task :addFinalVersionTag             // 5
+
+> Task :confirmFinalPublication        // 3
+=== Are you SURE you want to publish the code at 0.1.0 tag to GitHub, JCenter & MavenCentral? [y/N] ===
+y
+
+> Task :releaseToGitHub                // 6 (gren)
+
+> Task :<subproject-1>:[...]                               // 7
+> Task :<subproject-1>:publishMainPublicationToMavenLocal  // 7
+
+> Task :<subproject-2>:[...]                               // 7
+> Task :<subproject-2>:publishMainPublicationToMavenLocal  // 7
+
+> Task :injectReleasePasswords         // 7
+
+> Task :<subproject-1>:[...]           // 7
+> Task :<subproject-1>:bintrayUpload   // 7
+
+> Task :<subproject-2>:[...]           // 7
+> Task :<subproject-2>:bintrayUpload   // 7
+
+> Task :bintrayPublish                 // 7
+> Task :releaseToCentralRepos          // 7
+> Task :release
+> Task :resetScopeInGradleProperties   // 8
+> Task :pushUpdatedGradleProperties    // 8
+```
+
+Note that, thanks to [reckon](https://github.com/ajoberstar/reckon) plugin, we don't need to do the classic
+"pre-release version bumps". Instead, we:
+
+-   automatically reset the version scope after a release to `patch` (= "post-release version bump")
+-   manually change the scope to `minor` or `major` whenever we commit any changes that are in such scope
 
 #### Gradle Configuration Sharing
 
@@ -204,8 +288,8 @@ The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-s
 -   `idea`: parts of IntelliJ configuration from `.idea` directory
     (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
 
--   `npm`: files related to Node Package Manager
-    (currently, only [gren](https://github.com/github-tools/github-release-notes))
+-   `release`: files related to releasing, like `release.bat` script and Node.js configuration for
+    [gren](https://github.com/github-tools/github-release-notes)
 
 This feature is implemented:
 

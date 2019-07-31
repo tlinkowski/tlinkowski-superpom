@@ -6,5 +6,6 @@
 
 # imported files
 /.idea/
-/package.json
 /.grenrc.yml
+/package.json
+/release.bat

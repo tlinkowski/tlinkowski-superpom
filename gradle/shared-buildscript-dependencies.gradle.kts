@@ -35,6 +35,10 @@ dependencies {
   val modularityVersion: String by project
   compile(group = "org.javamodularity", name = "moduleplugin", version = modularityVersion)
 
+  // https://github.com/ajoberstar/grgit/
+  val grgitVersion: String by project
+  compile(group = "org.ajoberstar.grgit", name = "grgit-core", version = grgitVersion)
+
   // https://github.com/ajoberstar/reckon/
   val reckonVersion: String by project
   compile(group = "org.ajoberstar.reckon", name = "reckon-gradle", version = reckonVersion)

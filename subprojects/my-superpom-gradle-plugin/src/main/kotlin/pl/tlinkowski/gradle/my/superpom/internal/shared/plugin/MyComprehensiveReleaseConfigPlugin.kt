@@ -15,30 +15,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package pl.tlinkowski.gradle.my.superpom.internal.shared.plugin
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.superpom.internal.shared.configurator.MyComprehensiveReleaseConfigurator
 
 /**
- * Configuration shared between this project and the projects to which the SuperPOM plugin is applied.
+ * Configures tasks that let us perform a complete release in a single step. Includes:
+ * - generating the changelog (requires Node.js)
+ * - tagging the release
+ * - publishing to GitHub (requires Node.js)
+ * - publishing to central repos (JCenter & Maven Central)
+ * - resetting the release scope to "patch" (if needed)
  *
  * @author Tomasz Linkowski
+ * @see MyComprehensiveReleaseConfigurator
  */
-class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
+internal class MyComprehensiveReleaseConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(VersionConfigPlugin::class) // adds project.grgit + modified project.version
+    val configurator = MyComprehensiveReleaseConfigurator(tasks)
 
-      plugin(MyCoreConfigPlugin::class)
-      plugin(ModularityConfigPlugin::class)
-      plugin(TestConfigPlugin::class)
-      plugin(JacocoConfigPlugin::class)
-      plugin(MyCentralPublishConfigPlugin::class)
-      plugin(MyComprehensiveReleaseConfigPlugin::class)
+    configurator.configureTasks()
 
-      plugin(DependencyUpdatesConfigPlugin::class)
+    subprojects {
+      configurator.configureTaskDependenciesFor(this)
     }
   }
 }

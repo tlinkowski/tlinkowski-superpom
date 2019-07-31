@@ -53,6 +53,8 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
 
   fun build(): BuildResult = gradleRunner.build()
 
+  fun buildAndFail(): BuildResult = gradleRunner.buildAndFail()
+
   /**
    * Returns relative paths that need to be (temporarily) committed in order to have a clean repo.
    */

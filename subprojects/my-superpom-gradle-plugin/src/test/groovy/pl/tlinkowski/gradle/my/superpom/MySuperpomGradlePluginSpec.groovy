@@ -31,23 +31,14 @@ class MySuperpomGradlePluginSpec extends Specification {
 
   private Project project
 
-  def 'plugin sets proper license'() {
-    given:
-      project = newEmptyProject()
-    when:
-      applyMySuperpomPlugin()
-    then:
-      kordampConfig().licensing.licenses.licenses[0].id == 'Apache-2.0'
-  }
-
   def 'plugin can be applied to a multi-project root'() {
     given:
       project = newMultiProject()
-      setDummyDependencyVersions()
     when:
       applyMySuperpomPlugin()
     then:
-      noExceptionThrown()
+      kordampConfig().info.people.people[0].id == 'tlinkowski'
+      kordampConfig().licensing.licenses.licenses[0].id == 'Apache-2.0'
   }
 
   def 'plugin cannot be applied to a subproject'() {
@@ -81,9 +72,5 @@ class MySuperpomGradlePluginSpec extends Specification {
 
   private ProjectConfigurationExtension kordampConfig() {
     project.extensions.getByType ProjectConfigurationExtension
-  }
-
-  private setDummyDependencyVersions() {
-    ["kotlinVersion", "groovyVersion", "spockVersion"].forEach { project.ext.set(it, "?") }
   }
 }
