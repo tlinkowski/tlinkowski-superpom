@@ -28,14 +28,14 @@ import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
  *
  * @author Tomasz Linkowski
  */
-open class PluginVersionExportTask : DefaultTask() {
+internal open class PluginVersionExportTask : DefaultTask() {
 
   private val filename = SuperpomFileSharing.PLUGIN_VERSION_FILENAME
 
-  @Input
+  @get:Input
   val pluginVersion = project.version.toString()
 
-  @OutputFile
+  @get:OutputFile
   val pluginVersionFile = SuperpomFileSharing.exportedResourceDir(project).resolve(filename)
 
   init {

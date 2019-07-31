@@ -36,7 +36,7 @@ import java.nio.file.StandardCopyOption
  *
  * @author Tomasz Linkowski
  */
-open class ZipSharedFileImportTask : DefaultTask() {
+internal open class ZipSharedFileImportTask : DefaultTask() {
 
   init {
     group = TaskGroupNames.FILE_SHARING
@@ -45,7 +45,7 @@ open class ZipSharedFileImportTask : DefaultTask() {
   /**
    * Represents the Zip file from which we copy (like [Copy.from] but we can't use [Copy] directly).
    */
-  @InputFiles
+  @get:InputFiles
   lateinit var sourceFileTree: FileTree
     private set
 
@@ -53,7 +53,7 @@ open class ZipSharedFileImportTask : DefaultTask() {
    * Represents the original location of the exported files, which is now being used for importing these files
    * in the corresponding location (like [Copy.into] but we can't use [Copy] directly).
    */
-  @OutputFiles
+  @get:OutputFiles
   lateinit var targetFileTree: ConfigurableFileTree
     private set
 

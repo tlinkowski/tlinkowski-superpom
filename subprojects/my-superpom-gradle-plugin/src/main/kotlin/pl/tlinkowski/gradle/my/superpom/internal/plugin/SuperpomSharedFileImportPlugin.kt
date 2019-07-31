@@ -33,7 +33,7 @@ import pl.tlinkowski.gradle.my.superpom.internal.task.ZipSharedFileImportTask
  *
  * @author Tomasz Linkowski
  */
-class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
+internal class SuperpomSharedFileImportPlugin : AbstractRootPlugin() {
 
   companion object {
     const val MAIN_TASK_NAME = "importSharedFiles"

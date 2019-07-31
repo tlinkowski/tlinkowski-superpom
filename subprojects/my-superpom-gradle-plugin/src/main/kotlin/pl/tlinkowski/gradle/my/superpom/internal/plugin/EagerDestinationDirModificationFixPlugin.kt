@@ -36,7 +36,7 @@ import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugi
  *
  * @author Tomasz Linkowski
  */
-class EagerDestinationDirModificationFixPlugin : AbstractRootPlugin() {
+internal class EagerDestinationDirModificationFixPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     subprojects {

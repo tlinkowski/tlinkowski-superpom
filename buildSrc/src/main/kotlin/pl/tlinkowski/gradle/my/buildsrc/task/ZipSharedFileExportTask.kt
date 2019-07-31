@@ -30,7 +30,7 @@ import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
  *
  * @author Tomasz Linkowski
  */
-open class ZipSharedFileExportTask : Zip() {
+internal open class ZipSharedFileExportTask : Zip() {
 
   init {
     group = TaskGroupNames.FILE_SHARING

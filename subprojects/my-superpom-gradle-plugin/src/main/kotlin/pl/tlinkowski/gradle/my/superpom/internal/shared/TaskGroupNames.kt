@@ -20,7 +20,7 @@ package pl.tlinkowski.gradle.my.superpom.internal.shared
 /**
  * @author Tomasz Linkowski
  */
-object TaskGroupNames {
+internal object TaskGroupNames {
   /**
    * Tasks that are not to be called directly.
    */

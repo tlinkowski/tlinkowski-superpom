@@ -27,7 +27,7 @@ import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
  *
  * @author Tomasz Linkowski
  */
-open class CleanZipSharedFileImportTask : Delete() {
+internal open class CleanZipSharedFileImportTask : Delete() {
 
   init {
     group = TaskGroupNames.FILE_SHARING

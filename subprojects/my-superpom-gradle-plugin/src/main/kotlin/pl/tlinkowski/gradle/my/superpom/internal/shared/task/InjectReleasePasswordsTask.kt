@@ -31,7 +31,7 @@ import javax.swing.JPasswordField
  *
  * @author Tomasz Linkowski
  */
-open class InjectReleasePasswordsTask : DefaultTask() {
+internal open class InjectReleasePasswordsTask : DefaultTask() {
 
   init {
     group = TaskGroupNames.INTERNAL

@@ -32,7 +32,7 @@ import java.util.*
  *
  * @author Tomasz Linkowski
  */
-class SuperpomSharedGradlePropertyImportPlugin : AbstractRootPlugin() {
+internal class SuperpomSharedGradlePropertyImportPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     val properties = Properties()

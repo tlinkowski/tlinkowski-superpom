@@ -29,7 +29,7 @@ import org.gradle.kotlin.dsl.*
  *
  * @author Tomasz Linkowski
  */
-class VersionConfigPlugin : AbstractRootPlugin() {
+internal class VersionConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     apply {

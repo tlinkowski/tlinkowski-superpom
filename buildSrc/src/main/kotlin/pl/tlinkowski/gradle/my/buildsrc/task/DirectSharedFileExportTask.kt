@@ -28,7 +28,7 @@ import java.io.File
  *
  * @author Tomasz Linkowski
  */
-open class DirectSharedFileExportTask : Copy() {
+internal open class DirectSharedFileExportTask : Copy() {
 
   init {
     group = TaskGroupNames.FILE_SHARING
