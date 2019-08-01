@@ -18,9 +18,11 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
+import org.ajoberstar.grgit.Grgit
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import java.io.File
+import pl.tlinkowski.gradle.my.superpom.internal.shared.toGrgitPath
+import pl.tlinkowski.gradle.my.superpom.internal.shared.toNormalizedString
 import java.nio.file.Path
 
 /**
@@ -31,28 +33,37 @@ import java.nio.file.Path
 internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) : AutoCloseable {
 
   private val gradleRunner: GradleRunner
-  private val shadedGradleProperties: ShadedFile
-  private val shadedSettingsGradleKts: ShadedFile
+  private val shadedFiles: List<ShadedFile>
 
   init {
     gradleRunner = createGradleRunner(projectDir, args)
-    shadedGradleProperties = ShadedFile(projectDir.resolve("gradle.properties")) {
-      it + readTestkitPropertiesContent()
-    }
-    shadedSettingsGradleKts = ShadedFile(projectDir.resolve("settings.gradle.kts")) {
-      replaceClasspathWithPluginClasspath(it)
-    }
+    shadedFiles = listOf(
+            projectDir.shadedGradleProperties(),
+            projectDir.shadedSettingsGradleKts()
+    )
   }
 
-  override fun close() {
-    try {
-      shadedGradleProperties.close()
-    } finally {
-      shadedSettingsGradleKts.close()
-    }
+  private fun Path.shadedGradleProperties() = ShadedFile(resolve("gradle.properties")) { content ->
+    content + readTestkitPropertiesContent()
+  }
+
+  private fun Path.shadedSettingsGradleKts() = ShadedFile(resolve("settings.gradle.kts")) { content ->
+    replaceClasspathWithPluginClasspath(content)
   }
 
   fun build(): BuildResult = gradleRunner.build()
+
+  /**
+   * Returns relative paths that need to be (temporarily) committed in order to have a clean repo.
+   */
+  fun dirtyFilepaths(grgit: Grgit) = shadedFiles
+          .flatMap { listOf(it.path, it.bakPath) }
+          .map { it.toFile().toGrgitPath(grgit) }
+          .toSet()
+
+  override fun close() {
+    shadedFiles.closeAll()
+  }
 
   private fun createGradleRunner(projectDir: Path, args: List<String>) = GradleRunner.create()
           .withPluginClasspath()
@@ -79,7 +90,5 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
   private fun buildPluginClasspathString() = gradleRunner.pluginClasspath.joinToString(", ") { file ->
     '"' + file.toNormalizedString() + '"'
   }
-
-  private fun File.toNormalizedString() = path.replace('\\', '/')
   //endregion
 }

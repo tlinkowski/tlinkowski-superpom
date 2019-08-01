@@ -16,27 +16,17 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.superpom
+package pl.tlinkowski.gradle.my.superpom.internal.shared
 
-import java.nio.file.*
+import org.ajoberstar.grgit.Grgit
+import java.io.File
 
 /**
- * Special class that replaces the content of a file for the duration of a test.
- *
- * @author Tomasz Linkowski
+ * Prints the file with separators normalized to Unix format.
  */
-internal class ShadedFile(val path: Path, contentMapper: (String) -> String) : AutoCloseable {
+fun File.toNormalizedString() = path.replace('\\', '/')
 
-  val bakPath: Path
-    get() = Path.of("$path.bak")
-
-  init {
-    val modifiedContent = contentMapper(Files.readString(path))
-    Files.move(path, bakPath) // backup original file
-    Files.writeString(path, modifiedContent)
-  }
-
-  override fun close() {
-    Files.move(bakPath, path, StandardCopyOption.REPLACE_EXISTING) // restore original file
-  }
-}
+/**
+ * Returns a path to this file in a form that can be supplied to [grgit]'s `add` or `commit` operations.
+ */
+fun File.toGrgitPath(grgit: Grgit) = absoluteFile.relativeTo(grgit.repository.rootDir.parentFile).toNormalizedString()

@@ -18,25 +18,20 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
-import java.nio.file.*
-
 /**
- * Special class that replaces the content of a file for the duration of a test.
- *
- * @author Tomasz Linkowski
+ * Closes all [AutoCloseable]s, even if any of the [AutoCloseable.close] methods throws an [Exception].
  */
-internal class ShadedFile(val path: Path, contentMapper: (String) -> String) : AutoCloseable {
-
-  val bakPath: Path
-    get() = Path.of("$path.bak")
-
-  init {
-    val modifiedContent = contentMapper(Files.readString(path))
-    Files.move(path, bakPath) // backup original file
-    Files.writeString(path, modifiedContent)
+fun <C : AutoCloseable> Collection<C>.closeAll() {
+  var exception: Exception? = null
+  for (autoCloseable in this) {
+    try {
+      autoCloseable.close()
+    } catch (ex: Exception) {
+      if (exception == null) exception = ex else exception.addSuppressed(ex)
+    }
   }
 
-  override fun close() {
-    Files.move(bakPath, path, StandardCopyOption.REPLACE_EXISTING) // restore original file
+  if (exception != null) {
+    throw exception
   }
 }
