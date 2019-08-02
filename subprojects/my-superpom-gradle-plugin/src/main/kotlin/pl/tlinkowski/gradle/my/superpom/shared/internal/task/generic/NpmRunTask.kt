@@ -16,35 +16,28 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+import org.gradle.api.tasks.Exec
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * A simple wrapper over [Exec] task to run Node Package Manager.
  *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+internal open class NpmRunTask : Exec() {
 
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
+  init {
+    group = TaskGroupNames.INTERNAL
+    workingDir = project.rootDir
+    executable = "npm"
   }
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
+  /**
+   * @param scriptName script name defined in `package.json`
+   */
+  fun scriptName(scriptName: String) {
+    args("run", scriptName)
   }
 }

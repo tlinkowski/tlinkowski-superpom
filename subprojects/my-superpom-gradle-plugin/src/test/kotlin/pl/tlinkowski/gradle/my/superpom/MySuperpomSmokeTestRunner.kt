@@ -21,8 +21,8 @@ package pl.tlinkowski.gradle.my.superpom
 import org.ajoberstar.grgit.Grgit
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import pl.tlinkowski.gradle.my.superpom.internal.shared.toGrgitPath
-import pl.tlinkowski.gradle.my.superpom.internal.shared.toNormalizedString
+import pl.tlinkowski.gradle.my.superpom.shared.internal.toGrgitPath
+import pl.tlinkowski.gradle.my.superpom.shared.internal.toNormalizedString
 import java.nio.file.Path
 
 /**

@@ -23,8 +23,8 @@ import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.*
 import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption

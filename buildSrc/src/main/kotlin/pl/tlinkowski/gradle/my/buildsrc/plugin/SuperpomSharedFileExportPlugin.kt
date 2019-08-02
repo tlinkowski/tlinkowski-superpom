@@ -23,8 +23,8 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.buildsrc.task.*
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 
 /**
  * Facilitates export of some files from this SuperPOM project to all target projects.

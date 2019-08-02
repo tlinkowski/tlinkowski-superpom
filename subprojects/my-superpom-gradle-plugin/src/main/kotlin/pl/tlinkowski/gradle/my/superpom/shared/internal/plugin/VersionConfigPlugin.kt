@@ -16,34 +16,34 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
+import org.ajoberstar.reckon.gradle.ReckonExtension
+import org.ajoberstar.reckon.gradle.ReckonPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * Applies [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon/) plugin and configures it to use
+ * SNAPSHOT version scheme.
  *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+internal class VersionConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
+    apply {
+      plugin(ReckonPlugin::class)
     }
-  }
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
+    configure<ReckonExtension> {
+      scopeFromProp()
+      snapshotFromProp()
     }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
+
+    tasks {
+      ReckonPlugin.PUSH_TASK {
+        enabled = false // we use our own push task for version tags (MyComprehensiveReleaseConfigPlugin)
       }
     }
   }

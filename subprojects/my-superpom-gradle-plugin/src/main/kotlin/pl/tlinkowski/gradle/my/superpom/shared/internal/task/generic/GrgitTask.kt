@@ -16,35 +16,25 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
-import org.gradle.api.Project
+import org.ajoberstar.grgit.Grgit
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * A task that performs some Grgit action(s).
  *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+internal open class GrgitTask : DefaultTask() {
 
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
-  }
+  @get:Internal
+  protected val grgit: Grgit by project
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
+  init {
+    group = TaskGroupNames.INTERNAL
   }
 }

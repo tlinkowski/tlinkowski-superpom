@@ -15,27 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `kotlin-dsl`
-  idea
-}
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'my-superpom-gradle-plugin' into 'buildSrc'"
+import javax.swing.JFrame
+import javax.swing.JOptionPane
 
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/my-superpom-gradle-plugin/$sharedSourceDir")
-    into(sharedSourceDir)
-  }
-
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
-  }
-}
+/**
+ * Brings up an always-on-top OK/Cancel dialog and returns `true` if the user clicked OK.
+ */
+internal fun answerQuestionInExplicitSwingDialog(message: Any, title: String) = JOptionPane.showConfirmDialog(
+        JFrame().apply { isAlwaysOnTop = true }, // source: https://stackoverflow.com/a/15604780/2032415
+        message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE
+) == JOptionPane.OK_OPTION

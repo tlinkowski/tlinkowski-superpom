@@ -20,8 +20,8 @@ package pl.tlinkowski.gradle.my.buildsrc.task
 
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.api.tasks.bundling.ZipEntryCompression
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 
 /**
  * A task that packages files specified by given `key` to a `shared-$key-files.zip` archive in exported resources dir.

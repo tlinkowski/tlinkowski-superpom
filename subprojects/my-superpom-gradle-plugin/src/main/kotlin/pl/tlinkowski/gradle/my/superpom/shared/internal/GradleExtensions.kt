@@ -15,36 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
-
-import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * Executes the given configuration block against the [extension][ExtensionAware] of the specified type (if found).
  *
- * @author Tomasz Linkowski
+ * @see [ExtensionAware.configure]
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
-
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
-  }
-
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
-  }
+internal inline fun <reified T : Any> ExtensionAware.configureIfPresent(noinline configuration: T.() -> Unit) {
+  extensions.findByType(typeOf<T>())?.apply(configuration)
 }

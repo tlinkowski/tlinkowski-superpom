@@ -15,36 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * Configuration shared between this project and the projects to which the SuperPOM plugin is applied.
  *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
-  }
+    apply {
+      plugin(VersionConfigPlugin::class) // adds project.grgit + modified project.version
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
+      plugin(MyCoreConfigPlugin::class)
+      plugin(ModularityConfigPlugin::class)
+      plugin(TestConfigPlugin::class)
+      plugin(JacocoConfigPlugin::class)
+      plugin(MyCentralPublishConfigPlugin::class)
+      plugin(MyComprehensiveReleaseConfigPlugin::class)
+
+      plugin(DependencyUpdatesConfigPlugin::class)
     }
   }
 }

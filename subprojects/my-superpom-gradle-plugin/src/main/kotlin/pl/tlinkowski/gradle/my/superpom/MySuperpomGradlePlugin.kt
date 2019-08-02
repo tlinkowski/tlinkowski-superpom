@@ -20,8 +20,8 @@ package pl.tlinkowski.gradle.my.superpom
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.superpom.internal.plugin.*
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.MyCompleteSharedConfigPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
 
 /**
  * Applies [The Gradle SuperPOM](http://andresalmiray.com/the-gradle-superpom/) concept of Andres Almiray

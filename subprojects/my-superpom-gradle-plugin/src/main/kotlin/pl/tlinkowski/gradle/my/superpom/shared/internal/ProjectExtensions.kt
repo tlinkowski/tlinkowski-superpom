@@ -16,35 +16,18 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
- *
- * @author Tomasz Linkowski
+ * Marks that we truly want to release.
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+internal val Project.isFinalRelease
+  get() = project.findProperty("reckon.stage") == "final"
 
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
-  }
-
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
-  }
-}
+/**
+ * Marks that we should not perform any permanent changes (for testing).
+ */
+internal val Project.isDryRunRelease
+  get() = project.hasProperty("superpom.release.dryRun")

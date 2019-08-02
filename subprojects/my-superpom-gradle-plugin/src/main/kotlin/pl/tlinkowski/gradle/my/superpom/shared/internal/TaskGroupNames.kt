@@ -15,36 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package pl.tlinkowski.gradle.my.buildsrc.plugin
-
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
- *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
-
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
-  }
-
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
-  }
+internal object TaskGroupNames {
+  /**
+   * Tasks that are not to be called directly.
+   */
+  const val INTERNAL = "internal"
+  const val FILE_SHARING = "file sharing"
+  const val RELEASING = "releasing"
 }

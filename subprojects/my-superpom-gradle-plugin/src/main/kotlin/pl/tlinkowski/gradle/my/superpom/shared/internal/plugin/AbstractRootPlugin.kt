@@ -16,35 +16,29 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+import org.gradle.api.*
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
+ * Base plugin for root [Project]s.
  *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+abstract class AbstractRootPlugin : Plugin<Project> {
 
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
+  /**
+   * Applies this plugin, verifying that the provided [project] is a root project.
+   */
+  final override fun apply(project: Project) {
+    if (project != project.rootProject) {
+      throw GradleException("This plugin can be applied to the root project only")
     }
+    project.configureRootProject()
   }
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
-  }
+  /**
+   * Logic of this plugin (for convenience, as an extension method of the root project).
+   */
+  protected abstract fun Project.configureRootProject()
 }

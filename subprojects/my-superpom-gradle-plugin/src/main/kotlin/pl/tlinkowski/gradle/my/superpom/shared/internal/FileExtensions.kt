@@ -15,27 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `kotlin-dsl`
-  idea
-}
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'my-superpom-gradle-plugin' into 'buildSrc'"
+import org.ajoberstar.grgit.Grgit
+import java.io.File
 
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/my-superpom-gradle-plugin/$sharedSourceDir")
-    into(sharedSourceDir)
-  }
+/**
+ * Prints the file with separators normalized to Unix format.
+ */
+internal fun File.toNormalizedString() = path.replace('\\', '/')
 
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
-  }
-}
+/**
+ * Returns a path to this file in a form that can be supplied to [grgit]'s `add` or `commit` operations.
+ */
+internal fun File.toGrgitPath(grgit: Grgit) = absoluteFile.relativeTo(grgit.repository.rootDir.parentFile).toNormalizedString()

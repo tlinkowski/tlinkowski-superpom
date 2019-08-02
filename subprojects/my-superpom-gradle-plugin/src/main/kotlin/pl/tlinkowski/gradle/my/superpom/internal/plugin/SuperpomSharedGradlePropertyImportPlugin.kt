@@ -21,8 +21,8 @@ package pl.tlinkowski.gradle.my.superpom.internal.plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.superpom.MySuperpomSharedFileAccess
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 import java.util.*
 
 /**

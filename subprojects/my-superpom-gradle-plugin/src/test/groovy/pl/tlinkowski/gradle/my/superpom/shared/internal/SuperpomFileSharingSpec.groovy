@@ -16,35 +16,29 @@
  * limitations under the License.
  */
 
-package pl.tlinkowski.gradle.my.buildsrc.plugin
+package pl.tlinkowski.gradle.my.superpom.shared.internal
 
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
+import org.gradle.testfixtures.ProjectBuilder
+import spock.lang.Specification
 
 /**
- * Workaround for https://github.com/aalmiray/kordamp-gradle-plugins/issues/139
- *
  * @author Tomasz Linkowski
  */
-class DokkaRuntimeConfigurationWorkaroundPlugin : AbstractRootPlugin() {
+class SuperpomFileSharingSpec extends Specification {
 
-  override fun Project.configureRootProject() {
-    allprojects {
-      fixDokka()
-    }
+  def zipFileTreeProvider() {
+    when:
+      SuperpomFileSharing.INSTANCE.zipFileTreeProvider$my_superpom_gradle_plugin("FAKE")
+    then:
+      thrown(IllegalStateException)
   }
 
-  private fun Project.fixDokka() {
-    configurations {
-      create("dokkaRuntime")
-    }
-    repositories {
-      gradlePluginPortal {
-        content {
-          includeGroup("org.jetbrains.dokka")
-        }
-      }
-    }
+  def exportedResourceDir() {
+    given:
+      def project = ProjectBuilder.builder().build()
+    when:
+      def resourceDir = SuperpomFileSharing.INSTANCE.exportedResourceDir$my_superpom_gradle_plugin(project)
+    then:
+      FileExtensionsKt.toNormalizedString(resourceDir).endsWith(SuperpomFileSharing.RESOURCE_PATH)
   }
 }

@@ -22,7 +22,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 
 /**
  * Fixes too eager modification of `compileJava.destinationDir`. This modification should be performed only

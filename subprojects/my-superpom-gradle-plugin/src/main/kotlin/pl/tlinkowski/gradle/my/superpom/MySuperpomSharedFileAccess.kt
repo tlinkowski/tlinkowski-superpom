@@ -18,7 +18,7 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
 import java.io.InputStream
 
 /**

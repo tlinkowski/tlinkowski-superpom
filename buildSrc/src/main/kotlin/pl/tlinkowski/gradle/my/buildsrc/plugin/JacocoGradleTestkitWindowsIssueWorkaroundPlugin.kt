@@ -23,7 +23,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.*
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.AbstractRootPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 import java.io.File
 
 /**

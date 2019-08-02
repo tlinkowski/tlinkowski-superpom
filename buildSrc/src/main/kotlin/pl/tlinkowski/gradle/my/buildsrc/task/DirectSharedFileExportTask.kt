@@ -19,8 +19,8 @@
 package pl.tlinkowski.gradle.my.buildsrc.task
 
 import org.gradle.api.tasks.Copy
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 import java.io.File
 
 /**

@@ -19,8 +19,8 @@
 package pl.tlinkowski.gradle.my.superpom.internal.task
 
 import org.gradle.api.tasks.Delete
-import pl.tlinkowski.gradle.my.superpom.internal.shared.SuperpomFileSharing
-import pl.tlinkowski.gradle.my.superpom.internal.shared.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
+import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 
 /**
  * A task that removes files extracted using [ZipSharedFileImportTask].

@@ -247,8 +247,8 @@ A large part of the build configuration for:
 -   *target* projects
     (defined in [`pl.tlinkowski.gradle.my.superpom`](subprojects/my-superpom-gradle-plugin) plugin project)
 
-is *shared* as [`pl.tlinkowski.gradle.my.internal.shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared)
-package (see [`MyCompleteSharedConfigPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared/plugin/MyCompleteSharedConfigPlugin.kt)).
+is *shared* as [`pl.tlinkowski.gradle.my.superpom.shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared)
+package (see [`MyCompleteSharedConfigPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/MyCompleteSharedConfigPlugin.kt)).
 
 Thanks to this, we don't have to:
 
@@ -260,7 +260,7 @@ Thanks to this, we don't have to:
     -   such approach would be problematic for [direct file sharing](#direct-file-sharing)
 
 This is achieved by synchronizing the contents of the SuperPOM plugin's
-[`shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared) 
+[`shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared) 
 package with a corresponding `shared` package in `buildSrc`
 (see [`buildSrc/build.gradle.kts`](buildSrc/build.gradle.kts) for details).
 
@@ -282,7 +282,7 @@ Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.pr
 Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed
 as a "sync" operation between this (*source*) project and all *target* projects.
 
-The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/shared/SuperpomFileSharing.kt)
+The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/SuperpomFileSharing.kt)
 (usually, it's a good idea to git-ignore them in *target* projects). Currently, the following files are shared *directly*:
 
 -   `idea`: parts of IntelliJ configuration from `.idea` directory
