@@ -105,8 +105,8 @@ config {
 
     links {
       website = "https://github.com/tlinkowski/tlinkowski-superpom"
-      issueTracker = "https://github.com/tlinkowski/tlinkowski-superpom/issues"
-      scm = "https://github.com/tlinkowski/tlinkowski-superpom.git"
+      issueTracker = "$website/issues"
+      scm = "$website.git"
     }
   }
 }

@@ -28,8 +28,8 @@ config {
 
     links {
       website = "https://github.com/tlinkowski/FAKE-NAME"
-      issueTracker = "https://github.com/tlinkowski/FAKE-NAME/issues"
-      scm = "https://github.com/tlinkowski/FAKE-NAME.git"
+      issueTracker = "$website/issues"
+      scm = "$website.git"
     }
   }
 }
