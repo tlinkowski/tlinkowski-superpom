@@ -65,6 +65,9 @@ subprojects {
       enabled = true
       replaceJavadoc = true
       jdkVersion = 8
+
+      // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/issues/161
+      outputDirectory = file("$buildDir/docs/kotlindoc")
     }
 
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
