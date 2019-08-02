@@ -17,22 +17,25 @@
  */
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
+import com.github.benmanes.gradle.versions.VersionsPlugin
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
 /**
- * Configures [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin].
+ * Applies and configures [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin].
  *
  * @author Tomasz Linkowski
  */
 internal class DependencyUpdatesConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    allprojects {
-      tasks {
-        configureDependencyUpdates()
-      }
+    apply {
+      plugin(VersionsPlugin::class)
+    }
+
+    tasks {
+      configureDependencyUpdates()
     }
   }
 

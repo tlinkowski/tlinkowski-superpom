@@ -94,11 +94,7 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
     -   applies: [`idea`](https://docs.gradle.org/current/userguide/idea_plugin.html) plugin
 
-    -   configures:
-
-        -   Maven Central repository
-
-        -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
+    -   configures: Maven Central repository
 
 2.  for the root project:
 
@@ -108,6 +104,7 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
         -   [`org.kordamp.gradle.bintray`](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray) plugin
         -   [`org.ajoberstar.grgit`](https://github.com/ajoberstar/grgit) plugin
         -   [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon) plugin
+        -   [`com.github.ben-manes.versions`](https://github.com/ben-manes/gradle-versions-plugin) plugin
 
     -   configures:
 
@@ -124,6 +121,8 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
             -   `gnupgPassphrase`, `sonatypePassword`: by requesting them in a Swing dialog (not suitable for CI)
 
         -   a [comprehensive release process](#comprehensive-release-process)
+
+        -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
 
 3.  for subprojects:
 

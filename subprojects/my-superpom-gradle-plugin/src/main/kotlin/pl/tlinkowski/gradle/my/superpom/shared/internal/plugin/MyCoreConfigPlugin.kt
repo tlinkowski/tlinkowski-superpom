@@ -18,9 +18,11 @@
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.kotlin.dsl.*
+import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
-import org.kordamp.gradle.plugin.project.ProjectPlugin
+import org.kordamp.gradle.plugin.licensing.LicensingPlugin
 
 /**
  * Applies [Kordamp Project Plugin](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project).
@@ -33,21 +35,21 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     apply {
-      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
-      plugin(ProjectPlugin::class)
+      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_licensing
+      // (the rest of Kordamp's plugins is applied through `BintrayPlugin`)
+      plugin(LicensingPlugin::class)
     }
 
     configure<ProjectConfigurationExtension> {
       configureCoreKordamp()
     }
 
-    allprojects {
-      // https://docs.gradle.org/current/userguide/idea_plugin.html
-      apply(plugin = "idea")
+    subprojects {
+      configureSubproject()
+    }
 
-      repositories {
-        mavenCentral()
-      }
+    allprojects {
+      configureEveryProject()
     }
   }
 
@@ -72,6 +74,24 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
           id = "Apache-2.0"
         }
       }
+    }
+  }
+
+  private fun Project.configureSubproject() {
+    apply {
+      // https://guides.gradle.org/designing-gradle-plugins/#capabilities-vs-conventions
+      plugin(JavaBasePlugin::class)
+    }
+  }
+
+  private fun Project.configureEveryProject() {
+    apply {
+      // https://docs.gradle.org/current/userguide/idea_plugin.html
+      plugin(IdeaPlugin::class)
+    }
+
+    repositories {
+      mavenCentral()
     }
   }
 }

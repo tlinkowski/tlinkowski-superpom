@@ -27,9 +27,13 @@ dependencies {
   val kotlinVersion: String by project
   compile(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = kotlinVersion)
 
-  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_jacoco
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_licensing
   val kordampVersion: String by project
-  compile(group = "org.kordamp.gradle", name = "project-gradle-plugin", version = kordampVersion)
+  listOf("bintray", "jacoco", "licensing").forEach {
+    compile(group = "org.kordamp.gradle", name = "$it-gradle-plugin", version = kordampVersion)
+  }
 
   // https://github.com/java9-modularity/gradle-modules-plugin
   val modularityVersion: String by project
@@ -42,4 +46,8 @@ dependencies {
   // https://github.com/ajoberstar/reckon/
   val reckonVersion: String by project
   compile(group = "org.ajoberstar.reckon", name = "reckon-gradle", version = reckonVersion)
+
+  // https://github.com/ben-manes/gradle-versions-plugin
+  val dependencyUpdatesVersion: String by project
+  compile(group = "com.github.ben-manes", name = "gradle-versions-plugin", version = dependencyUpdatesVersion)
 }

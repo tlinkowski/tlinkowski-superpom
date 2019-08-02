@@ -19,11 +19,12 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
+import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
 /**
- * Configures automatic code coverage reports and minimum code coverage.
+ * Applies Kordamp's JaCoCo plugin and configures automatic code coverage reports and minimum code coverage.
  *
  * @author Tomasz Linkowski
  */
@@ -33,6 +34,10 @@ internal class JacocoConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     subprojects {
+      apply {
+        // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_jacoco
+        plugin(JacocoPlugin::class)
+      }
       tasks {
         configureJacocoTasks()
       }
