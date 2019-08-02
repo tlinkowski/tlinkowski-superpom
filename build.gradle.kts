@@ -15,11 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.MyCompleteSharedConfigPlugin
+import java.net.URL
 
 plugins {
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
@@ -80,6 +82,15 @@ subprojects {
 
       val pluginImplementationClass: String by project
       implementationClass = pluginImplementationClass
+    }
+  }
+
+  tasks {
+    // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/issues/155
+    withType(DokkaTask::class).configureEach {
+      externalDocumentationLink {
+        url = URL("https://docs.gradle.org/current/javadoc/")
+      }
     }
   }
 }
