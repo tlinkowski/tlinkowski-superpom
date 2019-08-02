@@ -15,20 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
 import pl.tlinkowski.gradle.my.superpom.internal.shared.plugin.MyCompleteSharedConfigPlugin
 
 plugins {
-  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
-  `kotlin-dsl` apply false
-
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
   id("org.kordamp.gradle.base") // so that we can access `config`
 
+  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
+  `kotlin-dsl` apply false
+
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
-  id("org.kordamp.gradle.kotlindoc")
+  id("org.kordamp.gradle.kotlindoc") apply false
 
   // https://github.com/koral--/jacoco-gradle-testkit-plugin
   id("pl.droidsonroids.jacoco.testkit") version "1.0.4" apply false
@@ -50,12 +51,21 @@ subprojects {
     // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
     plugin(KotlinDslPlugin::class)
 
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
+    plugin(KotlindocPlugin::class)
+
     // https://github.com/koral--/jacoco-gradle-testkit-plugin
     plugin(JaCoCoTestKitPlugin::class)
   }
 
   config {
     bintray.enabled = true
+
+    kotlindoc {
+      enabled = true
+      replaceJavadoc = true
+      jdkVersion = 8
+    }
 
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
     // NOTE: simply replaces more verbose `gradlePlugin { plugins { create(project.name) { ... }}}`
@@ -84,10 +94,5 @@ config {
       issueTracker = "https://github.com/tlinkowski/tlinkowski-superpom/issues"
       scm = "https://github.com/tlinkowski/tlinkowski-superpom.git"
     }
-  }
-
-  kotlindoc {
-    replaceJavadoc = true
-    jdkVersion = 8
   }
 }
