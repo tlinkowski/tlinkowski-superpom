@@ -23,8 +23,8 @@ import org.gradle.api.Project
  * Specification for SuperPOM file sharing.
  *
  * Needed both during:
- * - export (`pl.tlinkowski.gradle.my.buildsrc.plugin.SuperpomSharedFileExportPlugin`)
- * - import ([pl.tlinkowski.gradle.my.superpom.internal.plugin.SuperpomSharedFileImportPlugin])
+ * - export (`SuperpomSharedFileExportPlugin`)
+ * - import (`SuperpomSharedFileImportPlugin`)
  *
  * @author Tomasz Linkowski
  */
@@ -35,8 +35,8 @@ object SuperpomFileSharing {
    */
   const val RESOURCE_PATH = "/pl/tlinkowski/gradle/my/superpom/exported"
 
-  const val PLUGIN_VERSION_FILENAME = "plugin-version.txt"
-  const val SHARED_PROPERTIES_FILENAME = "shared-gradle.properties"
+  internal const val PLUGIN_VERSION_FILENAME = "plugin-version.txt"
+  internal const val SHARED_PROPERTIES_FILENAME = "shared-gradle.properties"
 
   /**
    * Mappings defining Zip export/import tasks to be added (see [zipFileName]).
@@ -62,25 +62,22 @@ object SuperpomFileSharing {
     }
   }
 
-  /**
-   * A filename of the Zip file for given [key].
-   */
-  fun zipFileName(key: String) = "shared-$key-files.zip"
+  internal fun zipFileName(key: String) = "shared-$key-files.zip"
 
   /**
    * A provider of a file tree to be zipped and exported under given [key].
    */
-  fun zipFileTreeProvider(key: String) = checkNotNull(ZIP_FILE_TREE_PROVIDER_MAP[key]) {
+  internal fun zipFileTreeProvider(key: String) = checkNotNull(ZIP_FILE_TREE_PROVIDER_MAP[key]) {
     "No Zip file tree provider for key '$key' found"
   }
 
   /**
    * Keys for exported Zip files.
    */
-  fun zipKeys() = ZIP_FILE_TREE_PROVIDER_MAP.keys
+  internal fun zipKeys() = ZIP_FILE_TREE_PROVIDER_MAP.keys
 
   /**
    * Path to the resources directory with exported files (relative to project).
    */
-  fun exportedResourceDir(project: Project) = project.file("src/main/resources/$RESOURCE_PATH")
+  internal fun exportedResourceDir(project: Project) = project.file("src/main/resources/$RESOURCE_PATH")
 }

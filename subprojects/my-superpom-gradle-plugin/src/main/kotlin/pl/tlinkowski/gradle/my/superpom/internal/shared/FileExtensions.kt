@@ -24,9 +24,9 @@ import java.io.File
 /**
  * Prints the file with separators normalized to Unix format.
  */
-fun File.toNormalizedString() = path.replace('\\', '/')
+internal fun File.toNormalizedString() = path.replace('\\', '/')
 
 /**
  * Returns a path to this file in a form that can be supplied to [grgit]'s `add` or `commit` operations.
  */
-fun File.toGrgitPath(grgit: Grgit) = absoluteFile.relativeTo(grgit.repository.rootDir.parentFile).toNormalizedString()
+internal fun File.toGrgitPath(grgit: Grgit) = absoluteFile.relativeTo(grgit.repository.rootDir.parentFile).toNormalizedString()

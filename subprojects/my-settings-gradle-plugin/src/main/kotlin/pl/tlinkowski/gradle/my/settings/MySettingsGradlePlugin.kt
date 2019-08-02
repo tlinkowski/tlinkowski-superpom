@@ -24,7 +24,7 @@ import org.gradle.kotlin.dsl.*
 import java.io.File
 
 /**
- * A `Settings` plugin that:
+ * A [Settings] plugin that:
  * - configures plugin management for `MySuperpomGradlePlugin`
  * - configures the project structure as described in
  * [Kordamp project structure](https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure)

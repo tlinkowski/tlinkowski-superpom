@@ -28,7 +28,7 @@ class SuperpomFileSharingSpec extends Specification {
 
   def zipFileTreeProvider() {
     when:
-      SuperpomFileSharing.INSTANCE.zipFileTreeProvider("FAKE")
+      SuperpomFileSharing.INSTANCE.zipFileTreeProvider$my_superpom_gradle_plugin("FAKE")
     then:
       thrown(IllegalStateException)
   }
@@ -37,7 +37,7 @@ class SuperpomFileSharingSpec extends Specification {
     given:
       def project = ProjectBuilder.builder().build()
     when:
-      def resourceDir = SuperpomFileSharing.INSTANCE.exportedResourceDir(project)
+      def resourceDir = SuperpomFileSharing.INSTANCE.exportedResourceDir$my_superpom_gradle_plugin(project)
     then:
       FileExtensionsKt.toNormalizedString(resourceDir).endsWith(SuperpomFileSharing.RESOURCE_PATH)
   }

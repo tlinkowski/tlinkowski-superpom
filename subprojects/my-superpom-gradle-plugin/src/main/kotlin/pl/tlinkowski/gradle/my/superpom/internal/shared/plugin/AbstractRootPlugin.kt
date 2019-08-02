@@ -37,5 +37,8 @@ abstract class AbstractRootPlugin : Plugin<Project> {
     project.configureRootProject()
   }
 
+  /**
+   * Logic of this plugin (for convenience, as an extension method of the root project).
+   */
   protected abstract fun Project.configureRootProject()
 }

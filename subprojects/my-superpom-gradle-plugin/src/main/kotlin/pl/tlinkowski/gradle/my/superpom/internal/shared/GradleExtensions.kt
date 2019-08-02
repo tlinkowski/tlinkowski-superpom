@@ -25,6 +25,6 @@ import org.gradle.kotlin.dsl.*
  *
  * @see [ExtensionAware.configure]
  */
-inline fun <reified T : Any> ExtensionAware.configureIfPresent(noinline configuration: T.() -> Unit) {
+internal inline fun <reified T : Any> ExtensionAware.configureIfPresent(noinline configuration: T.() -> Unit) {
   extensions.findByType(typeOf<T>())?.apply(configuration)
 }
