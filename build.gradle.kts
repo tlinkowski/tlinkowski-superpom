@@ -20,6 +20,7 @@ import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
+import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
 import java.net.URL
 
@@ -42,7 +43,7 @@ apply {
   plugin(MyCompleteSharedConfigPlugin::class) // shared build script
 
   plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
-  if (JacocoGradleTestkitWindowsIssueWorkaroundPlugin.isWindows()) {
+  if (isWindows()) {
     plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
   }
 }

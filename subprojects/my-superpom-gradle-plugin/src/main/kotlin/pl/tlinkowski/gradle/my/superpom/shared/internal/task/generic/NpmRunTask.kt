@@ -20,6 +20,7 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
 import org.gradle.api.tasks.Exec
 import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 
 /**
  * A simple wrapper over [Exec] task to run Node Package Manager.
@@ -31,7 +32,7 @@ internal open class NpmRunTask : Exec() {
   init {
     group = TaskGroupNames.INTERNAL
     workingDir = project.rootDir
-    executable = "npm"
+    executable = if (isWindows()) "npm.cmd" else "npm"
   }
 
   /**

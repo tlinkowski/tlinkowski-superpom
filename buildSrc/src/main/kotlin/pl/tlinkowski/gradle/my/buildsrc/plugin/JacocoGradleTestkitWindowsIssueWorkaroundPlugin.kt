@@ -18,11 +18,11 @@
 
 package pl.tlinkowski.gradle.my.buildsrc.plugin
 
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.*
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 import java.io.File
 
@@ -32,13 +32,6 @@ import java.io.File
  * @author Tomasz Linkowski
  */
 class JacocoGradleTestkitWindowsIssueWorkaroundPlugin : AbstractRootPlugin() {
-
-  companion object {
-    /**
-     * @return `true` if current OS is Windows
-     */
-    fun isWindows() = Os.isFamily(Os.FAMILY_WINDOWS)
-  }
 
   private val waitMillis = 100L
 
