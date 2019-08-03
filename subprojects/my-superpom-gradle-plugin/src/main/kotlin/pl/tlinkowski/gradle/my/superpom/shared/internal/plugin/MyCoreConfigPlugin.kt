@@ -21,6 +21,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.kotlin.dsl.*
 import org.gradle.plugins.ide.idea.IdeaPlugin
+import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import org.kordamp.gradle.plugin.licensing.LicensingPlugin
 
@@ -51,6 +52,8 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
     allprojects {
       configureEveryProject()
     }
+
+    configureRootIdea()
   }
 
   private fun ProjectConfigurationExtension.configureCoreKordamp() {
@@ -92,6 +95,14 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
 
     repositories {
       mavenCentral()
+    }
+  }
+
+  private fun Project.configureRootIdea() {
+    configure<IdeaModel> {
+      module {
+        excludeDirs.add(file("node_modules"))
+      }
     }
   }
 }
