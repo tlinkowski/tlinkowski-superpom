@@ -152,9 +152,6 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
     
         -   publishing to JCenter and Maven Central
 
-Note that in order to perform a release that requires no manual actions, a `finalizeRelease` Gradle property must be
-set (e.g. by calling `gradlew bintrayUpload -PfinalizeRelease`).
-
 #### Comprehensive Release Process
 
 This plugin configures a comprehensive release process by:
@@ -168,7 +165,7 @@ The comprehensive release process is configured by
 [MyComprehensiveReleaseConfigurator](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
 and includes:
 
-1.  Release validation (requirements: clean repo, `master` branch, `reckon.stage=final` property)
+1.  Release validation (requirements: clean repo, pushed `master` branch, `reckon.stage=final` property)
 2.  Full clean build (to make 100% sure we can release)
 3.  Confirmations to make sure the release is going fine
 4.  Changelog generation (by [gren](https://github.com/github-tools/github-release-notes), requires Node.js)
