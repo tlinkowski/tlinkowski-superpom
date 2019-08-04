@@ -19,7 +19,7 @@ build_script:
   - gradlew.bat assemble
 
 test_script:
-  - gradlew.bat check
+  - gradlew.bat check --stacktrace
 
 cache:
   - C:\Users\appveyor\.gradle

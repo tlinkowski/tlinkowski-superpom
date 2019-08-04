@@ -17,5 +17,8 @@ cache:
     - $HOME/.gradle/wrapper/
 #endregion
 
+script:
+  - ./gradlew check --stacktrace
+
 after_success:
   - codecov # https://github.com/codecov/codecov-python#configuration
