@@ -24,6 +24,7 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import org.kordamp.gradle.plugin.licensing.LicensingPlugin
+import org.kordamp.gradle.plugin.publishing.PublishingPlugin
 
 /**
  * Applies [Kordamp Project Plugin](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_project).
@@ -39,6 +40,9 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
       // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_licensing
       // (the rest of Kordamp's plugins is applied through `BintrayPlugin`)
       plugin(LicensingPlugin::class)
+
+      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_publishing
+      plugin(PublishingPlugin::class) // without this applied early, we ran into problems (e.g. #39)
     }
 
     configure<ProjectConfigurationExtension> {

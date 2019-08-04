@@ -23,7 +23,6 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.*
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import org.kordamp.gradle.plugin.bintray.BintrayPlugin
-import org.kordamp.gradle.plugin.publishing.PublishingPlugin
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isFinalRelease
 import pl.tlinkowski.gradle.my.superpom.shared.internal.task.InjectReleasePasswordsTask
@@ -43,8 +42,6 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     apply {
-      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_publishing
-      plugin(PublishingPlugin::class) // without this, we can't find "publishMainPublicationToMavenLocal" task (?)
       // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray
       plugin(BintrayPlugin::class)
     }
