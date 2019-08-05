@@ -18,10 +18,13 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
+import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.grgit.Status
 import org.ajoberstar.reckon.gradle.ReckonExtension
 import org.ajoberstar.reckon.gradle.ReckonPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.superpom.shared.internal.isFinalRelease
 
 /**
  * Applies [`org.ajoberstar.reckon`](https://github.com/ajoberstar/reckon/) plugin and configures it to use
@@ -41,10 +44,26 @@ internal class VersionConfigPlugin : AbstractRootPlugin() {
       snapshotFromProp()
     }
 
+    if (isFinalRelease) {
+      warnAboutDirtyFiles()
+    }
+
     tasks {
       ReckonPlugin.PUSH_TASK {
         enabled = false // we use our own push task for version tags (MyComprehensiveReleaseConfigPlugin)
       }
     }
   }
+
+  private fun Project.warnAboutDirtyFiles() {
+    val grgit: Grgit by project
+    grgit.status().dirtyFiles().forEach {
+      logger.warn("Dirty file: {}", it)
+    }
+  }
+
+  /**
+   * @see Status.isClean
+   */
+  private fun Status.dirtyFiles() = staged.allChanges + unstaged.allChanges + conflicts
 }
