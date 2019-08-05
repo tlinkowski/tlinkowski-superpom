@@ -6,6 +6,8 @@
 
 # imported files
 /.idea/
+/.appveyor.yml
+/.travis.yml
 /.grenrc.yml
 /package.json
 /release.bat
