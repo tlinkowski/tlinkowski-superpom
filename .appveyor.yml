@@ -21,7 +21,10 @@ build_script:
 test_script:
   - gradlew.bat check --stacktrace
 
-after_test:
+cache:
+  - C:\Users\appveyor\.gradle
+
+on_finish:
   # upload test results via REST-api: https://github.com/appveyor/ci/issues/92#issuecomment-307242316
   - ps: |
       $wc = New-Object 'System.Net.WebClient'
@@ -29,7 +32,4 @@ after_test:
       Foreach-Object {
           $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
       }
-
-cache:
-  - C:\Users\appveyor\.gradle
 #endregion
