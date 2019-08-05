@@ -32,7 +32,7 @@ internal class MySettingsSmokeTestRunner {
   private val gradleRunner: GradleRunner = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(createTempDir(javaClass.simpleName))
-          .withArguments("clean", "build", "--stacktrace")
+          .withArguments("clean", "build")
           .forwardOutput()
 
   fun createSubprojectsDir() = file("subprojects").apply {
@@ -44,7 +44,7 @@ internal class MySettingsSmokeTestRunner {
     resolve("$name.gradle.kts").writeText(`build-gradle-kts`)
   }
 
-  fun build(): BuildResult = gradleRunner.build()
+  fun build(): BuildResult = gradleRunner.withArguments(gradleRunner.arguments + "--stacktrace").build()
 
   fun buildAndFail(): BuildResult = gradleRunner.buildAndFail()
 

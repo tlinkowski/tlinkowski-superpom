@@ -51,7 +51,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
     replaceClasspathWithPluginClasspath(content)
   }
 
-  fun build(): BuildResult = gradleRunner.build()
+  fun build(): BuildResult = gradleRunner.withArguments(gradleRunner.arguments + "--stacktrace").build()
 
   fun buildAndFail(): BuildResult = gradleRunner.buildAndFail()
 
@@ -70,7 +70,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
   private fun createGradleRunner(projectDir: Path, args: List<String>) = GradleRunner.create()
           .withPluginClasspath()
           .withProjectDir(projectDir.toFile())
-          .withArguments(args + listOf("--stacktrace"))
+          .withArguments(args)
           .forwardOutput()
 
   //region GRADLE.PROPERTIES (duplicated in `MySettingsSmokeTestRunner.kt`)
