@@ -18,16 +18,23 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal
 
+import org.ajoberstar.grgit.Grgit
 import org.gradle.api.Project
 
 /**
  * Marks that we truly want to release.
  */
 internal val Project.isFinalRelease
-  get() = project.findProperty("reckon.stage") == "final"
+  get() = findProperty("reckon.stage") == "final"
 
 /**
  * Marks that we should not perform any permanent changes (for testing).
  */
 internal val Project.isDryRunRelease
-  get() = project.hasProperty("superpom.release.dryRun")
+  get() = hasProperty("superpom.release.dryRun")
+
+/**
+ * Provides a [Grgit] instance for given project.
+ */
+internal val Project.grgit
+  get() = property("grgit") as Grgit

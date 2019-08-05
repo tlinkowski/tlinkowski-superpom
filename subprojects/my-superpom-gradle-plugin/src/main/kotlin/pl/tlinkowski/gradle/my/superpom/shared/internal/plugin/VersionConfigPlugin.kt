@@ -18,12 +18,12 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
-import org.ajoberstar.grgit.Grgit
 import org.ajoberstar.grgit.Status
 import org.ajoberstar.reckon.gradle.ReckonExtension
 import org.ajoberstar.reckon.gradle.ReckonPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.superpom.shared.internal.grgit
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isFinalRelease
 
 /**
@@ -56,7 +56,6 @@ internal class VersionConfigPlugin : AbstractRootPlugin() {
   }
 
   private fun Project.warnAboutDirtyFiles() {
-    val grgit: Grgit by project
     grgit.status().dirtyFiles().forEach {
       logger.warn("Dirty file: {}", it)
     }

@@ -20,11 +20,11 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import org.kordamp.gradle.plugin.bintray.BintrayPlugin
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isFinalRelease
+import pl.tlinkowski.gradle.my.superpom.shared.internal.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.task.InjectReleasePasswordsTask
 
 /**
@@ -59,6 +59,7 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
       }
       tasks {
         hookUpInjectReleasePasswordsTask(injectReleasePasswords)
+        configureJarTasks()
       }
     }
   }
@@ -69,9 +70,8 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
     info {
       buildInfo {
         // for reproducible builds: https://aalmiray.github.io/kordamp-gradle-plugins/#_reproducible_builds
-        skipBuildBy = true
-        skipBuildDate = true
-        skipBuildTime = true
+        // we're adding a commit ID ourselves in a separate method below
+        enabled = false
       }
 
       credentials.sonatype {
@@ -111,6 +111,19 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
     }
     injectReleasePasswords {
       shouldRunAfter(named("publishMainPublicationToMavenLocal")) // run as late as possible
+    }
+  }
+
+  /**
+   * Replaces a part of what [org.kordamp.gradle.plugin.jar.JarPlugin] does.
+   */
+  private fun TaskContainerScope.configureJarTasks() {
+    withType<Jar>().configureEach {
+      manifest {
+        attributes(mapOf(
+                "Build-Revision" to project.grgit.head().id
+        ))
+      }
     }
   }
 }
