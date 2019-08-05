@@ -72,6 +72,15 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
         // for reproducible builds: https://aalmiray.github.io/kordamp-gradle-plugins/#_reproducible_builds
         // we're adding a commit ID ourselves in a separate method below
         enabled = false
+
+        //region WORKAROUND FOR: https://github.com/aalmiray/kordamp-gradle-plugins/issues/163
+        skipBuildBy = true
+        skipBuildCreatedBy = true
+        skipBuildDate = true
+        skipBuildTime = true
+        skipBuildJdk = true
+        skipBuildRevision = true
+        //endregion
       }
 
       credentials.sonatype {
