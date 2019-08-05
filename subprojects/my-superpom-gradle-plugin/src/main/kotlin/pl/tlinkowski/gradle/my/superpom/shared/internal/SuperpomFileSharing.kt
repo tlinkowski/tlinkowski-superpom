@@ -43,7 +43,8 @@ object SuperpomFileSharing {
    */
   private val ZIP_FILE_TREE_PROVIDER_MAP = mapOf(
           "idea" to this::sharedIdeaFiles,
-          "release" to this::sharedReleaseFiles
+          "release" to this::sharedReleaseFiles,
+          "ci" to this::sharedContinuousIntegrationFiles
   )
 
   private fun sharedIdeaFiles(project: Project) = with(project) {
@@ -59,6 +60,12 @@ object SuperpomFileSharing {
   private fun sharedReleaseFiles(project: Project) = with(project) {
     fileTree(rootDir) {
       include("/.grenrc.yml", "/package.json", "/release.bat")
+    }
+  }
+
+  private fun sharedContinuousIntegrationFiles(project: Project) = with(project) {
+    fileTree(rootDir) {
+      include("/.appveyor.yml", "/.travis.yml")
     }
   }
 
