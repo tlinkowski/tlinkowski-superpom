@@ -59,7 +59,9 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
       }
       tasks {
         hookUpInjectReleasePasswordsTask(injectReleasePasswords)
-        configureJarTasks()
+        if (isFinalRelease) {
+          configureJarTasks()
+        }
       }
     }
   }
