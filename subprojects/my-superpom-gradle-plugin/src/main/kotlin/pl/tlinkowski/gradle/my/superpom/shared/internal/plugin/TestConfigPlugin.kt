@@ -24,6 +24,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.*
 
 /**
  * Configures testing as follows:
@@ -83,7 +84,15 @@ internal class TestConfigPlugin : AbstractRootPlugin() {
     withType<Test>().configureEach {
       // https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html
       testLogging {
-        events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+        events = EnumSet.of(
+                // standard events
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.FAILED,
+                // useful e.g. with Gradle TestKit
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.STANDARD_ERROR
+        )
       }
     }
   }
