@@ -20,7 +20,6 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
 
 /**
  * Removes (both locally and remotely) a tag with given name.
@@ -41,11 +40,8 @@ internal open class RemoveTagAndPushTask : GrgitTask() {
       names = listOf(tagName)
     }
     // remote
-    if (!project.isDryRunRelease) {
-      grgit.push {
-        refsOrSpecs = listOf(":refs/tags/$tagName")
-        // `dryRun = project.isDryRunRelease` not possible here because we'd get an error (tag not present at origin)
-      }
+    grgit.pushIfNotDryRun {
+      refsOrSpecs = listOf(":refs/tags/$tagName")
     }
   }
 }

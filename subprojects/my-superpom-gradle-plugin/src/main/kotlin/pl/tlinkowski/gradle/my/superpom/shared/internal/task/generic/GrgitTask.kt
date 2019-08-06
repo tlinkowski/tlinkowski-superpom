@@ -18,11 +18,14 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
+import org.ajoberstar.grgit.Configurable
 import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.grgit.operation.PushOp
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
 import org.gradle.kotlin.dsl.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
+import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
 
 /**
  * A task that performs some Grgit action(s).
@@ -36,5 +39,17 @@ internal open class GrgitTask : DefaultTask() {
 
   init {
     group = TaskGroupNames.INTERNAL
+  }
+
+  /**
+   * Calls [Grgit.push] if not in dry-run mode.
+   */
+  protected fun Grgit.pushIfNotDryRun(closure: Configurable<PushOp>) {
+    if (project.isDryRunRelease) {
+      // we can't use PushOp.dryRun property due to CI (https://github.com/tlinkowski/tlinkowski-superpom/issues/42)
+      closure.configure(PushOp(null)) // just test the closure
+    } else {
+      push(closure) // actually push
+    }
   }
 }

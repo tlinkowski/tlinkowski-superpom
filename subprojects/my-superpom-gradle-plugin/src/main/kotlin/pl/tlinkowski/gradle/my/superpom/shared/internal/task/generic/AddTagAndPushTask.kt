@@ -20,7 +20,6 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
 
 /**
  * Adds (both locally and remotely) a tag with given name.
@@ -41,9 +40,8 @@ internal open class AddTagAndPushTask : GrgitTask() {
       name = tagName
     }
     // remote
-    grgit.push {
+    grgit.pushIfNotDryRun {
       refsOrSpecs = listOf("refs/tags/$tagName")
-      dryRun = project.isDryRunRelease
     }
   }
 }

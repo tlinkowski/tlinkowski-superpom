@@ -20,7 +20,6 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isDryRunRelease
 import pl.tlinkowski.gradle.my.superpom.shared.internal.toGrgitPath
 
 /**
@@ -44,8 +43,6 @@ internal open class CommitFileAndPushTask : GrgitTask() {
       paths = setOf(grgitPath)
     }
     logger.info("Pushing modified {}", grgitPath)
-    grgit.push {
-      dryRun = project.isDryRunRelease
-    }
+    grgit.pushIfNotDryRun {}
   }
 }
