@@ -19,9 +19,9 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
+import org.kordamp.gradle.plugin.jacoco.JacocoPlugin
 
 /**
  * Applies Kordamp's JaCoCo plugin and configures automatic code coverage reports and minimum code coverage.
