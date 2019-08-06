@@ -176,7 +176,7 @@ and includes:
 
 This is how a Gradle build log of such a release process looks:
 
-```
+```text
 > Task :validateReleasePossible        // 1
 
 > Task :<subproject-1>:[...]           // 2

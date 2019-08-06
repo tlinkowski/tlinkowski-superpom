@@ -38,18 +38,20 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
   init {
     gradleRunner = createGradleRunner(projectDir, args)
     shadedFiles = listOf(
-            projectDir.shadedGradleProperties(),
-            projectDir.shadedSettingsGradleKts()
+            projectDir.shadedGradleProperties,
+            projectDir.shadedSettingsGradleKts
     )
   }
 
-  private fun Path.shadedGradleProperties() = ShadedFile(resolve("gradle.properties")) { content ->
-    content + readTestkitPropertiesContent()
-  }
+  private val Path.shadedGradleProperties
+    get() = ShadedFile(resolve("gradle.properties")) { content ->
+      content + readTestkitPropertiesContent()
+    }
 
-  private fun Path.shadedSettingsGradleKts() = ShadedFile(resolve("settings.gradle.kts")) { content ->
-    replaceClasspathWithPluginClasspath(content)
-  }
+  private val Path.shadedSettingsGradleKts
+    get() = ShadedFile(resolve("settings.gradle.kts")) { content ->
+      replaceClasspathWithPluginClasspath(content)
+    }
 
   fun build(): BuildResult = gradleRunner.withArguments(gradleRunner.arguments + "--stacktrace").build()
 
@@ -74,9 +76,9 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
           .forwardOutput()
 
   //region GRADLE.PROPERTIES (duplicated in `MySettingsSmokeTestRunner.kt`)
-  private fun readTestkitPropertiesContent() = checkNotNull(gradleClassLoader().getResource("testkit-gradle.properties")).readText()
-
-  private fun gradleClassLoader() = GradleRunner::class.java.classLoader
+  private fun readTestkitPropertiesContent(): String = with(GradleRunner::class.java.classLoader) {
+    return checkNotNull(getResource("testkit-gradle.properties")).readText()
+  }
   //endregion
 
   //region SETTINGS.GRADLE.KTS

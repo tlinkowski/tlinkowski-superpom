@@ -79,9 +79,9 @@ internal class MySettingsSmokeTestRunner {
   //endregion
 
   //region GRADLE.PROPERTIES (duplicated in `MySuperpomSmokeTestRunner.kt`)
-  private fun readTestkitPropertiesContent() = checkNotNull(gradleClassLoader().getResource("testkit-gradle.properties")).readText()
-
-  private fun gradleClassLoader() = GradleRunner::class.java.classLoader
+  private fun readTestkitPropertiesContent(): String = with(GradleRunner::class.java.classLoader) {
+    return checkNotNull(getResource("testkit-gradle.properties")).readText()
+  }
   //endregion
 
   //region SETTINGS.GRADLE.KTS
