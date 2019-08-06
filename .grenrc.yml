@@ -8,4 +8,5 @@ groupBy:
   'Enhancements:': enhancement
   'Bug Fixes:': bug
 template:
-  issue: "- [{{text}}]({{url}}): {{name}}"
+  release: "## Version {{release}}\n\nRelease date: {{date}}\n{{body}}"
+  issue: "-   [{{text}}]({{url}}): {{name}}"
