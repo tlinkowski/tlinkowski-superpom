@@ -5,8 +5,10 @@ ignoreIssuesWith:
   - wontfix
   - duplicate
 groupBy:
-  'Enhancements:': enhancement
-  'Bug Fixes:': bug
+  'Enhancements': enhancement
+  'Bug Fixes': bug
 template:
-  release: "## Version {{release}}\n\nRelease date: {{date}}\n{{body}}"
+  changelogTitle: "# Releases\n\n",
+  release: "## Version {{release}}\n\nRelease date: {{date}}.\n{{body}}"
+  group: "\n### {{heading}}\n"
   issue: "-   [{{text}}]({{url}}): {{name}}"
