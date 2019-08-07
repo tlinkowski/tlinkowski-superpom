@@ -115,11 +115,6 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
         -   `SNAPSHOT`/`FINAL` release stages for [reckon](https://github.com/ajoberstar/reckon)
 
-        -   `injectReleasePasswords` task, which obtains passwords for performing a release:
-
-            -   `bintrayApiKey`: from Gradle properties (i.e. `~/.gradle/gradle.properties`),
-            -   `gnupgPassphrase`, `sonatypePassword`: by requesting them in a Swing dialog (not suitable for CI)
-
         -   a [comprehensive release process](#comprehensive-release-process)
 
         -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
@@ -227,7 +222,13 @@ y
 > Task :pushUpdatedGradleProperties    // 8
 ```
 
-Note that, thanks to [reckon](https://github.com/ajoberstar/reckon) plugin, we don't need to do the classic
+Note the [`injectReleasePasswords`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/task/InjectReleasePasswordsTask.kt)
+task, which obtains the following passwords for performing a release:
+
+-   `bintrayApiKey`: from Gradle properties (i.e. `~/.gradle/gradle.properties`),
+-   `gnupgPassphrase`, `sonatypePassword`: by requesting them in a Swing dialog (not suitable for CI)
+
+Also, note that thanks to [reckon](https://github.com/ajoberstar/reckon) plugin, we don't need to do the classic
 "pre-release version bumps". Instead, we:
 
 -   automatically reset the version scope after a release to `patch` (= "post-release version bump")
@@ -286,6 +287,9 @@ The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-s
 
 -   `release`: files related to releasing, like `release.bat` script and Node.js configuration for
     [gren](https://github.com/github-tools/github-release-notes)
+
+-   `ci`: configuration for Continuous Integration environments: `.appveyor.yml` and `.travis.yml`
+    (these files should *not* be git-ignored in *target* projects)
 
 This feature is implemented:
 
