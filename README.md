@@ -5,6 +5,7 @@
 [![Code coverage](https://img.shields.io/codecov/c/github/tlinkowski/tlinkowski-superpom.svg)](https://codecov.io/gh/tlinkowski/tlinkowski-superpom)
 [![Codacy grade](https://img.shields.io/codacy/grade/81a0cef956a34083accd2f8e401a66de.svg)](https://app.codacy.com/project/tlinkowski/tlinkowski-superpom/dashboard)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
+[![Maven Central](https://img.shields.io/maven-central/v/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin)](https://search.maven.org/search?q=g:pl.tlinkowski.gradle.my)
 
 This project is inspired by [The Gradle SuperPOM](http://andresalmiray.com/the-gradle-superpom/) post by
 [Andres Almiray](https://twitter.com/aalmiray).
