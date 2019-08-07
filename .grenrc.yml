@@ -8,7 +8,7 @@ groupBy:
   'Enhancements': enhancement
   'Bug Fixes': bug
 template:
-  changelogTitle: "# Releases\n\n",
+  changelogTitle: "# Releases\n\n"
   release: "## Version {{release}}\n\nRelease date: {{date}}.\n{{body}}"
   group: "\n### {{heading}}\n"
   issue: "-   [{{text}}]({{url}}): {{name}}"
