@@ -3,6 +3,10 @@ jdk: openjdk12
 
 sudo: false # faster builds
 
+branches:
+  except:
+    - /^\d+\.\d+\.\d+$/ # skip builds related to addTemporaryVersionTag
+
 before_install:
   - chmod +x gradlew # https://stackoverflow.com/questions/33820638/travis-yml-gradlew-permission-denied/33820642#33820642
   - pip install --user codecov # https://github.com/codecov/codecov-python#configuration

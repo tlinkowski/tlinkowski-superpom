@@ -4,6 +4,10 @@ image: Visual Studio 2017 # https://www.appveyor.com/docs/windows-images-softwar
 
 version: "#{build} ({branch})"
 
+branches:
+  except:
+    - /^\d+\.\d+\.\d+$/ # skip builds related to addTemporaryVersionTag
+
 #region JAVA
 environment:
   matrix:
