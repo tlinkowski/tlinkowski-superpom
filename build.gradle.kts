@@ -60,6 +60,9 @@ config {
 
 subprojects {
   apply {
+    // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/pull/165
+    plugin(org.kordamp.gradle.plugin.base.BasePlugin::class)
+
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
     plugin(PluginPlugin::class)
 
