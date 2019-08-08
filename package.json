@@ -2,7 +2,7 @@
   "name": "gren-runner",
   "version": "0.0.0",
   "scripts": {
-    "gren-changelog": "gren changelog --generate --override",
+    "gren-changelog": "gren changelog --tags=all --generate --override",
     "gren-release": "gren release"
   },
   "dependencies": {
