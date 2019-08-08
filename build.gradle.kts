@@ -42,13 +42,19 @@ plugins {
   id("pl.droidsonroids.jacoco.testkit") version "1.0.4" apply false
 }
 
-apply {
-  from("gradle/shared-gradle-properties.gradle.kts")
-  plugin(MyCompleteSharedConfigPlugin::class) // shared build script
+// https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
+config {
+  info {
+    name = "tlinkowski-superpom"
+    description = "Gradle Settings & Gradle SuperPOM plugins for all projects of Tomasz Linkowski."
+    inceptionYear = "2019"
+    tags = listOf("gradle", "gradle-plugin", "configuration", "sharing")
 
-  plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
-  if (isWindows()) {
-    plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
+    links {
+      website = "https://github.com/tlinkowski/tlinkowski-superpom"
+      issueTracker = "$website/issues"
+      scm = "$website.git"
+    }
   }
 }
 
@@ -109,18 +115,12 @@ subprojects {
   }
 }
 
-// https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
-config {
-  info {
-    name = "tlinkowski-superpom"
-    description = "Gradle Settings & Gradle SuperPOM plugins for all projects of Tomasz Linkowski."
-    inceptionYear = "2019"
-    tags = listOf("gradle", "gradle-plugin", "configuration", "sharing")
+apply {
+  from("gradle/shared-gradle-properties.gradle.kts")
+  plugin(MyCompleteSharedConfigPlugin::class) // shared build script
 
-    links {
-      website = "https://github.com/tlinkowski/tlinkowski-superpom"
-      issueTracker = "$website/issues"
-      scm = "$website.git"
-    }
+  plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
+  if (isWindows()) {
+    plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
   }
 }
