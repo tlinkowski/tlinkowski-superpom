@@ -17,6 +17,7 @@
  */
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
+import org.kordamp.gradle.plugin.plugin.PluginPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
@@ -27,6 +28,9 @@ import java.net.URL
 plugins {
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
   id("org.kordamp.gradle.base") // so that we can access `config`
+
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
+  id("org.kordamp.gradle.plugin") apply false
 
   // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
   `kotlin-dsl` apply false
@@ -50,6 +54,9 @@ apply {
 
 subprojects {
   apply {
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
+    plugin(PluginPlugin::class)
+
     // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
     // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
     plugin(KotlinDslPlugin::class)
@@ -76,7 +83,7 @@ subprojects {
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
     // NOTE: simply replaces more verbose `gradlePlugin { plugins { create(project.name) { ... }}}`
     plugin {
-      enabled = false // these plugins are NOT to be published to Gradle Plugin Portal
+      enabled = true // NOT published to Gradle Plugin Portal, but this causes the marker artifact to be published
 
       val pluginId: String by project
       id = pluginId
@@ -91,6 +98,12 @@ subprojects {
     withType(DokkaTask::class).configureEach {
       externalDocumentationLink {
         url = URL("https://docs.gradle.org/current/javadoc/")
+      }
+    }
+
+    listOf("uploadArchives", "login", "publishPlugins").forEach {
+      it {
+        enabled = false
       }
     }
   }
