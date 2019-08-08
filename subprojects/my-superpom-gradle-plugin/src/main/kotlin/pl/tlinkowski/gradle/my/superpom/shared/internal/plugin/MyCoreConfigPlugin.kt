@@ -73,6 +73,9 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
           roles = listOf("developer")
         }
       }
+
+      specification.enabled = false
+      implementation.enabled = false
     }
 
     licensing {
