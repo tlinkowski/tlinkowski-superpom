@@ -24,6 +24,14 @@ Release date: 07/08/2019.
 -   [#12](https://github.com/tlinkowski/tlinkowski-superpom/issues/12): Add a module-info.class
 -   [#11](https://github.com/tlinkowski/tlinkowski-superpom/issues/11): Configure code coverage
 -   [#10](https://github.com/tlinkowski/tlinkowski-superpom/issues/10): Switch to a single-project build to make things easier
+-   [#9](https://github.com/tlinkowski/tlinkowski-superpom/issues/9): Configure test logging for all events
+-   [#8](https://github.com/tlinkowski/tlinkowski-superpom/issues/8): Add support for publishing to Mavel local
+-   [#7](https://github.com/tlinkowski/tlinkowski-superpom/issues/7): Add support for transfering IntelliJ settings using the plugin
+-   [#6](https://github.com/tlinkowski/tlinkowski-superpom/issues/6): Remove redundancy in shared.build.gradle.kts and TLinkowskiSuperpomPlugin
+-   [#5](https://github.com/tlinkowski/tlinkowski-superpom/issues/5): Apply more Kordamp plugins as necessary
+-   [#3](https://github.com/tlinkowski/tlinkowski-superpom/issues/3): Add basic shared Gradle config
+-   [#2](https://github.com/tlinkowski/tlinkowski-superpom/issues/2): Add tests using Gradle TestKit
+-   [#1](https://github.com/tlinkowski/tlinkowski-superpom/issues/1): Initial project configuration
 
 ### Bug Fixes
 
@@ -32,6 +40,7 @@ Release date: 07/08/2019.
 -   [#41](https://github.com/tlinkowski/tlinkowski-superpom/issues/41): Dirty repo in "gradle release" smoke test on CI
 -   [#40](https://github.com/tlinkowski/tlinkowski-superpom/issues/40): Make Travis and AppVeyor print/upload failed Gradle TestKit test details
 -   [#39](https://github.com/tlinkowski/tlinkowski-superpom/issues/39): Task publishToMavenLocal fails
+-   [#36](https://github.com/tlinkowski/tlinkowski-superpom/issues/36): Warning about unsupported Kotlin plugin version
 -   [#35](https://github.com/tlinkowski/tlinkowski-superpom/issues/35): File sharing doesn't work when trying to export a file in root directory
 -   [#31](https://github.com/tlinkowski/tlinkowski-superpom/issues/31): Windows build failed again due to `test.exec` lock
 -   [#30](https://github.com/tlinkowski/tlinkowski-superpom/issues/30): Javadoc error: "No public or protected classes found to document" for a Kotlin modularized project
