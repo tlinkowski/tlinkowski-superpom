@@ -1,5 +1,19 @@
 # Releases
 
+## Version 0.1.1
+
+Release date: 09/08/2019.
+
+### Bug Fixes
+
+-   [#49](https://github.com/tlinkowski/tlinkowski-superpom/issues/49): Dependency updates plugin reports Gradle release candidates
+-   [#48](https://github.com/tlinkowski/tlinkowski-superpom/issues/48): Gren keeps only the last release in CHANGELOG.md
+-   [#47](https://github.com/tlinkowski/tlinkowski-superpom/issues/47): Append missing issues for changelog and release notes of 0.1.0
+-   [#46](https://github.com/tlinkowski/tlinkowski-superpom/issues/46): Remove redundant Manifest entries
+-   [#45](https://github.com/tlinkowski/tlinkowski-superpom/issues/45): Missing Gradle plugin marker artifacts in Bintray
+
+---
+
 ## Version 0.1.0
 
 Release date: 07/08/2019.
