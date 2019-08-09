@@ -49,6 +49,8 @@ internal class DependencyUpdatesConfigPlugin : AbstractRootPlugin() {
     val dependencyUpdates by existing(DependencyUpdatesTask::class)
 
     dependencyUpdates {
+      gradleReleaseChannel = "current"
+
       resolutionStrategy {
         componentSelection {
           all {

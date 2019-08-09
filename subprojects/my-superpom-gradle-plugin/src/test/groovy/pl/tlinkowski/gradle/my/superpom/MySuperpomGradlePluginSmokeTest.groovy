@@ -84,7 +84,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       def result = runner.build()
     then:
       taskWasSuccessful(result, ':dependencyUpdates')
-      !["beta", "RC"].any { result.output.contains(it) }
+      !result.output.matches("(?i)\\b(?:alpha|beta|rc)\\d*\\b")
   }
 
   def 'gradle release FAILS without reckon.stage=final'() {
