@@ -19,8 +19,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import org.kordamp.gradle.plugin.plugin.PluginPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
-import pl.tlinkowski.gradle.my.buildsrc.plugin.DokkaRuntimeConfigurationWorkaroundPlugin
-import pl.tlinkowski.gradle.my.buildsrc.plugin.JacocoGradleTestkitWindowsIssueWorkaroundPlugin
+import pl.tlinkowski.gradle.my.buildsrc.plugin.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
 import java.net.URL
@@ -122,8 +121,11 @@ apply {
   from("gradle/shared-gradle-properties.gradle.kts")
   plugin(MyCompleteSharedConfigPlugin::class) // shared build script
 
+  //region WORKAROUNDS
   plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
+  plugin(IncompletePluginMarkerPublicationWorkaroundPlugin::class)
   if (isWindows()) {
     plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
   }
+  //endregion
 }
