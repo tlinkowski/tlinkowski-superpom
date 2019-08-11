@@ -1,5 +1,15 @@
 # Releases
 
+## Version 0.1.2
+
+Release date: 10/08/2019.
+
+### Bug Fixes
+
+-   [#50](https://github.com/tlinkowski/tlinkowski-superpom/issues/50): Can't sync Gradle marker publications to Maven Central
+
+---
+
 ## Version 0.1.1
 
 Release date: 09/08/2019.
