@@ -31,22 +31,24 @@ import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugi
  *
  * @author Tomasz Linkowski
  */
-class IncompletePluginMarkerPublicationWorkaroundPlugin : AbstractRootPlugin() {
+class IncompletePluginMavenPublicationWorkaroundPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     subprojects {
       afterEvaluate {
-        configureGradlePluginMarkerPublication()
+        configurePluginMavenPublications()
       }
     }
   }
 
-  private fun Project.configureGradlePluginMarkerPublication() {
+  private fun Project.configurePluginMavenPublications() {
     configure<PublishingExtension> {
       publications {
         val effectiveConfig: ProjectConfigurationExtension by project
-        named<MavenPublication>("${effectiveConfig.plugin.pluginName}PluginMarkerMaven") {
-          PublishingUtils.configurePom(pom, effectiveConfig, effectiveConfig.publishing.pom)
+        listOf("pluginMaven", "${effectiveConfig.plugin.pluginName}PluginMarkerMaven").forEach {
+          named<MavenPublication>(it) {
+            PublishingUtils.configurePom(pom, effectiveConfig, effectiveConfig.publishing.pom)
+          }
         }
       }
     }

@@ -17,7 +17,6 @@
  */
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
-import org.kordamp.gradle.plugin.plugin.PluginPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
@@ -27,9 +26,6 @@ import java.net.URL
 plugins {
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
   id("org.kordamp.gradle.base") // so that we can access `config`
-
-  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
-  id("org.kordamp.gradle.plugin") apply false
 
   // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
   `kotlin-dsl` apply false
@@ -61,9 +57,6 @@ subprojects {
   apply {
     // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/pull/165
     plugin(org.kordamp.gradle.plugin.base.BasePlugin::class)
-
-    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
-    plugin(PluginPlugin::class)
 
     // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
     // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
@@ -108,12 +101,6 @@ subprojects {
         url = URL("https://docs.gradle.org/current/javadoc/")
       }
     }
-
-    listOf("uploadArchives", "login", "publishPlugins").forEach {
-      it {
-        enabled = false
-      }
-    }
   }
 }
 
@@ -123,7 +110,7 @@ apply {
 
   //region WORKAROUNDS
   plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
-  plugin(IncompletePluginMarkerPublicationWorkaroundPlugin::class)
+  plugin(IncompletePluginMavenPublicationWorkaroundPlugin::class)
   if (isWindows()) {
     plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
   }
