@@ -1,8 +1,18 @@
 # Releases
 
+## Version 0.1.3
+
+Release date: 12/08/2019.
+
+### Bug Fixes
+
+-   [#52](https://github.com/tlinkowski/tlinkowski-superpom/issues/52): JavaDocs missing in 0.1.2 (present in 0.1.0)
+
+---
+
 ## Version 0.1.2
 
-Release date: 10/08/2019.
+Release date: 11/08/2019.
 
 ### Bug Fixes
 
