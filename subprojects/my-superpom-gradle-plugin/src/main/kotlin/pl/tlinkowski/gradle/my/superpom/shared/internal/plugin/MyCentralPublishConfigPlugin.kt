@@ -19,6 +19,7 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
+import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
@@ -121,7 +122,9 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
       dependsOn(injectReleasePasswords) // run just before upload
     }
     injectReleasePasswords {
-      shouldRunAfter(named("publishMainPublicationToMavenLocal")) // run as late as possible
+      withType<PublishToMavenLocal>().forEach {
+        shouldRunAfter(it) // run as late as possible
+      }
     }
   }
 
