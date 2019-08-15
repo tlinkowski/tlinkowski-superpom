@@ -1,5 +1,15 @@
 # Releases
 
+## Version 0.1.4
+
+Release date: 15/08/2019.
+
+### Bug Fixes
+
+-   [#53](https://github.com/tlinkowski/tlinkowski-superpom/issues/53): Release fails for a project in which some subprojects are not published
+
+---
+
 ## Version 0.1.3
 
 Release date: 12/08/2019.
