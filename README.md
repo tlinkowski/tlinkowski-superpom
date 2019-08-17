@@ -30,6 +30,9 @@ Together, those two plugins preconfigure Gradle builds for each of my projects.
 `gradle.properties`:
 
 ```properties
+# Release scopes: [major, minor, patch]
+reckon.scope=minor
+# Dependencies
 mySuperpomVersion=x.y.z
 ```
 
