@@ -22,22 +22,20 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.*
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 import java.io.File
 
 /**
- * Workaround for https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9
+ * Workaround for https://github.com/koral--/jacoco-gradle-testkit-plugin/issues/9.
+ * Also, see https://github.com/tlinkowski/tlinkowski-superpom/issues/51.
  *
  * @author Tomasz Linkowski
  */
-class JacocoGradleTestkitWindowsIssueWorkaroundPlugin : AbstractRootPlugin() {
+class JacocoGradleTestkitIssueWorkaroundPlugin : AbstractRootPlugin() {
 
   private val waitMillis = 100L
 
   override fun Project.configureRootProject() {
-    assert(isWindows())
-
     subprojects {
       tasks {
         "test" {
@@ -52,8 +50,10 @@ class JacocoGradleTestkitWindowsIssueWorkaroundPlugin : AbstractRootPlugin() {
   private fun Task.waitUntilJacocoTestExecIsUnlocked() {
     val jacocoTestExecFile = jacocoTestExecFile()
 
-    // we wait preemptively because sometimes `jacocoTestExecFile.isLocked()` returns `false`,
+    // we wait preemptively because:
+    // 1) on Windows, `jacocoTestExecFile.isLocked()` sometimes returns `false`,
     // but `test` task fails anyway a moment later when it tries to read this file
+    // 2) on Linux, it's harder to check if a file is locked, so preemptive waiting may be enough (see #51)
     logger.info("Waiting preemptively $waitMillis ms (in case ${jacocoTestExecFile.name} is locked)...")
     Thread.sleep(waitMillis)
 
@@ -70,7 +70,9 @@ class JacocoGradleTestkitWindowsIssueWorkaroundPlugin : AbstractRootPlugin() {
           checkNotNull(extensions.getByType(JacocoTaskExtension::class).destinationFile)
 
   /**
-   * Checks if a file is locked. Source: [https://stackoverflow.com/a/13706972/2032415]
+   * Checks if a file is locked. ATTENTION: This most likely works only on Windows.
+   *
+   * Source: [https://stackoverflow.com/a/13706972/2032415]
    */
   private fun File.isLocked() = !renameTo(this)
 }

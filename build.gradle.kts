@@ -111,8 +111,6 @@ apply {
   //region WORKAROUNDS
   plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
   plugin(IncompletePluginMavenPublicationWorkaroundPlugin::class)
-  if (isWindows()) {
-    plugin(JacocoGradleTestkitWindowsIssueWorkaroundPlugin::class)
-  }
+  plugin(JacocoGradleTestkitIssueWorkaroundPlugin::class)
   //endregion
 }
