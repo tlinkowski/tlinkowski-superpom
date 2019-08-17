@@ -30,7 +30,7 @@ Together, those two plugins preconfigure Gradle builds for each of my projects.
 `gradle.properties`:
 
 ```properties
-mySuperpomVersion=0.1.2
+mySuperpomVersion=x.y.z
 ```
 
 `settings.gradle.kts`:
