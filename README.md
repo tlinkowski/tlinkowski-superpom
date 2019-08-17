@@ -5,7 +5,7 @@
 [![Code coverage](https://img.shields.io/codecov/c/github/tlinkowski/tlinkowski-superpom.svg)](https://codecov.io/gh/tlinkowski/tlinkowski-superpom)
 [![Codacy grade](https://img.shields.io/codacy/grade/81a0cef956a34083accd2f8e401a66de.svg)](https://app.codacy.com/project/tlinkowski/tlinkowski-superpom/dashboard)
 
-[![Maven Central](https://img.shields.io/maven-central/v/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin)](https://search.maven.org/search?q=g:pl.tlinkowski.gradle.my)
+[![Maven Central](https://img.shields.io/maven-central/v/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin?label=Maven%20Central)](https://search.maven.org/search?q=g:pl.tlinkowski.gradle.my)
 [![Javadocs](https://javadoc.io/badge/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin.svg?color=blue)](https://javadoc.io/doc/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin)
 [![Semantic Versioning](https://img.shields.io/badge/-semantic%20versioning-333333)](https://semver.org/)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
