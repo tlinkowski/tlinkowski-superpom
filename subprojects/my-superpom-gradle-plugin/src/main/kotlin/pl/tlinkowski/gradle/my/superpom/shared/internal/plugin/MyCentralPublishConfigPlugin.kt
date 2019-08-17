@@ -39,7 +39,10 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
    * If `false`, the release is published to JCenter and Maven Central without the possibility of reverting.
    * If `true` (for debugging), the release is only uploaded to Bintray and needs to be published manually from there.
    */
-  private var uploadOnly = false
+  private val uploadOnly = false
+
+  private val Project.isFirstFinalRelease
+    get() = isFinalRelease && (version == "0.1.0" || isDryRunRelease)
 
   override fun Project.configureRootProject() {
     apply {
@@ -64,6 +67,10 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
           configureJarTasks()
         }
       }
+    }
+
+    if (isFirstFinalRelease) {
+      configureFirstFinalReleaseMessage()
     }
   }
 
@@ -95,7 +102,7 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
     bintray {
       userOrg = "tlinkowski"
       name = project.name
-      skipMavenSync = uploadOnly
+      skipMavenSync = uploadOnly || project.isFirstFinalRelease
 
       credentials {
         username = "tlinkowski"
@@ -137,6 +144,16 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
         attributes(mapOf(
                 "Build-Revision" to project.grgit.head().id
         ))
+      }
+    }
+  }
+
+  private fun Project.configureFirstFinalReleaseMessage() {
+    tasks {
+      "bintrayPublish" {
+        doLast {
+          logger.lifecycle("SKIPPED sync to Maven Central (the project needs to be manually included in JCenter first)")
+        }
       }
     }
   }
