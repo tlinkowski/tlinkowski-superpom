@@ -19,6 +19,7 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.superpom.shared.extension.MySuperpomExtension
 
 /**
  * Configuration shared between this project and the projects to which the SuperPOM plugin is applied.
@@ -39,6 +40,10 @@ class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
       plugin(MyComprehensiveReleaseConfigPlugin::class)
 
       plugin(DependencyUpdatesConfigPlugin::class)
+    }
+
+    subprojects {
+      extensions.create("superpom", MySuperpomExtension::class)
     }
   }
 }

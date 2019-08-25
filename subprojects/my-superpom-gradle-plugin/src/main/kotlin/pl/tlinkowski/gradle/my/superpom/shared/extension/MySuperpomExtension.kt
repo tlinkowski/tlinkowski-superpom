@@ -16,4 +16,19 @@
  * limitations under the License.
  */
 
-modularity.standardJavaRelease(11)
+package pl.tlinkowski.gradle.my.superpom.shared.extension
+
+/**
+ * Per-subproject extension of My Gradle SuperPOM.
+ *
+ * Usage:
+ * ```kotlin
+ * superpom {
+ *
+ * }
+ * ```
+ *
+ * @author Tomasz Linkowski
+ */
+open class MySuperpomExtension {
+}
