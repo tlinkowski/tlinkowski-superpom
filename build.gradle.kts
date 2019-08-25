@@ -19,7 +19,6 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.*
-import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
 import java.net.URL
 
