@@ -17,7 +17,6 @@
  */
 package pl.tlinkowski.sample.java8.unmodularized
 
-import groovy.transform.TypeChecked
 import spock.lang.Specification
 
 import pl.tlinkowski.sample.java8.unmodularized.SampleKotlinHelper
@@ -26,7 +25,6 @@ import pl.tlinkowski.sample.java8.unmodularized.SampleMain
 /**
  * @author Tomasz Linkowski
  */
-@TypeChecked
 class SampleMainSpec extends Specification {
 
   def greetUpperCamel() {

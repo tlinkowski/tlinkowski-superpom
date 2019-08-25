@@ -17,19 +17,18 @@
  */
 package pl.tlinkowski.sample.kotlin.modularized
 
-import groovy.transform.TypeChecked
 import spock.lang.Specification
 
 /**
  * @author Tomasz Linkowski
  */
-@TypeChecked
 class SampleMainSpec extends Specification {
 
   def greetUpperCamel() {
     expect:
       'HelloWorld' == SampleMainKt.greetUpperCamel()
   }
+
   def main() {
     expect:
       SampleKotlinHelper.INSTANCE.noArgs().size() == 0

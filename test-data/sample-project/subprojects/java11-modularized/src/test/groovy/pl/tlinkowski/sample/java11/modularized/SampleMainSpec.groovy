@@ -17,13 +17,11 @@
  */
 package pl.tlinkowski.sample.java11.modularized
 
-import groovy.transform.TypeChecked
 import spock.lang.Specification
 
 /**
  * @author Tomasz Linkowski
  */
-@TypeChecked
 class SampleMainSpec extends Specification {
 
   def greetUpperCamel() {
