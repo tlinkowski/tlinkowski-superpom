@@ -20,6 +20,7 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import pl.tlinkowski.gradle.my.superpom.shared.internal.commitExt
 import pl.tlinkowski.gradle.my.superpom.shared.internal.toGrgitPath
 
 /**
@@ -38,9 +39,10 @@ internal open class CommitFileAndPushTask : GrgitTask() {
   @TaskAction
   fun commitFileAndPush() {
     val grgitPath = project.file(filepath).toGrgitPath(grgit) // toGrgitPath() is needed for testing
-    grgit.commit {
+    grgit.commitExt {
       message = commitMessage
       paths = setOf(grgitPath)
+      sign = false
     }
     logger.info("Pushing modified {}", grgitPath)
     grgit.pushIfNotDryRun {}

@@ -18,11 +18,42 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal
 
-import org.ajoberstar.grgit.Branch
-import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.grgit.*
+import org.ajoberstar.grgit.util.JGitUtil
 
 /**
  * @return `true` if given [branch] is pushed to `origin`
  */
 internal fun Grgit.isPushedBranch(branch: Branch) =
         resolve.toObjectId(branch) == resolve.toObjectId(branch.trackingBranch)
+
+
+/**
+ * Like [Grgit.commit] but signing is always disabled.
+ *
+ * Workaround for: https://github.com/tlinkowski/tlinkowski-superpom/issues/60
+ */
+internal fun Grgit.commitExt(closure: Configurable<ExtCommitOp>): Commit {
+  val commitOp = ExtCommitOp(repository)
+  closure.configure(commitOp)
+  return commitOp.call()
+}
+
+/**
+ * Like [org.ajoberstar.grgit.operation.CommitOp] but has `sign` field.
+ */
+internal data class ExtCommitOp(private val repo: Repository) {
+
+  lateinit var message: String
+  var paths: Set<String> = setOf()
+  var sign: Boolean? = null
+
+  fun call(): Commit {
+    val cmd = repo.jgit.commit()
+    cmd.message = message
+    paths.forEach { cmd.setOnly(it) }
+    cmd.setSign(sign) // this cannot be set in CommitOp yet
+    val commit = cmd.call()
+    return JGitUtil.convertCommit(repo, commit)
+  }
+}

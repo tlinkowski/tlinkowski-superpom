@@ -102,8 +102,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       def originalHead = grgit.head()
     and:
       runner = sampleProjectRunner('release', '-Preckon.stage=final')
-      grgit.add { patterns = runner.dirtyFilepaths(grgit) }
-      grgit.commit { message = 'SMOKE TEST: shaded files' }
+      runner.commitDirtyFilepaths(grgit)
     when:
       def result = runner.build()
     then:

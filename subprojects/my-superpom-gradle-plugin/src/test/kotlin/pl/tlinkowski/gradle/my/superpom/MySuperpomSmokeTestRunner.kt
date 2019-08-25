@@ -21,8 +21,7 @@ package pl.tlinkowski.gradle.my.superpom
 import org.ajoberstar.grgit.Grgit
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import pl.tlinkowski.gradle.my.superpom.shared.internal.toGrgitPath
-import pl.tlinkowski.gradle.my.superpom.shared.internal.toNormalizedString
+import pl.tlinkowski.gradle.my.superpom.shared.internal.*
 import java.nio.file.Path
 
 /**
@@ -57,10 +56,20 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
 
   fun buildAndFail(): BuildResult = gradleRunner.buildAndFail()
 
+  fun commitDirtyFilepaths(grgit: Grgit) {
+    grgit.add {
+      patterns = dirtyFilepaths(grgit)
+    }
+    grgit.commitExt {
+      message = "SMOKE TEST: shaded files"
+      sign = false
+    }
+  }
+
   /**
    * Returns relative paths that need to be (temporarily) committed in order to have a clean repo.
    */
-  fun dirtyFilepaths(grgit: Grgit) = shadedFiles
+  private fun dirtyFilepaths(grgit: Grgit) = shadedFiles
           .flatMap { listOf(it.path, it.bakPath) }
           .map { it.toFile().toGrgitPath(grgit) }
           .toSet()
