@@ -41,12 +41,14 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
           'package.json'
   ]
 
-  private static final List<String> SUBPROJECTS = [
+  private static final List<String> TESTED_SUBPROJECTS = [
           'java8-unmodularized',
           'java8-modularized',
           'java11-modularized',
           'kotlin-modularized'
   ]
+  private static final List<String> PUBLISHED_SUBPROJECTS = TESTED_SUBPROJECTS + 'test-project'
+  private static final List<String> ALL_SUBPROJECTS = PUBLISHED_SUBPROJECTS + 'unpublished'
 
   @AutoCleanup
   private MySuperpomSmokeTestRunner runner
@@ -71,10 +73,8 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       SAMPLE_SHARED_FILES.forEach { sampleProjectFileExists(it) }
     and:
       taskDidNotFail(result, ':build')
-      SUBPROJECTS.forEach {
-        taskWasSuccessful(result, ":$it:test")
-        taskWasSuccessful(result, ":$it:build")
-      }
+      TESTED_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:test") }
+      ALL_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:build") }
   }
 
   def 'gradle dependencyUpdates'() {
@@ -106,7 +106,9 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
     when:
       def result = runner.build()
     then:
-      SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:bintrayUpload") }
+      PUBLISHED_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:bintrayUpload") }
+      (ALL_SUBPROJECTS - PUBLISHED_SUBPROJECTS).forEach { taskWasSkipped(result, ":$it:bintrayUpload") }
+
       taskWasSuccessful(result, ':bintrayPublish')
 
       taskWasSkipped(result, ':releaseToGitHub')
