@@ -39,17 +39,6 @@ tasks {
   //endregion
 }
 
-//region JAVA PLATFORM MODULE SYSTEM
-val moduleName by extra("pl.tlinkowski.gradle.my.superpom")
-
-tasks {
-  jar {
-    inputs.property("moduleName", moduleName)
-
-    manifest {
-      // for this project, there are too many split packages to bother with a full JPMS module
-      attributes["Automatic-Module-Name"] = moduleName
-    }
-  }
+superpom {
+  automaticModuleName = "pl.tlinkowski.gradle.my.superpom"
 }
-//endregion

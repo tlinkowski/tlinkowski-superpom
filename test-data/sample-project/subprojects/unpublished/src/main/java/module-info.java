@@ -15,31 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package pl.tlinkowski.gradle.my.superpom.shared.extension
-
 /**
- * Per-subproject extension of My Gradle SuperPOM.
- *
- * Usage:
- * ```kotlin
- * superpom {
- *
- * }
- * ```
- *
  * @author Tomasz Linkowski
  */
-open class MySuperpomExtension {
-
-  /**
-   * If `true`, a project will get all the test dependencies with `api` instead of `testImplementation` scope.
-   */
-  var isTestProject = false
-
-  /**
-   * An [automatic module name](https://docs.oracle.com/en/java/javase/12/docs/specs/jar/jar.html#modular-jar-files)
-   * (must be set if there's no `module-info.java`).
-   */
-  var automaticModuleName: String? = null
+module pl.tlinkowski.sample.unpublished {
+  exports pl.tlinkowski.sample.unpublished;
 }
