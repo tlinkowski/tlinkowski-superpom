@@ -18,7 +18,7 @@
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaBasePlugin
+import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.kotlin.dsl.*
 import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.plugins.ide.idea.model.IdeaModel
@@ -89,8 +89,8 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
 
   private fun Project.configureSubproject() {
     apply {
-      // https://guides.gradle.org/designing-gradle-plugins/#capabilities-vs-conventions
-      plugin(JavaBasePlugin::class)
+      // https://docs.gradle.org/current/userguide/java_library_plugin.html
+      plugin(JavaLibraryPlugin::class)
     }
   }
 

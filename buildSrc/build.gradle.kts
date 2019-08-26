@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 plugins {
+  `java-library`
   `kotlin-dsl`
   idea
 }

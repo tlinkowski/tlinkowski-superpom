@@ -38,7 +38,7 @@ subprojects {
   dependencies {
     val guavaVersion: String by project
 
-    "compile"(group = "com.google.guava", name = "guava", version = guavaVersion)
+    "api"(group = "com.google.guava", name = "guava", version = guavaVersion)
   }
 
   config {
