@@ -15,25 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package pl.tlinkowski.sample.test;
 
-package pl.tlinkowski.gradle.my.superpom.shared.extension
+import org.spockframework.lang.Wildcard;
 
 /**
- * Per-subproject extension of My Gradle SuperPOM.
- *
- * Usage:
- * ```kotlin
- * superpom {
- *
- * }
- * ```
- *
  * @author Tomasz Linkowski
  */
-open class MySuperpomExtension {
+public final class Sample {
 
-  /**
-   * If `true`, a project will get all the test dependencies with `api` instead of `testImplementation` scope.
-   */
-  var isTestProject = false
+  public static final Wildcard WILDCARD = Wildcard.INSTANCE;
 }

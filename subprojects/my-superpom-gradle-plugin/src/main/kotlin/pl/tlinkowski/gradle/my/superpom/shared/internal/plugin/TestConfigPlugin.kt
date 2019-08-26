@@ -24,6 +24,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import pl.tlinkowski.gradle.my.superpom.shared.internal.superpom
 import java.util.*
 
 /**
@@ -60,17 +61,22 @@ internal class TestConfigPlugin : AbstractRootPlugin() {
     }
   }
 
+  /**
+   * [Project.afterEvaluate] due to [Project.superpom].
+   */
   private fun Project.configureDependencies() {
-    dependencies {
-      val testImplementation by configurations
+    afterEvaluate {
+      dependencies {
+        val kotlinVersion: String by project
+        val spockVersion: String by project
+        val groovyVersion: String by project
 
-      val kotlinVersion: String by project
-      val spockVersion: String by project
-      val groovyVersion: String by project
+        val scope = if (superpom.isTestProject) "api" else "testImplementation"
 
-      testImplementation(kotlin(module = "stdlib-jdk8", version = kotlinVersion))
-      testImplementation(group = "org.spockframework", name = "spock-core", version = spockVersion)
-      testImplementation(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
+        scope(kotlin(module = "stdlib-jdk8", version = kotlinVersion))
+        scope(group = "org.spockframework", name = "spock-core", version = spockVersion)
+        scope(group = "org.codehaus.groovy", name = "groovy-all", version = groovyVersion)
+      }
     }
   }
 

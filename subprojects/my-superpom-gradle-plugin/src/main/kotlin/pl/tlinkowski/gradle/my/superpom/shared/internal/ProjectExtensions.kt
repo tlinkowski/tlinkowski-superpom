@@ -20,6 +20,8 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal
 
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.*
+import pl.tlinkowski.gradle.my.superpom.shared.extension.MySuperpomExtension
 
 /**
  * Marks that we truly want to release.
@@ -38,3 +40,12 @@ internal val Project.isDryRunRelease
  */
 internal val Project.grgit
   get() = property("grgit") as Grgit
+
+/**
+ * Provides [MySuperpomExtension] instance for given project (works for **subprojects** only).
+ *
+ * Querying of this extension should always be done in [Project.afterEvaluate] to make sure that
+ * the values are already set by the build script.
+ */
+internal val Project.superpom
+  get() = extensions.getByType<MySuperpomExtension>()

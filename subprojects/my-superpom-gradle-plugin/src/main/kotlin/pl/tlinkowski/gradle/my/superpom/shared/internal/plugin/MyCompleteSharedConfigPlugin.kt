@@ -43,7 +43,7 @@ class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
     }
 
     subprojects {
-      extensions.create("superpom", MySuperpomExtension::class)
+      extensions.create<MySuperpomExtension>("superpom")
     }
   }
 }
