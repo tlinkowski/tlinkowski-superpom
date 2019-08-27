@@ -38,6 +38,12 @@ open class MySuperpomExtension {
   var isTestProject = false
 
   /**
+   * If `true`, a project will get Lombok dependencies, a Delombok task, and its Javadoc task will ba based on
+   * delomboked source code.
+   */
+  var useLombok = false
+
+  /**
    * An [automatic module name](https://docs.oracle.com/en/java/javase/12/docs/specs/jar/jar.html#modular-jar-files)
    * (must be set if there's no `module-info.java`).
    */

@@ -44,7 +44,8 @@ object SuperpomFileSharing {
   private val ZIP_FILE_TREE_PROVIDER_MAP = mapOf(
           "idea" to this::sharedIdeaFiles,
           "release" to this::sharedReleaseFiles,
-          "ci" to this::sharedContinuousIntegrationFiles
+          "ci" to this::sharedContinuousIntegrationFiles,
+          "lombok" to this::sharedLombokFiles
   )
 
   private fun sharedIdeaFiles(project: Project) = with(project) {
@@ -66,6 +67,12 @@ object SuperpomFileSharing {
   private fun sharedContinuousIntegrationFiles(project: Project) = with(project) {
     fileTree(rootDir) {
       include("/.appveyor.yml", "/.travis.yml")
+    }
+  }
+
+  private fun sharedLombokFiles(project: Project) = with(project) {
+    fileTree(rootDir) {
+      include("/lombok.config")
     }
   }
 

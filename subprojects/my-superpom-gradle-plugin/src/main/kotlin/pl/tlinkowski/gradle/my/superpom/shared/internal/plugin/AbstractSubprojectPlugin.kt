@@ -15,17 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.tlinkowski.gradle.my.superpom.shared.internal
+
+package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
+
+import org.gradle.api.*
 
 /**
+ * Base plugin for subprojects.
+ *
  * @author Tomasz Linkowski
  */
-internal object TaskGroupNames {
+abstract class AbstractSubprojectPlugin : Plugin<Project> {
+
   /**
-   * Tasks that are not to be called directly.
+   * Applies this plugin, verifying that the provided [project] is a subproject.
    */
-  const val INTERNAL = "internal"
-  const val FILE_SHARING = "file sharing"
-  const val RELEASING = "releasing"
-  const val LOMBOK = "lombok"
+  final override fun apply(project: Project) {
+    if (project == project.rootProject) {
+      throw GradleException("This plugin can be applied to a subproject only")
+    }
+    project.configureSubproject()
+  }
+
+  /**
+   * Logic of this plugin (for convenience, as an extension method of the subproject).
+   */
+  protected abstract fun Project.configureSubproject()
 }

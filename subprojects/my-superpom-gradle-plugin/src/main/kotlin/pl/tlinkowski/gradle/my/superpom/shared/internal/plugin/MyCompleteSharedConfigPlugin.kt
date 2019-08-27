@@ -43,7 +43,17 @@ class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
     }
 
     subprojects {
-      extensions.create<MySuperpomExtension>("superpom")
+      configureSubproject()
+    }
+  }
+
+  private fun Project.configureSubproject() {
+    val superpom = extensions.create<MySuperpomExtension>("superpom")
+
+    afterEvaluate {
+      if (superpom.useLombok) {
+        apply<LombokConfigPlugin>()
+      }
     }
   }
 }
