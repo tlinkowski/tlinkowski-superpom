@@ -38,7 +38,3 @@ tasks {
   }
   //endregion
 }
-
-superpom {
-  automaticModuleName = "pl.tlinkowski.gradle.my.superpom"
-}

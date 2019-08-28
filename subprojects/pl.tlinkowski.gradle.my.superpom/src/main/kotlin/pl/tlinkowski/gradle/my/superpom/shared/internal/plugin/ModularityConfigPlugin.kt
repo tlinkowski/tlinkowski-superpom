@@ -23,7 +23,6 @@ import org.gradle.kotlin.dsl.*
 import org.javamodularity.moduleplugin.ModuleSystemPlugin
 import org.javamodularity.moduleplugin.tasks.TestModuleOptions
 import pl.tlinkowski.gradle.my.superpom.shared.internal.configureIfPresent
-import pl.tlinkowski.gradle.my.superpom.shared.internal.superpom
 
 /**
  * Applies and configures [Gradle Modules Plugin](https://github.com/java9-modularity/gradle-modules-plugin).
@@ -54,20 +53,12 @@ internal class ModularityConfigPlugin : AbstractRootPlugin() {
     }
   }
 
-  /**
-   * [Project.afterEvaluate] due to [Project.superpom].
-   */
   private fun Project.configureAutomaticModuleName() {
-    afterEvaluate {
-      val automaticModuleName = checkNotNull(superpom.automaticModuleName, { "Set superpom.automaticModuleName" })
-      val moduleName by extra(automaticModuleName)
+    tasks.named<Jar>("jar") {
+      inputs.property("project.name", project.name)
 
-      tasks.named<Jar>("jar") {
-        inputs.property("moduleName", moduleName)
-
-        manifest {
-          attributes["Automatic-Module-Name"] = moduleName
-        }
+      manifest {
+        attributes["Automatic-Module-Name"] = project.name
       }
     }
   }

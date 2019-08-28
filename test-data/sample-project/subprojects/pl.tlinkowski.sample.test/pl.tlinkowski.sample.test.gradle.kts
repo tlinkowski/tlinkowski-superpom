@@ -36,5 +36,4 @@
 
 superpom {
   isTestProject = true
-  automaticModuleName = "pl.tlinkowski.sample.test"
 }

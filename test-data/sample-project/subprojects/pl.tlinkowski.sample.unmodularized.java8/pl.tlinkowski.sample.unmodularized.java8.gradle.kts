@@ -35,5 +35,5 @@
  */
 
 superpom {
-  automaticModuleName = "pl.tlinkowski.sample.unmodularized.java8"
+
 }

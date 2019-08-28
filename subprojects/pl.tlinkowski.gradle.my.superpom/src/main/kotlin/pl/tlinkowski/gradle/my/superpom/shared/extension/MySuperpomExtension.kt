@@ -42,10 +42,4 @@ open class MySuperpomExtension {
    * delomboked source code.
    */
   var useLombok = false
-
-  /**
-   * An [automatic module name](https://docs.oracle.com/en/java/javase/12/docs/specs/jar/jar.html#modular-jar-files)
-   * (must be set if there's no `module-info.java`).
-   */
-  var automaticModuleName: String? = null
 }
