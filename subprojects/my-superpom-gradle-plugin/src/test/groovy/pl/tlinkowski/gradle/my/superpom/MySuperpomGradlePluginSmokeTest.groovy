@@ -38,7 +38,10 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   private static final List<String> SAMPLE_SHARED_FILES = [
           '.idea/codeStyles/Project.xml',
           '.idea/inspectionProfiles/Project_Default.xml',
-          'package.json'
+          '.travis.yml',
+          'lombok.config',
+          'package.json',
+          'release.bat'
   ]
 
   private static final List<String> TESTED_SUBPROJECTS = [
@@ -47,7 +50,7 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
           'java11-modularized',
           'kotlin-modularized'
   ]
-  private static final List<String> PUBLISHED_SUBPROJECTS = TESTED_SUBPROJECTS + 'test-project'
+  private static final List<String> PUBLISHED_SUBPROJECTS = TESTED_SUBPROJECTS + ['test-project', 'lombok']
   private static final List<String> ALL_SUBPROJECTS = PUBLISHED_SUBPROJECTS + 'unpublished'
 
   @AutoCleanup
@@ -75,6 +78,14 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       taskDidNotFail(result, ':build')
       TESTED_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:test") }
       ALL_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:build") }
+      taskWasSuccessful(result, ':lombok:delombokJava')
+      taskWasSuccessful(result, ':lombok:javadoc')
+    and:
+      def lombokBuildDir = SAMPLE_PROJECT_DIR.resolve('subprojects/lombok/build')
+      def delombokedSampleJava = 'delombok/pl/tlinkowski/sample/lombok/Sample.java'
+      def sampleHtml = 'docs/javadoc/pl.tlinkowski.sample.lombok/pl/tlinkowski/sample/lombok/Sample.html'
+      !lombokBuildDir.resolve(delombokedSampleJava).text.contains('@UtilityClass')
+      !lombokBuildDir.resolve(sampleHtml).text.contains('Constructor')
   }
 
   def 'gradle dependencyUpdates'() {

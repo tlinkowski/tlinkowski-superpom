@@ -9,5 +9,6 @@
 /.appveyor.yml
 /.travis.yml
 /.grenrc.yml
+/lombok.config
 /package.json
 /release.bat
