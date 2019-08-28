@@ -15,28 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `java-library`
-  `kotlin-dsl`
-  idea
-}
+package pl.tlinkowski.sample.modularized.kotlin
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+import spock.lang.Specification
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'pl.tlinkowski.gradle.my.superpom' plugin into 'buildSrc'"
+/**
+ * @author Tomasz Linkowski
+ */
+class SampleMainSpec extends Specification {
 
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/pl.tlinkowski.gradle.my.superpom/$sharedSourceDir")
-    into(sharedSourceDir)
+  def greetUpperCamel() {
+    expect:
+      'HelloWorld' == SampleMainKt.greetUpperCamel()
   }
 
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
+  def main() {
+    expect:
+      SampleKotlinHelper.INSTANCE.noArgs().size() == 0
+    when:
+      SampleMainKt.main()
+    then:
+      noExceptionThrown()
   }
 }

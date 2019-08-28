@@ -15,28 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `java-library`
-  `kotlin-dsl`
-  idea
-}
+package pl.tlinkowski.sample.modularized.java8;
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+import com.google.common.base.CaseFormat;
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'pl.tlinkowski.gradle.my.superpom' plugin into 'buildSrc'"
+/**
+ * @author Tomasz Linkowski
+ */
+public final class SampleMain {
 
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/pl.tlinkowski.gradle.my.superpom/$sharedSourceDir")
-    into(sharedSourceDir)
+  public static void main(String[] args) {
+    System.out.format("%s!%n", greetUpperCamel());
   }
 
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
+  public static String greetUpperCamel() {
+    return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, "hello-world");
+  }
+
+  private SampleMain() {
   }
 }

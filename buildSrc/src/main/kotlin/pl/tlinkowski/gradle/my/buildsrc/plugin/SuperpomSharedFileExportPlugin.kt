@@ -29,7 +29,7 @@ import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 /**
  * Facilitates export of some files from this SuperPOM project to all target projects.
  *
- * Counterpart of `SuperpomSharedFileImportPlugin` from `my-superpom-gradle-plugin`.
+ * Counterpart of `SuperpomSharedFileImportPlugin` from `pl.tlinkowski.gradle.my.superpom` Gradle plugin.
  *
  * @author Tomasz Linkowski
  */

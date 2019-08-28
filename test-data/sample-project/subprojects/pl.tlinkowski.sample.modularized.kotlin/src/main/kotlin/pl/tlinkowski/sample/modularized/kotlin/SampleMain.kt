@@ -15,28 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `java-library`
-  `kotlin-dsl`
-  idea
+package pl.tlinkowski.sample.modularized.kotlin
+
+import com.google.common.base.CaseFormat
+
+fun main() {
+  println("${greetUpperCamel()}!")
 }
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
-
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'pl.tlinkowski.gradle.my.superpom' plugin into 'buildSrc'"
-
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/pl.tlinkowski.gradle.my.superpom/$sharedSourceDir")
-    into(sharedSourceDir)
-  }
-
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
-  }
-}
+fun greetUpperCamel(): String = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, "hello-world")

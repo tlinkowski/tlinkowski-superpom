@@ -26,7 +26,7 @@ import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 /**
  * A task that packages files specified by given `key` to a `shared-$key-files.zip` archive in exported resources dir.
  *
- * Counterpart of `ZipSharedFileImportTask` from `my-superpom-gradle-plugin`.
+ * Counterpart of `ZipSharedFileImportTask` from `pl.tlinkowski.gradle.my.superpom` Gradle plugin.
  *
  * @author Tomasz Linkowski
  */
@@ -52,7 +52,7 @@ internal open class ZipSharedFileExportTask : Zip() {
   }
 
   /**
-   * Counterpart of `ZipSharedFileImportTask.fromExportedZipFile` from `my-superpom-gradle-plugin`.
+   * Counterpart of `ZipSharedFileImportTask.fromExportedZipFile` from `pl.tlinkowski.gradle.my.superpom` Gradle plugin.
    */
   private fun intoExportedZipFile(key: String) {
     val filename = SuperpomFileSharing.zipFileName(key)

@@ -15,28 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  `java-library`
-  `kotlin-dsl`
-  idea
-}
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+/**
+ * @author Tomasz Linkowski
+ */
+@SuppressWarnings("JavaModuleNaming")
+module pl.tlinkowski.sample.modularized.java11 {
+  exports pl.tlinkowski.sample.modularized.java11;
 
-tasks {
-  val syncSharedKotlinSources by registering(Sync::class) {
-    group = "superpom"
-    description = "Synchronizes 'shared' package from 'pl.tlinkowski.gradle.my.superpom' plugin into 'buildSrc'"
-
-    val sharedSourceDir = "src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared"
-    from("../subprojects/pl.tlinkowski.gradle.my.superpom/$sharedSourceDir")
-    into(sharedSourceDir)
-  }
-
-  compileKotlin {
-    dependsOn(syncSharedKotlinSources)
-  }
+  requires com.google.common;
 }
