@@ -45,13 +45,18 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
   ]
 
   private static final List<String> TESTED_SUBPROJECTS = [
-          'java8-unmodularized',
-          'java8-modularized',
-          'java11-modularized',
-          'kotlin-modularized'
+          'pl.tlinkowski.sample.unmodularized.java8',
+          'pl.tlinkowski.sample.modularized.java8',
+          'pl.tlinkowski.sample.modularized.java11',
+          'pl.tlinkowski.sample.modularized.kotlin'
   ]
-  private static final List<String> PUBLISHED_SUBPROJECTS = TESTED_SUBPROJECTS + ['test-project', 'lombok']
-  private static final List<String> ALL_SUBPROJECTS = PUBLISHED_SUBPROJECTS + 'unpublished'
+  private static final List<String> PUBLISHED_SUBPROJECTS = TESTED_SUBPROJECTS + [
+          'pl.tlinkowski.sample.test',
+          'pl.tlinkowski.sample.lombok'
+  ]
+  private static final List<String> ALL_SUBPROJECTS = PUBLISHED_SUBPROJECTS + [
+          'pl.tlinkowski.sample.unpublished'
+  ]
 
   @AutoCleanup
   private MySuperpomSmokeTestRunner runner
@@ -78,12 +83,13 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
       taskDidNotFail(result, ':build')
       TESTED_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:test") }
       ALL_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:build") }
-      taskWasSuccessful(result, ':lombok:delombokJava')
-      taskWasSuccessful(result, ':lombok:javadoc')
+      taskWasSuccessful(result, ':pl.tlinkowski.sample.lombok:delombokJava')
+      taskWasSuccessful(result, ':pl.tlinkowski.sample.lombok:javadoc')
     and:
-      def lombokBuildDir = SAMPLE_PROJECT_DIR.resolve('subprojects/lombok/build')
+      def lombokModuleName = 'pl.tlinkowski.sample.lombok'
+      def lombokBuildDir = SAMPLE_PROJECT_DIR.resolve("subprojects/$lombokModuleName/build")
       def delombokedSampleJava = 'delombok/pl/tlinkowski/sample/lombok/Sample.java'
-      def sampleHtml = 'docs/javadoc/pl.tlinkowski.sample.lombok/pl/tlinkowski/sample/lombok/Sample.html'
+      def sampleHtml = "docs/javadoc/$lombokModuleName/pl/tlinkowski/sample/lombok/Sample.html"
       !lombokBuildDir.resolve(delombokedSampleJava).text.contains('@UtilityClass')
       !lombokBuildDir.resolve(sampleHtml).text.contains('Constructor')
   }

@@ -5,8 +5,8 @@
 [![Code coverage](https://img.shields.io/codecov/c/github/tlinkowski/tlinkowski-superpom.svg)](https://codecov.io/gh/tlinkowski/tlinkowski-superpom)
 [![Codacy grade](https://img.shields.io/codacy/grade/81a0cef956a34083accd2f8e401a66de.svg)](https://app.codacy.com/project/tlinkowski/tlinkowski-superpom/dashboard)
 
-[![Maven Central](https://img.shields.io/maven-central/v/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin?label=Maven%20Central)](https://search.maven.org/search?q=g:pl.tlinkowski.gradle.my)
-[![Javadocs](https://javadoc.io/badge/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin.svg?color=blue)](https://javadoc.io/doc/pl.tlinkowski.gradle.my/my-superpom-gradle-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/pl.tlinkowski.gradle.my/pl.tlinkowski.gradle.my.superpom?label=Maven%20Central)](https://search.maven.org/search?q=g:pl.tlinkowski.gradle.my)
+[![Javadocs](https://javadoc.io/badge/pl.tlinkowski.gradle.my/pl.tlinkowski.gradle.my.superpom.svg?color=blue)](https://javadoc.io/doc/pl.tlinkowski.gradle.my/pl.tlinkowski.gradle.my.superpom)
 [![Semantic Versioning](https://img.shields.io/badge/-semantic%20versioning-333333)](https://semver.org/)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
@@ -16,10 +16,10 @@ This project is inspired by [The Gradle SuperPOM](http://andresalmiray.com/the-g
 This projects provides two plugins:
 
 1.  A Gradle [`Project`](https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html)
-    plugin (id: [`pl.tlinkowski.gradle.my.superpom`](subprojects/my-superpom-gradle-plugin))
+    plugin (id: [`pl.tlinkowski.gradle.my.superpom`](subprojects/pl.tlinkowski.gradle.my.superpom))
 
 2.  A Gradle [`Settings`](https://docs.gradle.org/current/javadoc/org/gradle/api/initialization/Settings.html)
-    plugin (id: [`pl.tlinkowski.gradle.my.settings`](subprojects/my-settings-gradle-plugin))
+    plugin (id: [`pl.tlinkowski.gradle.my.settings`](subprojects/pl.tlinkowski.gradle.my.settings))
 
 Together, those two plugins preconfigure Gradle builds for each of my projects.
 
@@ -45,7 +45,7 @@ buildscript {
   }
   dependencies {
     val mySuperpomVersion: String by settings
-    classpath(group = "pl.tlinkowski.gradle.my", name = "my-settings-gradle-plugin", version = mySuperpomVersion)
+    classpath(group = "pl.tlinkowski.gradle.my", name = "pl.tlinkowski.gradle.my.settings", version = mySuperpomVersion)
   }
 }
 apply(plugin = "pl.tlinkowski.gradle.my.settings")
@@ -164,7 +164,7 @@ This plugin configures a comprehensive release process by:
     (which simply calls `gradle clean` followed by `gradle release -Preckon.stage=final`)
 
 The comprehensive release process is configured by
-[MyComprehensiveReleaseConfigurator](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
+[MyComprehensiveReleaseConfigurator](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
 and includes:
 
 1.  Release validation (requirements: clean repo, pushed `master` branch, `reckon.stage=final` property)
@@ -229,7 +229,8 @@ y
 > Task :pushUpdatedGradleProperties    // 8
 ```
 
-Note the [`injectReleasePasswords`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/task/InjectReleasePasswordsTask.kt)
+Note the
+[`injectReleasePasswords`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/task/InjectReleasePasswordsTask.kt)
 task, which obtains the following passwords for performing a release:
 
 -   `bintrayApiKey`: from Gradle properties (i.e. `~/.gradle/gradle.properties`),
@@ -249,10 +250,10 @@ A large part of the build configuration for:
     (defined mostly in the included [`buildSrc`](buildSrc) build), and
 
 -   *target* projects
-    (defined in [`pl.tlinkowski.gradle.my.superpom`](subprojects/my-superpom-gradle-plugin) plugin project)
+    (defined in [`pl.tlinkowski.gradle.my.superpom`](subprojects/pl.tlinkowski.gradle.my.superpom) plugin project)
 
-is *shared* as [`pl.tlinkowski.gradle.my.superpom.shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared)
-package (see [`MyCompleteSharedConfigPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/MyCompleteSharedConfigPlugin.kt)).
+is *shared* as [`pl.tlinkowski.gradle.my.superpom.shared`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared)
+package (see [`MyCompleteSharedConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/MyCompleteSharedConfigPlugin.kt)).
 
 Thanks to this, we don't have to:
 
@@ -264,7 +265,7 @@ Thanks to this, we don't have to:
     -   such approach would be problematic for [direct file sharing](#direct-file-sharing)
 
 This is achieved by synchronizing the contents of the SuperPOM plugin's
-[`shared`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared) 
+[`shared`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared) 
 package with a corresponding `shared` package in `buildSrc`
 (see [`buildSrc/build.gradle.kts`](buildSrc/build.gradle.kts) for details).
 
@@ -278,7 +279,7 @@ Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.pr
     for [`buildSrc`](buildSrc), root [`settings.gradle.kts`](settings.gradle.kts),
     and root [`build.gradle.kts`](build.gradle.kts)
 
--   by [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt),
+-   by [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt),
     for all *target* projects
 
 #### Direct File Sharing
@@ -286,7 +287,8 @@ Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.pr
 Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed
 as a "sync" operation between this (*source*) project and all *target* projects.
 
-The files to be shared are specified in [`SuperpomFileSharing`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/SuperpomFileSharing.kt)
+The files to be shared are specified in
+[`SuperpomFileSharing`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/SuperpomFileSharing.kt)
 (usually, it's a good idea to git-ignore them in *target* projects). Currently, the following files are shared *directly*:
 
 -   `idea`: parts of IntelliJ configuration from `.idea` directory
@@ -304,9 +306,9 @@ This feature is implemented:
     by registering a special `exportSharedFiles` task for this (*source*) project
 
     -   the task zips files to be exported and places the resulting archive in the
-        [resources](subprojects/my-superpom-gradle-plugin/src/main/resources) of the SuperPOM plugin
+        [resources](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/resources) of the SuperPOM plugin
 
--   in [`SuperpomSharedFileImportPlugin`](subprojects/my-superpom-gradle-plugin/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedFileImportPlugin.kt),
+-   in [`SuperpomSharedFileImportPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedFileImportPlugin.kt),
     by registering a special `importSharedFiles` task for a *target* project
 
     -   the task reads the archive as a resource and unzips it in the corresponding location

@@ -23,6 +23,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import pl.tlinkowski.gradle.my.superpom.shared.internal.*
 import java.nio.file.Path
+import kotlin.math.sign
 
 /**
  * Special class that handles setting up and cleaning up an appropriately modified `gradle.properties` file.
@@ -92,7 +93,7 @@ internal class MySuperpomSmokeTestRunner(projectDir: Path, args: List<String>) :
 
   //region SETTINGS.GRADLE.KTS
   private fun replaceClasspathWithPluginClasspath(content: String): String {
-    val dependencyNotation = """group = "pl.tlinkowski.gradle.my", name = "my-settings-gradle-plugin", version = mySuperpomVersion"""
+    val dependencyNotation = """group = "pl.tlinkowski.gradle.my", name = "pl.tlinkowski.gradle.my.settings", version = mySuperpomVersion"""
     val pluginClasspathString = buildPluginClasspathString()
     val modifiedContent = content.replace(dependencyNotation, "files($pluginClasspathString)")
     assert(content != modifiedContent) { content }
