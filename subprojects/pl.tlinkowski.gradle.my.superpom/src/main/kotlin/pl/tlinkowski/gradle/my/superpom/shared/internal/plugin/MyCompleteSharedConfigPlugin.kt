@@ -34,6 +34,7 @@ class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
 
       plugin(MyCoreConfigPlugin::class)
       plugin(ModularityConfigPlugin::class)
+      plugin(NamingConventionEnforcementPlugin::class)
       plugin(TestConfigPlugin::class)
       plugin(JacocoConfigPlugin::class)
       plugin(MyCentralPublishConfigPlugin::class)
