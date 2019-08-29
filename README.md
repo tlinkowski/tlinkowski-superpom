@@ -151,7 +151,12 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
         -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
 
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
-    
+
+        -   project name and module name validation (see [Naming Convention](#naming-convention))
+        
+        -   [`Automatic-Module-Name`](https://docs.oracle.com/en/java/javase/12/docs/specs/jar/jar.html#modular-jar-files)
+            equal to `project.name` (if `module-info.java` is absent)
+
         -   publishing to JCenter and Maven Central
 
 #### Comprehensive Release Process
@@ -312,6 +317,20 @@ This feature is implemented:
     by registering a special `importSharedFiles` task for a *target* project
 
     -   the task reads the archive as a resource and unzips it in the corresponding location
+
+## Naming Convention
+
+This project applies a
+[naming convention for Maven & JPMS by Christian Stein](https://sormuras.github.io/blog/2019-08-04-maven-coordinates-and-java-module-names).
+In short:
+ 
+> Gradle project name = JPMS module name
+
+The SuperPOM plugin enforces this convention by ensuring that the Gradle project name (i.e. Maven `artifactId`):
+
+-   starts with Maven `groupId`
+-   equals JPMS module name (only if `module-info.java` is present)
+-   is a prefix of every package in the project
 
 ## Requirements
 
