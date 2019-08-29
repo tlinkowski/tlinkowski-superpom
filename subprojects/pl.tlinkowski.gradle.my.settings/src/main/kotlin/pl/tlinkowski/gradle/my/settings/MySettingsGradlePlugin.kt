@@ -73,10 +73,12 @@ class MySettingsGradlePlugin : Plugin<Settings> {
   }
 
   private fun Settings.includeSubprojects(groupDir: File) {
-    requireNotNull(groupDir.listFiles(), { groupDir }).forEach { tryIncludeSubproject(it) }
+    requireNotNull(groupDir.listFiles(), { groupDir })
+            .filter { it.isDirectory }
+            .forEach { includeSubproject(it) }
   }
 
-  private fun Settings.tryIncludeSubproject(subprojectDir: File) {
+  private fun Settings.includeSubproject(subprojectDir: File) {
     val subprojectName = subprojectDir.name
     val buildFile = subprojectDir.resolve("$subprojectName.gradle.kts")
 
