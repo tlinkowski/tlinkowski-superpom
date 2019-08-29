@@ -1,0 +1,1 @@
+Verifies META-INF is skipped by `NamingConventionEnforcementPlugin`.
