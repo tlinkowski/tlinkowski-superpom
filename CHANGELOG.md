@@ -1,5 +1,28 @@
 # Releases
 
+## Version 0.2.0
+
+Release date: 30/08/2019.
+
+### Enhancements
+
+-   [#65](https://github.com/tlinkowski/tlinkowski-superpom/issues/65): Enforce project name = module name convention
+-   [#64](https://github.com/tlinkowski/tlinkowski-superpom/issues/64): Change artifact names to module names (BREAKING CHANGE)
+-   [#61](https://github.com/tlinkowski/tlinkowski-superpom/issues/61): Use Java Library Gradle Plugin
+-   [#59](https://github.com/tlinkowski/tlinkowski-superpom/issues/59): Support for superpom.automaticModuleName
+-   [#56](https://github.com/tlinkowski/tlinkowski-superpom/issues/56): Update dependencies
+-   [#55](https://github.com/tlinkowski/tlinkowski-superpom/issues/55): Support for superpom.isTestProject
+-   [#54](https://github.com/tlinkowski/tlinkowski-superpom/issues/54): Add shared per-subproject `superpom` extension
+-   [#17](https://github.com/tlinkowski/tlinkowski-superpom/issues/17): Add full Lombok support
+
+### Bug Fixes
+
+-   [#66](https://github.com/tlinkowski/tlinkowski-superpom/issues/66): MySettingsGradlePlugin fails if there's a file in `subprojects` directory
+-   [#60](https://github.com/tlinkowski/tlinkowski-superpom/issues/60): Signing commits on JGit fails
+-   [#44](https://github.com/tlinkowski/tlinkowski-superpom/issues/44): Sync to Maven Central didn't work for 0.1.0
+
+---
+
 ## Version 0.1.4
 
 Release date: 15/08/2019.
