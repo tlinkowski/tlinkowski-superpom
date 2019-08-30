@@ -52,17 +52,17 @@ class MySuperpomGradlePluginSpec extends Specification {
 
   //region PROJECT HELPERS
   private static Project newMultiProject() {
-    def rootProject = newEmptyProject()
-    newSubprojectOf(rootProject)
+    def rootProject = newRootProject('pl.tlinkowski.sample')
+    newSubprojectOf('pl.tlinkowski.sample.subproject', rootProject)
     rootProject
   }
 
-  private static Project newEmptyProject() {
-    ProjectBuilder.builder().build()
+  private static Project newRootProject(String name) {
+    ProjectBuilder.builder().withName(name).build()
   }
 
-  private static Project newSubprojectOf(Project parent) {
-    ProjectBuilder.builder().withParent(parent).build()
+  private static Project newSubprojectOf(String name, Project parent) {
+    ProjectBuilder.builder().withName(name).withParent(parent).build()
   }
   //endregion
 
