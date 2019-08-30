@@ -117,14 +117,20 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
 
         -   main project properties using
             [Kordamp DSL](https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl)
+            ([`MyCoreConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/MyCoreConfigPlugin.kt))
 
         -   shared file import tasks (see [direct file sharing](#direct-file-sharing))
 
         -   `SNAPSHOT`/`FINAL` release stages for [reckon](https://github.com/ajoberstar/reckon)
+            ([`VersionConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/VersionConfigPlugin.kt))
 
         -   a [comprehensive release process](#comprehensive-release-process)
 
         -   [dependency updates](https://github.com/ben-manes/gradle-versions-plugin): skipping Release Candidates
+            ([`DependencyUpdatesConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/DependencyUpdatesConfigPlugin.kt))
+
+        -   [project Lombok usage](#lombok) (opt-in)
+            ([`LombokConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/LombokConfigPlugin.kt))
 
 3.  for subprojects:
 
@@ -142,22 +148,36 @@ This SuperPOM plugin can be applied to the **root** project only, and it does th
     -   configures:
 
         -   logging of test events
+            ([`TestConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/TestConfigPlugin.kt))
 
         -   test dependencies on Kotlin, Groovy, and [Spock](http://spockframework.org/)
+            ([`TestConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/TestConfigPlugin.kt))
+
+            -   at `testImplementaton` scope (if
+                [`superpom.isTestProject`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/extension/MySuperpomExtension.kt)
+                is `false` &mdash; default)
+
+            -   at `api` scope (if `superpom.isTestProject` is `true` &mdash; opt-in)
+
+        -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
+            ([`TestConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/TestConfigPlugin.kt))
 
         -   [running tests on classpath](https://github.com/java9-modularity/gradle-modules-plugin#fall-back-to-classpath-mode)
             (necessary as Groovy isn't JPMS-compatible)
-
-        -   `compileTestGroovy` dependency on `compileTestKotlin` (so that Spock can access Kotlin helpers)
+            ([`ModularityConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/ModularityConfigPlugin.kt))
 
         -   minimum line code coverage = **95%** ([JaCoCo](https://www.jacoco.org/jacoco/))
+            ([`JacocoConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/JacocoConfigPlugin.kt))
 
         -   project name and module name validation (see [Naming Convention](#naming-convention))
-        
+            ([`NamingConventionEnforcementPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/NamingConventionEnforcementPlugin.kt))
+
         -   [`Automatic-Module-Name`](https://docs.oracle.com/en/java/javase/12/docs/specs/jar/jar.html#modular-jar-files)
             equal to `project.name` (if `module-info.java` is absent)
+            ([`ModularityConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/ModularityConfigPlugin.kt))
 
         -   publishing to JCenter and Maven Central
+            ([`MyCentralPublishConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/MyCentralPublishConfigPlugin.kt))
 
 #### Comprehensive Release Process
 
@@ -165,11 +185,11 @@ This plugin configures a comprehensive release process by:
  
 -   exposing `release` Gradle task (which serves as the root of a complex task chain)
 
--   providing [shared](#direct-file-sharing) `release.bat` script
+-   providing [shared](#direct-file-sharing) [`release.bat`](release.bat) script
     (which simply calls `gradle clean` followed by `gradle release -Preckon.stage=final`)
 
 The comprehensive release process is configured by
-[MyComprehensiveReleaseConfigurator](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
+[`MyComprehensiveReleaseConfigurator`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/configurator/MyComprehensiveReleaseConfigurator.kt)
 and includes:
 
 1.  Release validation (requirements: clean repo, pushed `master` branch, `reckon.stage=final` property)
@@ -296,14 +316,17 @@ The files to be shared are specified in
 [`SuperpomFileSharing`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/SuperpomFileSharing.kt)
 (usually, it's a good idea to git-ignore them in *target* projects). Currently, the following files are shared *directly*:
 
--   `idea`: parts of IntelliJ configuration from `.idea` directory
+-   `idea`: parts of IntelliJ configuration from [`.idea`](.idea) directory
     (subdirectories `codeStyles`, `copyright`, `inspectionProfiles`)
 
--   `release`: files related to releasing, like `release.bat` script and Node.js configuration for
+-   `release`: files related to releasing, like [`release.bat`](release.bat) script and Node.js configuration for
     [gren](https://github.com/github-tools/github-release-notes)
 
--   `ci`: configuration for Continuous Integration environments: `.appveyor.yml` and `.travis.yml`
-    (these files should *not* be git-ignored in *target* projects)
+-   `ci`: configuration for Continuous Integration environments, i.e. [`.appveyor.yml`](.appveyor.yml) and
+    [`.travis.yml`](.travis.yml) files (these files should *not* be git-ignored in *target* projects)
+
+-   `lombok`: [Lombok configuration](https://projectlombok.org/features/configuration),
+    i.e. [`lombok.config`](lombok.config) file
 
 This feature is implemented:
 
@@ -318,6 +341,21 @@ This feature is implemented:
 
     -   the task reads the archive as a resource and unzips it in the corresponding location
 
+#### Lombok
+
+If [`superpom.useLombok`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/extension/MySuperpomExtension.kt)
+is `true`, this plugin (through [`LombokConfigPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/LombokConfigPlugin.kt)):
+
+-   adds `compileOnly` and `annotationProcessor` dependencies on [Project Lombok](https://projectlombok.org/)
+    (like [`gradle-lombok`](https://github.com/franzbecker/gradle-lombok) plugin)
+
+-   configures [`delombokJava`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/task/DelombokJavaTask.kt)
+    task, which generates [delomboked](https://projectlombok.org/features/delombok) version of the main Java source code
+    (like [`gradle-delombok`](https://github.com/lukoerfer/gradle-delombok) plugin, but in a JPMS-compatible way)
+
+-   configures `javadoc` task to use the delomboked source code as its source
+    (otherwise, JavaDoc wouldn't reflect code generated by Lombok at all)
+
 ## Naming Convention
 
 This project applies a
@@ -326,7 +364,8 @@ In short:
  
 > Gradle project name = JPMS module name
 
-The SuperPOM plugin enforces this convention by ensuring that the Gradle project name (i.e. Maven `artifactId`):
+The SuperPOM plugin [enforces this convention](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/plugin/NamingConventionEnforcementPlugin.kt)
+by ensuring that the Gradle project name (i.e. Maven `artifactId`):
 
 -   starts with Maven `groupId`
 -   equals JPMS module name (only if `module-info.java` is present)
