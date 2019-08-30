@@ -85,8 +85,7 @@ subprojects {
     plugin {
       enabled = true // NOT published to Gradle Plugin Portal, but this causes the marker artifact to be published
 
-      val pluginId: String by project
-      id = pluginId
+      id = project.name
 
       val pluginImplementationClass: String by project
       implementationClass = pluginImplementationClass
