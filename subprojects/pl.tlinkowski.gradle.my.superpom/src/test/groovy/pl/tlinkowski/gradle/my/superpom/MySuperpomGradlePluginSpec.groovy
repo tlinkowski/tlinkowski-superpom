@@ -18,8 +18,8 @@
 
 package pl.tlinkowski.gradle.my.superpom
 
-import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.internal.plugins.PluginApplicationException
 import org.gradle.testfixtures.ProjectBuilder
 import org.kordamp.gradle.plugin.base.ProjectConfigurationExtension
 import spock.lang.Specification
@@ -47,7 +47,9 @@ class MySuperpomGradlePluginSpec extends Specification {
     when:
       applyMySuperpomPlugin()
     then:
-      thrown(GradleException)
+      PluginApplicationException ex = thrown()
+      ex.message.startsWith('Failed to apply plugin')
+      ex.cause.message == 'This plugin can be applied to the root project only'
   }
 
   //region PROJECT HELPERS
