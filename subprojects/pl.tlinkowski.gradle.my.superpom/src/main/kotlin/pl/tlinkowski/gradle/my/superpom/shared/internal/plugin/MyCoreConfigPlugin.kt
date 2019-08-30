@@ -36,14 +36,12 @@ import org.kordamp.gradle.plugin.publishing.PublishingPlugin
 internal class MyCoreConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_licensing
-      // (the rest of Kordamp's plugins is applied through `BintrayPlugin`)
-      plugin(LicensingPlugin::class)
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_licensing
+    // (the rest of Kordamp's plugins is applied through `BintrayPlugin`)
+    apply<LicensingPlugin>()
 
-      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_publishing
-      plugin(PublishingPlugin::class) // without this applied early, we ran into problems (e.g. #39)
-    }
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_publishing
+    apply<PublishingPlugin>() // without this applied early, we ran into problems (e.g. #39)
 
     configure<ProjectConfigurationExtension> {
       configureCoreKordamp()
@@ -88,17 +86,13 @@ internal class MyCoreConfigPlugin : AbstractRootPlugin() {
   }
 
   private fun Project.configureSubproject() {
-    apply {
-      // https://docs.gradle.org/current/userguide/java_library_plugin.html
-      plugin(JavaLibraryPlugin::class)
-    }
+    // https://docs.gradle.org/current/userguide/java_library_plugin.html
+    apply<JavaLibraryPlugin>()
   }
 
   private fun Project.configureEveryProject() {
-    apply {
-      // https://docs.gradle.org/current/userguide/idea_plugin.html
-      plugin(IdeaPlugin::class)
-    }
+    // https://docs.gradle.org/current/userguide/idea_plugin.html
+    apply<IdeaPlugin>()
 
     repositories {
       mavenCentral()

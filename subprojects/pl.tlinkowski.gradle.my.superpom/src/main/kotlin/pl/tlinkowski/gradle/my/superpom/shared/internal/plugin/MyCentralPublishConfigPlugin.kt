@@ -45,10 +45,8 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
     get() = isFinalRelease && (version == "0.1.0" || isDryRunRelease)
 
   override fun Project.configureRootProject() {
-    apply {
-      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray
-      plugin(BintrayPlugin::class)
-    }
+    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_bintray
+    apply<BintrayPlugin>()
 
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
     configure<ProjectConfigurationExtension> {

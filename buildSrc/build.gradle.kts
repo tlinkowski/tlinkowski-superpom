@@ -21,10 +21,8 @@ plugins {
   idea
 }
 
-apply {
-  from("../gradle/shared-gradle-properties.gradle.kts")
-  from("../gradle/shared-buildscript-dependencies.gradle.kts")
-}
+apply(from = "../gradle/shared-gradle-properties.gradle.kts")
+apply(from = "../gradle/shared-buildscript-dependencies.gradle.kts")
 
 tasks {
   val syncSharedKotlinSources by registering(Sync::class) {

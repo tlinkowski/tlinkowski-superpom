@@ -34,10 +34,9 @@ internal class JacocoConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
     subprojects {
-      apply {
-        // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_jacoco
-        plugin(JacocoPlugin::class)
-      }
+      // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_jacoco
+      apply<JacocoPlugin>()
+
       tasks {
         configureJacocoTasks()
       }

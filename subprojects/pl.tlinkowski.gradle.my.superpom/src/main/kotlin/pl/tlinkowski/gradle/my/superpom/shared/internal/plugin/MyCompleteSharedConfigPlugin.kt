@@ -29,19 +29,17 @@ import pl.tlinkowski.gradle.my.superpom.shared.extension.MySuperpomExtension
 class MyCompleteSharedConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(VersionConfigPlugin::class) // adds project.grgit + modified project.version
+    apply<VersionConfigPlugin>() // adds project.grgit + modified project.version
 
-      plugin(MyCoreConfigPlugin::class)
-      plugin(ModularityConfigPlugin::class)
-      plugin(NamingConventionEnforcementPlugin::class)
-      plugin(TestConfigPlugin::class)
-      plugin(JacocoConfigPlugin::class)
-      plugin(MyCentralPublishConfigPlugin::class)
-      plugin(MyComprehensiveReleaseConfigPlugin::class)
+    apply<MyCoreConfigPlugin>()
+    apply<ModularityConfigPlugin>()
+    apply<NamingConventionEnforcementPlugin>()
+    apply<TestConfigPlugin>()
+    apply<JacocoConfigPlugin>()
+    apply<MyCentralPublishConfigPlugin>()
+    apply<MyComprehensiveReleaseConfigPlugin>()
 
-      plugin(DependencyUpdatesConfigPlugin::class)
-    }
+    apply<DependencyUpdatesConfigPlugin>()
 
     subprojects {
       configureSubproject()

@@ -35,9 +35,7 @@ import pl.tlinkowski.gradle.my.superpom.shared.internal.isFinalRelease
 internal class VersionConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(ReckonPlugin::class)
-    }
+    apply<ReckonPlugin>()
 
     configure<ReckonExtension> {
       scopeFromProp()

@@ -53,20 +53,18 @@ config {
 }
 
 subprojects {
-  apply {
-    // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/pull/165
-    plugin(org.kordamp.gradle.plugin.base.BasePlugin::class)
+  // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/pull/165
+  apply<org.kordamp.gradle.plugin.base.BasePlugin>()
 
-    // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
-    // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
-    plugin(KotlinDslPlugin::class)
+  // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
+  // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
+  apply<KotlinDslPlugin>()
 
-    // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
-    plugin(KotlindocPlugin::class)
+  // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_kotlindoc
+  apply<KotlindocPlugin>()
 
-    // https://github.com/koral--/jacoco-gradle-testkit-plugin
-    plugin(JaCoCoTestKitPlugin::class)
-  }
+  // https://github.com/koral--/jacoco-gradle-testkit-plugin
+  apply<JaCoCoTestKitPlugin>()
 
   config {
     bintray.enabled = true
@@ -102,13 +100,11 @@ subprojects {
   }
 }
 
-apply {
-  from("gradle/shared-gradle-properties.gradle.kts")
-  plugin(MyCompleteSharedConfigPlugin::class) // shared build script
+apply(from = "gradle/shared-gradle-properties.gradle.kts")
+apply<MyCompleteSharedConfigPlugin>() // shared build script
 
-  //region WORKAROUNDS
-  plugin(DokkaRuntimeConfigurationWorkaroundPlugin::class)
-  plugin(IncompletePluginMavenPublicationWorkaroundPlugin::class)
-  plugin(JacocoGradleTestkitIssueWorkaroundPlugin::class)
-  //endregion
-}
+//region WORKAROUNDS
+apply<DokkaRuntimeConfigurationWorkaroundPlugin>()
+apply<IncompletePluginMavenPublicationWorkaroundPlugin>()
+apply<JacocoGradleTestkitIssueWorkaroundPlugin>()
+//endregion

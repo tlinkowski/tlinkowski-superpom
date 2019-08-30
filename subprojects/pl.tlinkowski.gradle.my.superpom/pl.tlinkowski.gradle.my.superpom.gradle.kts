@@ -19,10 +19,8 @@
 import pl.tlinkowski.gradle.my.buildsrc.plugin.SuperpomSharedFileExportPlugin
 import pl.tlinkowski.gradle.my.superpom.shared.internal.SuperpomFileSharing
 
-apply {
-  from("$rootDir/gradle/shared-buildscript-dependencies.gradle.kts")
-  plugin(SuperpomSharedFileExportPlugin::class)
-}
+apply(from = "$rootDir/gradle/shared-buildscript-dependencies.gradle.kts")
+apply<SuperpomSharedFileExportPlugin>()
 
 tasks {
   licenseMain {

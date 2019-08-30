@@ -39,10 +39,8 @@ internal class ModularityConfigPlugin : AbstractRootPlugin() {
 
   //region SUBPROJECT CONFIG
   private fun Project.configureSubproject() {
-    apply {
-      // https://github.com/java9-modularity/gradle-modules-plugin
-      plugin(ModuleSystemPlugin::class)
-    }
+    // https://github.com/java9-modularity/gradle-modules-plugin
+    apply<ModuleSystemPlugin>()
 
     if (!hasProperty("moduleName")) { // added by ModuleSystemPlugin if `module-info.java` found
       configureAutomaticModuleName()

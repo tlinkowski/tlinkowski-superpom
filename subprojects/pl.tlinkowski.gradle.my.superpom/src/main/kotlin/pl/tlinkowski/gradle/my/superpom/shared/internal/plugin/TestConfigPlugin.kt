@@ -52,13 +52,11 @@ internal class TestConfigPlugin : AbstractRootPlugin() {
   }
 
   private fun Project.applyPlugins() {
-    apply {
-      // https://kotlinlang.org/docs/reference/using-gradle.html
-      plugin("org.jetbrains.kotlin.jvm") // for test helpers
+    // https://kotlinlang.org/docs/reference/using-gradle.html
+    apply(plugin = "org.jetbrains.kotlin.jvm") // for test helpers
 
-      // https://docs.gradle.org/current/userguide/groovy_plugin.html
-      plugin(GroovyPlugin::class) // for Spock
-    }
+    // https://docs.gradle.org/current/userguide/groovy_plugin.html
+    apply<GroovyPlugin>() // for Spock
   }
 
   /**

@@ -32,11 +32,9 @@ import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedC
 class MySuperpomGradlePlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(SuperpomSharedFileImportPlugin::class)
-      plugin(SuperpomSharedGradlePropertyImportPlugin::class)
-      plugin(EagerDestinationDirModificationFixPlugin::class) // this must come BEFORE `MyCompleteSharedConfigPlugin`
-      plugin(MyCompleteSharedConfigPlugin::class) // shared build script
-    }
+    apply<SuperpomSharedFileImportPlugin>()
+    apply<SuperpomSharedGradlePropertyImportPlugin>()
+    apply<EagerDestinationDirModificationFixPlugin>() // this must come BEFORE `MyCompleteSharedConfigPlugin`
+    apply<MyCompleteSharedConfigPlugin>() // shared build script
   }
 }

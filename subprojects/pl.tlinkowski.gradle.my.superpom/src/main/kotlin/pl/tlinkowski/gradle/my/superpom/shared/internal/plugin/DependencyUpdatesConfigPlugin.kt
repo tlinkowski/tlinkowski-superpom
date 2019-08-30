@@ -30,9 +30,7 @@ import org.gradle.kotlin.dsl.*
 internal class DependencyUpdatesConfigPlugin : AbstractRootPlugin() {
 
   override fun Project.configureRootProject() {
-    apply {
-      plugin(VersionsPlugin::class)
-    }
+    apply<VersionsPlugin>()
 
     tasks {
       configureDependencyUpdates()
