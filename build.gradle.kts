@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.kordamp.gradle.plugin.kotlindoc.KotlindocPlugin
 import pl.droidsonroids.gradle.jacoco.testkit.JaCoCoTestKitPlugin
 import pl.tlinkowski.gradle.my.buildsrc.plugin.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
-import java.net.URL
 
 plugins {
   // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base
@@ -53,9 +51,6 @@ config {
 }
 
 subprojects {
-  // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/pull/165
-  apply<org.kordamp.gradle.plugin.base.BasePlugin>()
-
   // https://docs.gradle.org/current/userguide/kotlin_dsl.html#sec:kotlin-dsl_plugin
   // https://docs.gradle.org/current/userguide/java_gradle_plugin.html
   apply<KotlinDslPlugin>()
@@ -74,8 +69,11 @@ subprojects {
       replaceJavadoc = true
       jdkVersion = 8
 
-      // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/issues/161
-      outputDirectory = file("$buildDir/docs/kotlindoc")
+      externalDocumentationLinks {
+        externalDocumentationLink {
+          url = "https://docs.gradle.org/current/javadoc/"
+        }
+      }
     }
 
     // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_plugin
@@ -87,15 +85,6 @@ subprojects {
 
       val pluginImplementationClass: String by project
       implementationClass = pluginImplementationClass
-    }
-  }
-
-  tasks {
-    // workaround for: https://github.com/aalmiray/kordamp-gradle-plugins/issues/155
-    withType(DokkaTask::class).configureEach {
-      externalDocumentationLink {
-        url = URL("https://docs.gradle.org/current/javadoc/")
-      }
     }
   }
 }
