@@ -56,7 +56,7 @@ class MySuperpomGradlePluginFailureSmokeTest extends Specification {
 
   def 'project and module name mismatch detected'() {
     given:
-      def projectName = 'pl.tlinkowski.fail.mismatch.module'
+      def projectName = 'pl.tlinkowski.fail.mismatch.module1'
       def moduleName = 'pl.tlinkowski.fail.mismatch.module2'
       runner = failureProjectRunner(projectName)
     when:
@@ -67,8 +67,8 @@ class MySuperpomGradlePluginFailureSmokeTest extends Specification {
 
   def 'project and package name mismatch detected'() {
     given:
+      def projectName = 'pl.tlinkowski.fail.mismatch.package1'
       def sourceFile = 'pl/tlinkowski/fail/mismatch/package2/Sample.java'
-      def projectName = 'pl.tlinkowski.fail.mismatch.package'
       runner = failureProjectRunner(projectName)
     when:
       def result = runner.buildAndFail()
@@ -77,10 +77,11 @@ class MySuperpomGradlePluginFailureSmokeTest extends Specification {
   }
 
   private static MySuperpomSmokeTestRunner failureProjectRunner(String projectName) {
-    new MySuperpomSmokeTestRunner(FAILURE_PROJECT_DIR, [
+    def args = [
             '-c', 'failure.settings.gradle.kts',
-            "-PtestedProjectName=$projectName".toString(),
+            '-PtestedProjectName=' + projectName,
             ":$projectName:build".toString()
-    ])
+    ]
+    new MySuperpomSmokeTestRunner(FAILURE_PROJECT_DIR, args)
   }
 }
