@@ -33,6 +33,16 @@ class MySuperpomGradlePluginFailureSmokeTest extends Specification {
   @AutoCleanup
   private MySuperpomSmokeTestRunner runner
 
+  def 'invalid automatic module name detected'() {
+    given:
+      def projectName = 'invalid-module-name'
+      runner = failureProjectRunner(projectName)
+    when:
+      def result = runner.buildAndFail()
+    then:
+      result.output.contains('Invalid automatic module name')
+  }
+
   def 'project and group name mismatch detected'() {
     given:
       def group = 'pl.tlinkowski.fail'

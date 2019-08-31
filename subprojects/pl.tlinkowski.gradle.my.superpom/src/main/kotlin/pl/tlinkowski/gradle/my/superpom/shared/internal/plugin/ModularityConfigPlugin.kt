@@ -17,11 +17,13 @@
  */
 package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
 import org.javamodularity.moduleplugin.ModuleSystemPlugin
 import org.javamodularity.moduleplugin.tasks.TestModuleOptions
+import pl.tlinkowski.gradle.my.superpom.shared.internal.ModuleNameValidator
 import pl.tlinkowski.gradle.my.superpom.shared.internal.configureIfPresent
 
 /**
@@ -43,11 +45,18 @@ internal class ModularityConfigPlugin : AbstractRootPlugin() {
     apply<ModuleSystemPlugin>()
 
     if (!hasProperty("moduleName")) { // added by ModuleSystemPlugin if `module-info.java` found
+      validateAutomaticModuleName()
       configureAutomaticModuleName()
     }
 
     tasks {
       configureModularityForTasks()
+    }
+  }
+
+  private fun Project.validateAutomaticModuleName() {
+    if (!ModuleNameValidator.isValidModuleName(project.name)) {
+      throw GradleException("Invalid automatic module name: ${project.name}")
     }
   }
 
