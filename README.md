@@ -368,8 +368,13 @@ The SuperPOM plugin [enforces this convention](subprojects/pl.tlinkowski.gradle.
 by ensuring that the Gradle project name (i.e. Maven `artifactId`):
 
 -   starts with Maven `groupId`
--   equals JPMS module name (only if `module-info.java` is present)
+
 -   is a prefix of every package in the project
+
+-   equals JPMS module name (only if `module-info.java` is present)
+
+-   is [valid](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/shared/internal/ModuleNameValidator.kt)
+    automatic JPMS module name (only if `module-info.java` is absent)
 
 ## Requirements
 
