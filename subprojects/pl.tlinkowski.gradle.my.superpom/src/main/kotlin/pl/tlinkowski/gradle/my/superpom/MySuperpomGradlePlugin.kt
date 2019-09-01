@@ -19,7 +19,8 @@ package pl.tlinkowski.gradle.my.superpom
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
-import pl.tlinkowski.gradle.my.superpom.internal.plugin.*
+import pl.tlinkowski.gradle.my.superpom.internal.plugin.SuperpomSharedFileImportPlugin
+import pl.tlinkowski.gradle.my.superpom.internal.plugin.SuperpomSharedGradlePropertyImportPlugin
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.AbstractRootPlugin
 import pl.tlinkowski.gradle.my.superpom.shared.internal.plugin.MyCompleteSharedConfigPlugin
 
@@ -34,7 +35,6 @@ class MySuperpomGradlePlugin : AbstractRootPlugin() {
   override fun Project.configureRootProject() {
     apply<SuperpomSharedFileImportPlugin>()
     apply<SuperpomSharedGradlePropertyImportPlugin>()
-    apply<EagerDestinationDirModificationFixPlugin>() // this must come BEFORE `MyCompleteSharedConfigPlugin`
     apply<MyCompleteSharedConfigPlugin>() // shared build script
   }
 }

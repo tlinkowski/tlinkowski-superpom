@@ -22,7 +22,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
 import org.javamodularity.moduleplugin.ModuleSystemPlugin
-import org.javamodularity.moduleplugin.tasks.TestModuleOptions
+import org.javamodularity.moduleplugin.extensions.TestModuleOptions
 import pl.tlinkowski.gradle.my.superpom.shared.internal.ModuleNameValidator
 import pl.tlinkowski.gradle.my.superpom.shared.internal.configureIfPresent
 
