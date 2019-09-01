@@ -1,5 +1,16 @@
 # Releases
 
+## Version 0.3.0
+
+Release date: 01/09/2019.
+
+### Enhancements
+
+-   [#68](https://github.com/tlinkowski/tlinkowski-superpom/issues/68): Automatic module name validation
+-   [#67](https://github.com/tlinkowski/tlinkowski-superpom/issues/67): Update dependencies
+
+---
+
 ## Version 0.2.0
 
 Release date: 30/08/2019.
