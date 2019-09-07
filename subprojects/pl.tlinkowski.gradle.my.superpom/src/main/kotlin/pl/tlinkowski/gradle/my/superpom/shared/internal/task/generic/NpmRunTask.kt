@@ -18,7 +18,7 @@
 
 package pl.tlinkowski.gradle.my.superpom.shared.internal.task.generic
 
-import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.*
 import pl.tlinkowski.gradle.my.superpom.shared.internal.TaskGroupNames
 import pl.tlinkowski.gradle.my.superpom.shared.internal.isWindows
 
@@ -36,9 +36,14 @@ internal open class NpmRunTask : Exec() {
   }
 
   /**
-   * @param scriptName script name defined in `package.json`
+   * Script name defined in `package.json`.
    */
-  fun scriptName(scriptName: String) {
+  @get:Input
+  lateinit var scriptName: String
+
+  @TaskAction
+  override fun exec() {
     args("run", scriptName)
+    super.exec()
   }
 }

@@ -89,7 +89,7 @@ internal class MyComprehensiveReleaseConfigurator(tasks: TaskContainer) {
     }
 
     generateChangelog {
-      scriptName("gren-changelog")
+      scriptName = "gren-changelog"
       dependsOn(addTemporaryVersionTag) // Git tag is needed for gren to be able to generate the changelog
       finalizedBy(removeTemporaryVersionTag) // we remove the Git tag immediately after gren runs
       onlyIfNotDryRun()
@@ -127,7 +127,7 @@ internal class MyComprehensiveReleaseConfigurator(tasks: TaskContainer) {
     }
 
     releaseToGitHub {
-      scriptName("gren-release")
+      scriptName = "gren-release"
       dependsOn(confirmFinalPublication)
       onlyIfNotDryRun()
     }
