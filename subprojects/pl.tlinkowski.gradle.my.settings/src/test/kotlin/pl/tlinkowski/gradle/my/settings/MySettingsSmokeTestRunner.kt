@@ -39,8 +39,9 @@ internal class MySettingsSmokeTestRunner {
     mkdir()
   }
 
-  fun createSubproject(name: String) = file("subprojects/$name").apply {
-    mkdir()
+  fun createSubproject(subpath: String) = file("subprojects/$subpath").apply {
+    val name = subpath.substringAfterLast('/')
+    mkdirs()
     resolve("$name.gradle.kts").writeText(`build-gradle-kts`)
   }
 

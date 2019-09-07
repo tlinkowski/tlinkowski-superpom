@@ -69,24 +69,27 @@ class MySettingsGradlePlugin : Plugin<Settings> {
 
   //region ADAPTED FROM: https://aalmiray.github.io/kordamp-gradle-plugins/#_project_structure
   private fun Settings.configureProjectStructure() {
-    listOf("subprojects").forEach { includeSubprojects(rootDir.resolve(it)) }
+    listOf("subprojects").forEach { includeSubprojectsRecursive(rootDir.resolve(it)) }
   }
 
-  private fun Settings.includeSubprojects(groupDir: File) {
-    requireNotNull(groupDir.listFiles(), { groupDir })
+  private fun Settings.includeSubprojectsRecursive(dir: File) {
+    requireNotNull(dir.listFiles(), { dir })
             .filter { it.isDirectory }
-            .forEach { includeSubproject(it) }
+            .forEach { includeSubprojectOrGroup(it) }
   }
 
-  private fun Settings.includeSubproject(subprojectDir: File) {
-    val subprojectName = subprojectDir.name
-    val buildFile = subprojectDir.resolve("$subprojectName.gradle.kts")
+  private fun Settings.includeSubprojectOrGroup(dir: File) {
+    val subprojectName = dir.name
+    val buildFile = dir.resolve("$subprojectName.gradle.kts")
 
-    include(subprojectName)
-
-    val subproject = project(":$subprojectName")
-    subproject.projectDir = subprojectDir
-    subproject.buildFileName = buildFile.name
+    if (buildFile.exists()) {
+      include(subprojectName)
+      val subproject = project(":$subprojectName")
+      subproject.projectDir = dir
+      subproject.buildFileName = buildFile.name
+    } else {
+      includeSubprojectsRecursive(dir)
+    }
   }
   //endregion
 }

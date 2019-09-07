@@ -88,6 +88,8 @@ Configures:
 
     -   subprojects in `subprojects` directory
     -   build file names changed from `build.gradle.kts` to `<subproject-name>.gradle.kts`
+    -   build files required for all subprojects
+    -   subprojects optionally grouped under subdirectories (e.g. `subprojects/sample/pl.tlinkowski.xyz.sample`)
 
 ### Project Plugin (id: `pl.tlinkowski.gradle.my.superpom`)
 

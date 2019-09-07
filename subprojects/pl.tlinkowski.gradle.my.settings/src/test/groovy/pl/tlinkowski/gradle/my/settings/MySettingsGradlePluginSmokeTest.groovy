@@ -67,4 +67,15 @@ class MySettingsGradlePluginSmokeTest extends Specification {
     then:
       result.output.contains("Failed to apply plugin [id '$settingsPluginId']")
   }
+
+  def 'plugin loads nested `sample` subproject'() {
+    given:
+      runner.createSubprojectsDir()
+      runner.createSubproject("group/sample")
+    when:
+      def result = runner.build()
+    then:
+      result.task(":build").outcome == TaskOutcome.SUCCESS
+      result.task(":sample:build").outcome == TaskOutcome.SUCCESS
+  }
 }
