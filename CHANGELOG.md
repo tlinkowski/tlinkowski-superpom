@@ -1,5 +1,16 @@
 # Releases
 
+## Version 0.4.0
+
+Release date: 07/09/2019.
+
+### Enhancements
+
+-   [#71](https://github.com/tlinkowski/tlinkowski-superpom/issues/71): More flexible subproject directory layout
+-   [#70](https://github.com/tlinkowski/tlinkowski-superpom/issues/70): Change "Overwriting property" to "Skipping property"
+
+---
+
 ## Version 0.3.0
 
 Release date: 01/09/2019.
