@@ -307,6 +307,8 @@ Gradle properties at [`gradle/shared-gradle.properties`](gradle/shared-gradle.pr
 -   by [`SuperpomSharedGradlePropertyImportPlugin`](subprojects/pl.tlinkowski.gradle.my.superpom/src/main/kotlin/pl/tlinkowski/gradle/my/superpom/internal/plugin/SuperpomSharedGradlePropertyImportPlugin.kt),
     for all *target* projects
 
+If a shared property to be imported already exists, it's ignored with a warning.
+
 #### Direct File Sharing
 
 Selected files in this project can be directly exported to projects that apply this SuperPOM plugin. It can be viewed

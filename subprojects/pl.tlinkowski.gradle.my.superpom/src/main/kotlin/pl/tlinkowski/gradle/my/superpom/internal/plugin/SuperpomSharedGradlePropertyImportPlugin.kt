@@ -40,11 +40,14 @@ internal class SuperpomSharedGradlePropertyImportPlugin : AbstractRootPlugin() {
       properties.load(it)
     }
 
+    //region DUPLICATED IN shared-gradle-properties.gradle.kts
     properties.stringPropertyNames().forEach { name ->
-      if (hasProperty(name)) {
-        logger.warn("Overwriting property: {}", name)
+      if (extra.has(name)) {
+        logger.warn("Shared property {}={} ignored (property {}={} found)", name, properties[name], name, extra[name])
+      } else {
+        extra[name] = properties[name]
       }
-      extra[name] = properties[name]
     }
+    //endregion
   }
 }

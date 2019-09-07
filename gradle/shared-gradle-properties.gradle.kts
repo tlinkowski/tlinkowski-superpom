@@ -24,15 +24,18 @@ import java.util.*
  */
 run {
   val buildscriptFile = checkNotNull(buildscript.sourceFile)
+  val logger = LoggerFactory.getLogger(buildscriptFile.name)
 
   val properties = Properties()
   buildscriptFile.resolveSibling("shared-gradle.properties").inputStream().use { properties.load(it) }
 
+  //region DUPLICATED IN SuperpomSharedGradlePropertyImportPlugin.kt
   properties.stringPropertyNames().forEach { name ->
     if (extra.has(name)) {
-      val logger = LoggerFactory.getLogger(buildscriptFile.name)
-      logger.warn("Overwriting property: {}", name)
+      logger.warn("Shared property {}={} ignored (property {}={} found)", name, properties[name], name, extra[name])
+    } else {
+      extra[name] = properties[name]
     }
-    extra[name] = properties[name]
   }
+  //endregion
 }
