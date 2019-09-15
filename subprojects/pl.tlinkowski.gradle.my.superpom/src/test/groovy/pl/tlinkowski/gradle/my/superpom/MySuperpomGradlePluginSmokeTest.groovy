@@ -123,7 +123,10 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
     when:
       def result = runner.build()
     then:
-      PUBLISHED_SUBPROJECTS.forEach { taskWasSuccessful(result, ":$it:bintrayUpload") }
+      PUBLISHED_SUBPROJECTS.forEach {
+        taskWasSuccessful(result, ":$it:bintrayUpload")
+        filesWereUploaded(result, it, ".jar", "-sources.jar", "-javadoc.jar", ".pom")
+      }
       (ALL_SUBPROJECTS - PUBLISHED_SUBPROJECTS).forEach { taskWasSkipped(result, ":$it:bintrayUpload") }
 
       taskWasSuccessful(result, ':bintrayPublish')
@@ -158,6 +161,20 @@ class MySuperpomGradlePluginSmokeTest extends Specification {
 
   private static boolean taskDidNotFail(BuildResult result, String taskName) {
     result.task(taskName).outcome != TaskOutcome.FAILED
+  }
+
+  private static void filesWereUploaded(BuildResult result, String projectName, String... fileSuffixes) {
+    for (String fileSuffix : fileSuffixes) {
+      assert fileWasUploaded(result, projectName, fileSuffix)
+    }
+  }
+
+  private static boolean fileWasUploaded(BuildResult result, String projectName, String fileSuffix) {
+    result.output.lines().anyMatch { line -> isMatchingUploadingToLine(line, projectName, fileSuffix) }
+  }
+
+  private static boolean isMatchingUploadingToLine(String line, String projectName, String fileSuffix) {
+    line.startsWith("Uploading to ") && line.contains(projectName) && line.endsWith("$fileSuffix...")
   }
   //endregion
 }
