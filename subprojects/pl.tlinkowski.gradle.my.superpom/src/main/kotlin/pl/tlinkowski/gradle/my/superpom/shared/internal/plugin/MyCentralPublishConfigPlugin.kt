@@ -19,6 +19,8 @@ package pl.tlinkowski.gradle.my.superpom.shared.internal.plugin
 
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
@@ -64,6 +66,9 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
         if (isFinalRelease) {
           configureJarTasks()
         }
+      }
+      afterEvaluate {
+        tryAddJavadocJarToMainPublication()
       }
     }
 
@@ -133,6 +138,21 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
         attributes(mapOf(
                 "Build-Revision" to project.grgit.head().id
         ))
+      }
+    }
+  }
+
+  private fun Project.tryAddJavadocJarToMainPublication() {
+    val effectiveConfig: ProjectConfigurationExtension by project
+    if (!effectiveConfig.publishing.enabled) {
+      return
+    }
+
+    configure<PublishingExtension> {
+      publications {
+        named<MavenPublication>("main") {
+          artifact(tasks.getByName("javadocJar"))
+        }
       }
     }
   }
