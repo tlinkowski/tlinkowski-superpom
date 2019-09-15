@@ -68,7 +68,7 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
         }
       }
       afterEvaluate {
-        tryAddJavadocJarToMainPublication()
+        addJavadocJarToMainPublicationIfNeeded()
       }
     }
 
@@ -142,9 +142,9 @@ internal class MyCentralPublishConfigPlugin : AbstractRootPlugin() {
     }
   }
 
-  private fun Project.tryAddJavadocJarToMainPublication() {
+  private fun Project.addJavadocJarToMainPublicationIfNeeded() {
     val effectiveConfig: ProjectConfigurationExtension by project
-    if (!effectiveConfig.publishing.enabled) {
+    if (!effectiveConfig.publishing.enabled || effectiveConfig.plugin.id != null) {
       return
     }
 
