@@ -31,7 +31,7 @@ plugins {
   id("org.kordamp.gradle.kotlindoc") apply false
 
   // https://github.com/koral--/jacoco-gradle-testkit-plugin
-  id("pl.droidsonroids.jacoco.testkit") version "1.0.4" apply false
+  id("pl.droidsonroids.jacoco.testkit") version "1.0.5" apply false
 }
 
 // https://aalmiray.github.io/kordamp-gradle-plugins/#_org_kordamp_gradle_base_dsl
