@@ -1,5 +1,20 @@
 # Releases
 
+## Version 0.5.0
+
+Release date: 16/09/2019.
+
+### Enhancements
+
+-   [#73](https://github.com/tlinkowski/tlinkowski-superpom/issues/73): Update dependencies
+
+### Bug Fixes
+
+-   [#75](https://github.com/tlinkowski/tlinkowski-superpom/issues/75): Adding `javadocJar` to main publication causes Gradle plugin publications to fail
+-   [#74](https://github.com/tlinkowski/tlinkowski-superpom/issues/74): Fix javadocJar missing in main publications of the target projects
+
+---
+
 ## Version 0.4.0
 
 Release date: 07/09/2019.
